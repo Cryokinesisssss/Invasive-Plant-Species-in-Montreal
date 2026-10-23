@@ -1,0 +1,197 @@
+// Alliaria petiolata
+desc: 'Alliaria petiolata is a biennial flowering plant in the Mustard family, Brassicaceae. It is native to Europe, western and central Asia, and northwestern Africa, from Morocco, Iberia and the British Isles, north to northern Scandinavia, and east to northern Pakistan and western China (Xinjiang).',
+
+// Trapa natans
+desc: 'The water caltrop is any of three extant species of the genus Trapa: Trapa natans, Trapa bicornis and the endangered Trapa rossica. It is also known as water chestnut, buffalo nut, bat nut, devil pod, ling nut, lin kok, ling kio nut, or singhara. In India its called as singada.',
+
+// Acer platanoides
+desc: 'Acer platanoides (Norway maple) is a species of maple native to eastern and central Europe and western Asia, from France east to Russia, north to southern Scandinavia and southeast to northern Iran. It is a member of the soapberry and lychee family.',
+
+// Myriophyllum spicatum
+desc: 'Myriophyllum spicatum (Eurasian watermilfoil or spiked water-milfoil) is native to Europe, Asia, and north Africa. It is a submerged aquatic plant, and grows in still or slow-moving water.',
+
+// Frangula alnus
+desc: 'Frangula alnus, commonly known as alder buckthorn, glossy buckthorn, or breaking buckthorn, is a tall deciduous shrub in the family Rhamnaceae. Unlike other "buckthorns", alder buckthorn does not have thorns.',
+
+// Rhamnus cathartica
+desc: 'Rhamnus cathartica, the buckthorn, common buckthorn or purging buckthorn, is a species of small tree in the flowering plant family Rhamnaceae. It is native to Europe, northwest Africa and western Asia, from the central British Isles south to Morocco, and east to Kyrgyzstan.',
+
+// Reynoutria x bohemica
+desc: 'Bohemian knotweed is a nothospecies that is a cross between Japanese knotweed and giant knotweed. It has been documented as occurring in the wild in Japan. The scientific name is accepted to be Reynoutria × bohemica, but it may also be referred to as Fallopia × bohemica and Polygonum × bohemicum.',
+
+// Reynoutria sachalinensis
+desc: 'Reynoutria sachalinensis (giant knotweed or Sakhalin knotweed Japanese オオイタドリ ooitadori, Russian Горец сахалинский, Гречиха сахалинская; syns. Polygonum sachalinense, Fallopia sachalinensis) is a species of Fallopia native to northeastern Asia in northern Japan (Hokkaidō, Honshū) and the far east of...',
+
+// Reynoutria japonica
+desc: 'Reynoutria japonica, synonyms Fallopia japonica and Polygonum cuspidatum, is a large species of herbaceous perennial plant of the knotweed and buckwheat family Polygonaceae. It is commonly known as Asian knotweed or Japanese knotweed. It is native to East Asia in Japan, China and Korea.',
+
+// Phragmites australis
+desc: 'Phragmites australis, known as the common reed, is a species of flowering plant in the grass family Poaceae. It is a wetland grass that can grow up to 20 feet (6 metres) tall and has a cosmopolitan distribution worldwide.',
+
+// Stratiotes aloides
+desc: 'Statiotes aloides, commonly known as water soldiers or water pineapple, is a submerged aquatic plant native to Europe and northwestern Asia. In Britain it was once common in East Anglia and still is in many places, particularly wet ditches and healthy ponds.',
+
+// Phalaris arundinacea
+desc: 'Phalaris arundinacea, sometimes known as reed canary grass, is a tall, perennial bunchgrass that commonly forms extensive single-species stands along the margins of lakes and streams and in wet open areas, with a wide distribution in Europe, Asia, northern Africa and North America.',
+
+// Heracleum mantegazzianum
+desc: 'Heracleum mantegazzianum, commonly known as giant hogweed, cartwheel-flower, giant cow parsnip, hogsbane or giant cow parsley, is a plant in the family Apiaceae. In New Zealand, it is also sometimes called wild parsnip, or wild rhubarb. It typically grows to heights of 2 to 5.',
+
+// Cabomba caroliniana
+desc: 'Cabomba caroliniana is an aquatic perennial herbaceous plant native to North and South America. It is a weed of national significance in Australia and on the list of invasive alien species of union concern in the EU.',
+
+// Celastrus orbiculatus
+desc: 'Celastrus orbiculatus is a woody vine of the Celastraceae family. It is commonly called Oriental bittersweet. Other common names include Chinese bittersweet, Asian bittersweet, Round-leaved bittersweet, and Asiatic bittersweet.',
+
+// Lonicera maackii
+desc: 'Lonicera maackii, the Amur honeysuckle, is a species of honeysuckle in the family Caprifoliaceae that is native to temperate western Asia, specifically in northern and western China south to Yunnan, Mongolia, Primorsky Krai in southeastern Russia, Korea, and, albeit rare there, central and northern ...',
+
+// Vincetoxicum rossicum
+desc: 'Vincetoxicum rossicum is a flowering plant of the milkweed family. It is a perennial herb native to southern Europe and is a highly invasive plant growing in all of the Eastern United States, in the mid west, and southern Ontario and Quebec in Canada.',
+
+// Vincetoxicum nigrum
+desc: 'Cynanchum louiseae, a species in the milkweed family, is also known as black swallow-wort, Louise\'s swallow-wort, or black dog-strangling vine. Cynanchum louiseae is a species of plant that is native to Europe and is found primarily in Italy, France, Portugal, and Spain.',
+
+// Aegopodium podagraria
+desc: 'Aegopodium podagraria L. commonly called ground elder, herb gerard, bishop\'s weed, goutweed, gout wort, and snow-in-the-mountain, and sometimes called English masterwort, and wild masterwort, is a perennial plant in the carrot family (Apiaceae) that grows in shady places.',
+
+// Egeria densa
+desc: 'Elodea densa, the large-flowered waterweed or Brazilian waterweed, is a species of Elodea native to warm temperate South America in southeastern Brazil, Argentina, Chile and Uruguay.',
+
+// Berberis thunbergii
+desc: 'Berberis thunbergii, the Japanese barberry, Thunberg\'s barberry, or red barberry, is a species of flowering plant in the barberry family, Berberidaceae, native to Japan and eastern Asia, though widely naturalized in China and in North America. Growing to 1 metre (3.3 ft) tall by 2.5 metres (8.',
+
+// Petasites hybridus
+desc: 'Petasites hybridus, the butterbur, is a herbaceous perennial flowering plant in the daisy family Asteraceae, native to Europe and northern Asia.',
+
+// Hydrilla verticillata
+desc: 'Hydrilla (waterthyme) is a genus of aquatic plant, usually treated as containing just one species, Hydrilla verticillata, though some botanists divide it into several species.',
+
+// Hydrocharis morsus-ranae
+desc: 'Hydrocharis morsus-ranae, frogbit, is a flowering plant belonging to the genus Hydrocharis in the family Hydrocharitaceae. In North America, it is referred to as common frogbit or European frog\'s-bit to distinguish it from the related American frogbit (Limnobium spongia).',
+
+// Impatiens glandulifera
+desc: 'Impatiens glandulifera is a large annual plant native to the Himalayas. Via human introduction it is now present across much of the Northern Hemisphere and is considered an invasive species in some areas.',
+
+// Microstegium vimineum
+desc: 'Microstegium vimineum, commonly known as Japanese stiltgrass, packing grass, or Nepalese browntop, is an annual grass that is common in a wide variety of habitats and is well adapted to low light levels.',
+
+// Myriophyllum aquaticum
+desc: 'Myriophyllum aquaticum is a flowering plant, a vascular dicot, commonly called parrot\'s-feather and parrot feather watermilfoil.',
+
+// Nitellopsis obtusa
+desc: 'Nitellopsis obtusa is a large freshwater alga. It is also known by the common name starry stonewort.',
+
+// Elaeagnus umbellata
+desc: 'Elaeagnus umbellata is known as Japanese silverberry, umbellata oleaster, autumn olive, autumn elaeagnus, or spreading oleaster. The species is indigenous to eastern Asia and ranges from the Himalayas eastwards to Japan.',
+
+// Petasites japonicus
+desc: 'Petasites japonicus, also known as butterbur, giant butterbur, great butterbur and sweet-coltsfoot, is an herbaceous perennial plant in the family Asteraceae. It exists in China, Japan, Korea and Sakhalin. But also exists many places in Europe, too. It is especially commonly found around Swiss alps.',
+
+// Najas minor
+desc: 'Najas minor, known as brittle naiad or brittle waternymph, is an annual aquatic plant, a submersed herb. It is native to Europe, Asia and North Africa from the Netherlands to Morocco east to Japan and the Philippines, including China, Siberia, Central Asia, Iran, Turkey, Ukraine, Germany, France Ita...',
+
+// Potamogeton crispus
+desc: 'Potamogeton crispus, the curled pondweed or curly-leaf pondweed, is a species of aquatic plant native to Eurasia but an introduced species and often a noxious weed in North America.',
+
+// Ficaria verna
+desc: 'Ficaria verna, (formerly Ranunculus ficaria L.) commonly known as lesser celandine or pilewort, is a low-growing, hairless perennial flowering plant in the buttercup family Ranunculaceae native to Europe and west Asia.',
+
+// Ailanthus altissima
+desc: 'Ailanthus altissima (/eɪˈlænθəs ælˈtɪsɪmə/ ay-LAN-thəss al-TIH-sim-ə), commonly known as tree of heaven or ailanthus tree, is a deciduous tree in the quassia family. It is native to northeast, central China, and Taiwan.',
+
+// Anthriscus sylvestris
+desc: 'Anthriscus sylvestris, known as cow parsley, wild chervil, wild beaked parsley, or keck is a herbaceous biennial or short-lived perennial plant in the family Apiaceae (Umbelliferae), genus Anthriscus.',
+
+// Alnus glutinosa
+desc: 'Alnus glutinosa, the common alder, black alder, European alder or just alder, is a species of tree in the family Betulaceae, native to most of Europe, southwest Asia and northern Africa.',
+
+// Heracleum sphondylium
+desc: 'Heracleum sphondylium, commonly known as hogweed, common hogweed or cow parsnip, is a herbaceous perennial or biennial plant, in the umbelliferous family Apiaceae that includes fennel, cow parsley, ground elder and giant hogweed. It is native to Europe and Asia.',
+
+// Butomus umbellatus
+desc: 'Butomus umbellatus is the Old World Palearctic and Asian plant species in the family Butomaceae. Common names include flowering rush or grass rush.',
+
+// Lonicera morrowii
+desc: 'Lonicera morrowii, the Morrow\'s honeysuckle, is a deciduous honeysuckle in the family Caprifoliaceae, native to Japan, Korea, and Northeast China. It is a shrub, reaching a height of 2–2.5 m, with oblong leaves 4–6 cm long.',
+
+// Lonicera tatarica
+desc: 'Lonicera tatarica is a species of honeysuckle known by the common name Tartarian honeysuckle. It is native to Siberia and other parts of eastern Asia, but it is probably better known in North America, where it is a widespread introduced species and noxious weed.',
+
+// Lonicera x bella
+desc: 'Lonicera × bella, known as Bell\'s honeysuckle and showy fly honeysuckle, is a hybrid species of flowering plant in the family Caprifoliaceae. It was first described by Hermann Zabel in 1889.',
+
+// Symphytum officinale
+desc: 'Symphytum officinale is a perennial flowering plant of the genus Symphytum in the family Boraginaceae. Along with thirty four other species of Symphytum, it is known as comfrey. To differentiate it from other members of the genus Symphytum, this species is known as common comfrey or true comfrey.',
+
+// Acer ginnala
+desc: 'Acer ginnala (Amur maple) is a plant species with woody stems native to northeastern Asia from easternmost Mongolia east to Korea and Japan, and north to the Russian Far East in the Amur River valley.',
+
+// Nymphoides peltata
+desc: 'Nymphoides peltata (syn. Villarsia nymphaeoides, Limnanthemum peltatum S.G. Gmel., Nymphoides nymphaeoides (L.) Britton, fringed water lily, yellow floating heart, floating heart, water fringe, entire marshwort) is perennial, rooted aquatic plant with floating leaves of the family Menyanthaceae.',
+
+// Galium mollugo
+desc: 'Galium mollugo, common name hedge bedstraw or false baby\'s breath, is a herbaceous annual plant of the family Rubiaceae. It shares the name hedge bedstraw with the related European species, Galium album.',
+
+// Glyceria maxima
+desc: 'Glyceria maxima (Hartm.) Holmb. (syn. G. aquatica (L.) Wahlenb.; G. spectabilis Mert. &amp; W.D.J. Koch; Molinia maxima Hartm.; Poa aquatica L.), commonly known as Great Manna Grass, Reed Mannagrass, and Reed Sweet-grass, is a species of rhizomatous perennial grasses in the mannagrass genus native t...',
+
+// Iris pseudacorus
+desc: 'Iris pseudacorus, the yellow flag, yellow iris, or water flag, is a species of flowering plant in the family Iridaceae. It is native to Europe, western Asia and northwest Africa.',
+
+// Pontederia crassipes
+desc: 'Eichhornia crassipes, commonly known as common water hyacinth, is an aquatic plant native to the Amazon basin, and is often a highly problematic invasive species outside its native range.',
+
+// Hesperis matronalis
+desc: 'Hesperis matronalis is a herbaceous plant species in the mustard family, Brassicaceae. It has numerous common names, including dame\'s rocket, damask violet, dame\'s-violet, dames-wort, dame\'s gilliflower, night-scented gilliflower, queen\'s gilliflower, rogue\'s gilliflower, summer lilac, sweet rocket,...',
+
+// Pueraria montana
+desc: 'Pueraria montana is a species of plant in the botanical family Fabaceae. At least three sub-species (alternatively called varieties) are known. It is closely related to other species in the genus Pueraria (P. edulis and P.',
+
+// Pistia stratiotes
+desc: 'Pistia is a genus of aquatic plant in the arum family, Araceae. The single species it comprises, Pistia stratiotes, is often called water cabbage, water lettuce, Nile cabbage, or shellflower.',
+
+// Lamium galeobdolon
+desc: 'Lamium galeobdolon, commonly known as yellow archangel, artillery plant, or aluminium plant, is a widespread wildflower in Europe, and has been introduced elsewhere as a garden plant.',
+
+// Lupinus polyphyllus
+desc: 'Lupinus polyphyllus (large-leaved lupine, big-leaved lupine, many-leaved lupine or, primarily in cultivation, garden lupin) is a species of lupine (lupin) native to western North America from southern Alaska and British Columbia east to Quebec, and western Wyoming, and south to Utah and California.',
+
+// Miscanthus sacchariflorus
+desc: 'Miscanthus sacchariflorus (common name: Amur silver-grass, Korean muluksae) is a grass native to temperate Northeast Asia.',
+
+// Miscanthus sinensis
+desc: 'Miscanthus sinensis is a species of flowering plant in the grass family Poaceae, native to eastern Asia throughout most of China, Japan, Taiwan and Korea. It is an herbaceous perennial grass, growing to 0.8–2 m (3–7 ft) tall, rarely 4 m (13 ft), forming dense clumps from an underground rhizome.',
+
+// Ulmus pumila
+desc: 'Ulmus pumila, the Siberian elm, is a tree native to Central Asia, eastern Siberia, the Russian Far East, Mongolia, Tibet, northern China, India (northern Kashmir) and Korea. It is also known as the Asiatic elm and dwarf elm, but sometimes miscalled the \'Chinese Elm\' (Ulmus parvifolia).',
+
+// Vinca minor
+desc: 'Vinca minor (common names lesser periwinkle or dwarf periwinkle) is a species of flowering plant native to central and southern Europe, from Portugal and France north to the Netherlands and the Baltic States, east to the Caucasus, and also southwestern Asia in Turkey.',
+
+// Robinia pseudoacacia
+desc: 'Robinia pseudoacacia, commonly known in its native territory as black locust, is a medium-sized deciduous tree native to the southeastern United States, but it has been widely planted and naturalized elsewhere in temperate North America, Europe, Southern Africa and Asia and is considered an invasive...',
+
+// Rorippa amphibia
+desc: 'Rorippa amphibia is a plant species in the genus Rorippa. It is called great yellowcress. The flowers are visited by many types of insects, and can be characterized by a generalized pollination syndrome.',
+
+// Rosa multiflora
+desc: 'Rosa multiflora (syn. Rosa polyantha) is a species of rose known commonly as multiflora rose, baby rose, Japanese rose, many-flowered rose, seven-sisters rose, and Eijitsu rose. It is native to eastern Asia, in China, Japan and Korea.',
+
+// Rosa rugosa
+desc: 'Rosa rugosa (rugosa rose, beach rose, Japanese rose, or Ramanas rose) is a species of rose native to eastern Asia, in northeastern China, Japan, Korea and southeastern Siberia, where it grows on the coast, often on sand dunes.',
+
+// Lythrum salicaria
+desc: 'Lythrum salicaria (purple loosestrife) is a flowering plant belonging to the family Lythraceae. It should not be confused with other plants sharing the name loosestrife that are members of the family Primulaceae. Other names include spiked loosestrife, or purple lythrum.',
+
+// Salvinia
+desc: 'Salvinia, a genus in the family Salviniaceae, is a floating fern named in honor of Anton Maria Salvini, a 17th-century Italian scientist. Watermoss is a common name for Salvinia.',
+
+// Helianthus tuberosus
+desc: 'The Jerusalem artichoke (Helianthus tuberosus), also called sunroot, sunchoke, earth apple, or topinambour, is a species of sunflower native to eastern North America, and found from eastern Canada and Maine west to North Dakota, and south to northern Florida and Texas.',
+
+// Valeriana officinalis
+desc: 'Valerian (Valeriana officinalis, Caprifoliaceae) is a perennial flowering plant native to Europe and Asia. In the summer when the mature plant may have a height of 1.',
+
+// Parthenocissus quinquefolia
+desc: 'Parthenocissus quinquefolia, known as Virginia creeper, Victoria creeper, five-leaved ivy, or five-finger, is a species of flowering plant in the grape family, Vitaceae.',

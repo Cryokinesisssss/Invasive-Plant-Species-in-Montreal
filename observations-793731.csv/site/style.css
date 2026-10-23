@@ -1,0 +1,1740 @@
+/* ============================================================
+   style.css — Invasive Species in Montreal
+   Shared stylesheet for index.html (map) and species.html (catalog).
+
+   Section index (use this to find things fast at the demo):
+     1.  Root variables                 → brand colours
+     2.  Global reset + body
+     3.  Top navigation                 → the dark-green bar
+     4.  Filter bar                     → the white bar under the nav
+     5.  Filter popovers                → the dropdowns (Risk / Borough / etc.)
+     6.  Main + map container
+     7.  Footer
+     8.  Map popup                      → iNat observation popup
+     9.  Legend                         → bottom-right risk legend
+     10. Lightbox                       → click a thumbnail → full image
+     11. Map status badge               → top-right "N observations" block
+     12. Story trigger button           → "About this map"
+     13. Story overlay                  → the modal itself
+     14. Borough stats panel            → side panel after clicking a borough
+     15. Species catalog page           → header, cards, badges
+     16. Taxonomy panel                 → "View scientific classification"
+     17. Projects panel                 → "View projects & initiatives"
+     18. Search + suggestions           → shared search dropdown
+     19. Species catalog filter bar     → small-screen layout fixes
+     20. Sentinelle marker              → square marker hover
+     21. Leaflet focus fix
+   ============================================================ */
+
+
+/* ============================================================
+   1. ROOT VARIABLES — brand colours
+   ============================================================ */
+:root {
+  --brand-dark:   #1B4332;
+  --brand-accent: #DCBD23;
+  --text-muted:   #555;
+  --bg-page:      #f6f6f6;
+}
+
+
+/* ============================================================
+   2. GLOBAL RESET + BODY
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg-page);
+  color: #222;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+/* ============================================================
+   3. TOP NAVIGATION — the dark-green bar at the top
+   ============================================================ */
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 16px;
+  background: #0f2a1d;
+  color: #fff;
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  box-sizing: border-box;
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  z-index: 700;
+  flex-shrink: 0;
+}
+
+.topnav-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #DCBD23;
+  margin-right: 18px;
+  font-size: 14px;
+  line-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.topnav-link {
+  color: #d5e2d9;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background 0.12s;
+  line-height: 20px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.topnav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.topnav-link.active {
+  background: #1B4332;
+  color: #fff;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   4. FILTER BAR — the white bar under the nav
+   ============================================================ */
+.filters {
+  background: #ffffff;
+  border-bottom: 1px solid #e3e3e3;
+  padding: 8px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  z-index: 600;
+  flex-shrink: 0;
+  position: relative;   /* stacking context so popovers can float above Leaflet */
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: #222;
+}
+
+/* Count badge — sits at the far right */
+.filter-count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1B4332;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reset button */
+.filter-reset {
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.filter-reset:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+
+/* ============================================================
+   5. FILTER POPOVERS (multi-select dropdowns)
+   ============================================================ */
+.fp { position: relative; }
+
+.fp-btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #222;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.fp-btn:hover { background: #f6f6f6; border-color: #999; }
+.fp-btn[aria-expanded="true"] {
+  background: #eef6f0;
+  border-color: #1B4332;
+  color: #1B4332;
+}
+
+/* ---- 5a. Chevron arrow ---- */
+.fp-btn::after {
+  content: "▾";
+  font-size: 10px;
+  color: #666;
+  margin-left: 2px;
+}
+
+.fp-btn[aria-expanded="true"]::after { color: #1B4332; }
+
+/* ---- 5b. Summary text ("All" / "N selected") ---- */
+.fp-summary {
+  font-weight: 500;
+  font-size: 12px;
+  color: #555;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fp-summary.is-set { color: #1B4332; font-weight: 600; }
+
+/* ---- 5c. The floating panel ---- */
+.fp-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 5000;         /* well above Leaflet controls (1000) and borough panel (1000) */
+  width: 260px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 10px 10px 12px;
+}
+
+.fp-panel-wide { width: 320px; }
+
+/* ---- 5d. Search box inside a popover ---- */
+.fp-search {
+  width: 100%;
+  font: inherit;
+  font-size: 12.5px;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: #fff;
+  color: #222;
+}
+
+.fp-search:focus {
+  outline: none;
+  border-color: #1B4332;
+  box-shadow: 0 0 0 2px rgba(27, 67, 50, 0.15);
+}
+
+/* ---- 5e. List of checkboxes ---- */
+.fp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin: 4px 0;
+}
+
+.fp-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  font-size: 12.5px;
+  color: #222;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fp-check:hover { background: #f4f8f5; }
+
+.fp-check input[type="checkbox"] {
+  accent-color: #1B4332;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.fp-check span {
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- 5f. "All" and "Boroughs of Montreal" special rows ---- */
+.fp-check-all {
+  font-weight: 700;
+  color: #1B4332;
+  background: #f0f7f2;
+  border: 1px solid #d7e6dc;
+  border-radius: 4px;
+}
+
+.fp-check-all:hover { background: #e6f0ea; }
+
+.fp-check-special {
+  font-weight: 600;
+  color: #1D4E89;
+  background: #eef4fb;
+  border: 1px solid #cfdcef;
+  border-radius: 4px;
+}
+
+.fp-check-special:hover { background: #e2ecf8; }
+
+/* ---- 5g. Dividers + labels + empty state ---- */
+.fp-divider {
+  height: 1px;
+  background: #e3e3e3;
+  margin: 8px 0;
+}
+
+.fp-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #666;
+  font-weight: 600;
+  margin: 6px 0 4px;
+}
+
+.fp-group-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: #888;
+  margin: 8px 0 2px;
+  padding-left: 6px;
+}
+
+.fp-empty {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+
+/* ============================================================
+   6. MAIN + MAP CONTAINER
+   ============================================================ */
+main {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+
+#map {
+  flex: 1 1 auto;
+  min-height: 400px;
+  width: 100%;
+}
+
+
+/* ============================================================
+   7. FOOTER
+   ============================================================ */
+footer {
+  padding: 8px 20px;
+  background: #ffffff;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  border-top: 1px solid #e3e3e3;
+  flex-shrink: 0;
+}
+
+footer a {
+  color: var(--brand-dark);
+  text-decoration: underline;
+}
+
+
+/* ============================================================
+   8. MAP POPUP — iNaturalist observation popup
+   ============================================================ */
+.leaflet-popup-content {
+  margin: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #222;
+  min-width: 240px;
+  max-width: 280px;
+}
+
+.leaflet-popup-content-wrapper { border-radius: 8px; }
+
+/* ---- 8a. Head: thumbnail + text ---- */
+.popup-head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.popup-thumb {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  border-radius: 4px;
+  object-fit: cover;
+  cursor: zoom-in;
+  background: #f0f0f0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.popup-thumb:hover {
+  transform: scale(1.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.popup-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  color: #999;
+  cursor: default;
+}
+
+.popup-headtext { flex: 1 1 auto; min-width: 0; }
+
+.popup-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.popup-latin {
+  font-size: 12px;
+  color: #555;
+  margin: 0 0 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.popup-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ---- 8b. Grid of key/value rows ---- */
+.popup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 12px;
+  padding-top: 6px;
+  margin-bottom: 6px;
+  border-top: 1px solid #eee;
+  font-size: 12px;
+}
+
+.popup-grid > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popup-grid .popup-grid-wide {
+  grid-column: 1 / -1;
+  white-space: normal;
+}
+
+.popup-grid .lbl {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
+  margin-bottom: 1px;
+}
+
+/* ---- 8c. Warning + photo note + CTA ---- */
+.popup-sensitive {
+  margin: 6px 0;
+  padding: 4px 8px;
+  background: #fff7e6;
+  border-left: 3px solid #f4a261;
+  border-radius: 2px;
+  font-size: 11.5px;
+  color: #7a4500;
+}
+
+.popup-photo-note {
+  font-size: 11px;
+  color: #888;
+  margin: 6px 0;
+  line-height: 1.35;
+}
+
+.popup-btn {
+  display: block;
+  margin-top: 4px;
+  padding: 6px 10px;
+  background: var(--brand-dark);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.popup-btn:hover { background: #2D6A4F; }
+
+
+/* ============================================================
+   9. LEGEND — bottom-right risk legend
+   ============================================================ */
+.legend {
+  background: rgba(243, 240, 240, 0.94);
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  font-size: 11px;
+  line-height: 1.35;
+  color: #222;
+  max-width: 170px;
+}
+
+.legend-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555;
+  margin-bottom: 3px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 0;
+}
+
+.legend-row small {
+  color: #888;
+  font-size: 10px;
+}
+
+.legend-divider {
+  height: 1px;
+  background: #e2e2e2;
+  margin: 7px 0 5px;
+}
+
+/* ---- 9a. Risk strip: three items inline ---- */
+.legend-risk-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-bottom: 2px;
+}
+.legend-risk-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* ---- 9b. Swatches ---- */
+.legend .swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #444;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.legend .swatch-sentinel {
+  background: #40916c;
+  border: 1.5px solid #444;
+  border-radius: 2px;
+}
+
+.legend .swatch-dashed {
+  background: transparent;
+  border: 1.5px dashed #666;
+  border-radius: 50%;
+}
+
+.legend .swatch-inat {
+  background: #e9ecef;
+  border: 1.5px solid #666;
+  border-radius: 50%;
+}
+
+.legend-note {
+  font-size: 10px;
+  color: #888;
+  margin-top: 4px;
+  line-height: 1.3;
+  max-width: 160px;
+}
+
+
+/* ============================================================
+   10. LIGHTBOX — click a thumbnail → full-size image
+   ============================================================ */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: lightbox-fade 0.15s ease-out;
+}
+
+@keyframes lightbox-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 92vw;
+  max-height: 92vh;
+  cursor: default;
+}
+
+.lightbox-content img {
+  display: block;
+  max-width: 92vw;
+  max-height: 92vh;
+  border-radius: 6px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: #222;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-close:hover { background: #eee; }
+
+
+/* ============================================================
+   11. MAP STATUS BADGE — top-right "N observations" block
+   ============================================================ */
+.map-status {
+  position: fixed;
+  top: 96px;
+  right: 16px;
+  z-index: 500;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #f4f7f4;
+  background: #1B4332;
+  border: 1px solid #0f2a1d;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1.35;
+  max-width: calc(100vw - 32px);
+  text-align: right;
+}
+
+.map-status::before {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 40px;
+  margin: 0 0 8px auto;
+  background: #DCBD23;
+  border-radius: 2px;
+}
+
+.map-status .status-line {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.85;
+  line-height: 1.35;
+}
+
+.map-status .status-line-main {
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.map-status .status-sub {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
+/* ---- 11a. Filtered state (amber) ---- */
+.map-status.is-filtered {
+  background: #4a3a12;
+  border-color: #7a6000;
+}
+
+.map-status.is-filtered::before {
+  background: #ffd166;
+}
+
+@media (max-width: 600px) {
+  .map-status {
+    top: 88px;
+    right: 8px;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  .map-status::before { width: 28px; height: 2px; margin-bottom: 6px; }
+}
+
+
+/* ============================================================
+   12. STORY TRIGGER BUTTON — "About this map"
+   ============================================================ */
+.story-open {
+  position: fixed;
+  left: 16px;
+  bottom: 56px;
+  z-index: 500;
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #1B4332;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background 0.12s, transform 0.12s;
+}
+
+.story-open:hover {
+  background: #2D6A4F;
+  transform: translateY(-1px);
+}
+
+.story-open:active { transform: translateY(0); }
+
+.story-open:focus-visible {
+  outline: 3px solid #DCBD23;
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .story-open {
+    left: 8px;
+    bottom: 52px;
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+}
+
+
+/* ============================================================
+   13. STORY OVERLAY — the modal itself
+   ============================================================ */
+.story-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+  animation: story-fade 0.15s ease-out;
+}
+
+.story-overlay[hidden] { display: none; }
+
+@keyframes story-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.story-content {
+  position: relative;
+  max-width: 700px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 40px 44px 36px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #1b1f2a;
+  cursor: auto;
+}
+
+.story-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  color: #333;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.story-close:hover { background: #e0e0e0; }
+
+.story-close:focus-visible {
+  outline: 3px solid #1B4332;
+  outline-offset: 2px;
+}
+
+/* ---- 13a. Headings + paragraphs + lists inside the modal ---- */
+.story-content h1 {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #1B4332;
+  margin: 0 0 16px;
+  padding-right: 40px;
+  letter-spacing: -0.01em;
+}
+
+.story-content .lede {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #2a2f3a;
+  margin: 0 0 16px;
+}
+
+.story-content p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #1b1f2a;
+  margin: 0 0 12px;
+}
+
+.story-content p > strong:first-child {
+  color: #1B4332;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.story-content .story-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e3e3e3;
+}
+
+.story-content h2 {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1B4332;
+  margin: 0 0 8px;
+}
+
+.story-content ul {
+  margin: 0;
+  padding-left: 20px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #333;
+}
+
+.story-content ul li { margin-bottom: 6px; }
+
+.story-content a {
+  color: #1B4332;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.story-content a:hover { text-decoration: none; }
+
+@media (max-width: 640px) {
+  .story-overlay { padding: 12px; align-items: flex-start; }
+  .story-content { padding: 28px 20px 24px; }
+  .story-content h1 { font-size: 20px; }
+  .story-content .lede { font-size: 15px; }
+  .story-content p { font-size: 14px; }
+}
+
+
+/* ============================================================
+   14. BOROUGH STATS PANEL — side panel after clicking a borough
+   ============================================================ */
+.borough-panel {
+  position: fixed;
+  bottom: 100px;
+  left: 16px;
+  z-index: 1000;
+  width: 300px;
+  max-height: calc(100vh - 260px);
+  overflow: auto;
+  background: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  border-left: 4px solid #1B4332;
+  font-size: 13px;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.bp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #1B4332;
+  color: #fff;
+  border-radius: 0 8px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.bp-title {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.bp-title.has-overflow {
+  cursor: help;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.45);
+  text-underline-offset: 3px;
+}
+
+.bp-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.bp-close:hover { background: rgba(255, 255, 255, 0.15); }
+
+.bp-body { padding: 10px 12px 14px; }
+
+.bp-total { font-size: 12px; color: #666; margin-bottom: 8px; }
+
+/* ---- 14a. Tier rows (expandable) ---- */
+.bp-tier {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  margin: 4px 0;
+  background: #f6f6f6;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: #222;
+  transition: background 0.12s;
+}
+
+.bp-tier:hover { background: #e6f0ea; }
+.bp-tier.open  { background: #b7d3c5; border-color: #c5d3ef; }
+
+.bp-tier .swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid #000;
+}
+
+.bp-tier .bp-count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.bp-tier .bp-caret { margin-left: 6px; font-size: 11px; color: #888; }
+
+/* ---- 14b. Per-species list inside an expanded tier ---- */
+.bp-species {
+  margin: 4px 0 8px 12px;
+  padding: 6px 8px;
+  background: #fafbfd;
+  border-left: 2px solid #d6dff0;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+}
+
+.bp-species-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px dashed #e9edf4;
+}
+
+.bp-species-row:last-child { border-bottom: none; }
+
+.bp-species-row .sci {
+  color: #666;
+  font-style: italic;
+  font-size: 11px;
+  display: block;
+}
+
+.bp-species-row .sp-name { flex: 1 1 auto; min-width: 0; }
+
+.bp-species-row .sp-count {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  color: #1B4332;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .borough-panel {
+    left: 8px;
+    bottom: 96px;
+    width: calc(100vw - 16px);
+    max-height: 50vh;
+  }
+}
+
+
+/* ============================================================
+   15. SPECIES CATALOG PAGE — header, cards, badges
+   ============================================================ */
+.species-header {
+  padding: 12px 20px;
+  background: #1B4332;
+  color: #fff;
+  min-height: 88px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.species-header h1 { margin: 0 0 4px; font-size: 18px; font-weight: 600; }
+
+.species-source {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #d3e4d9;
+  max-width: 780px;
+}
+
+.species-source a { color: #DCBD23; text-decoration: underline; }
+.species-source a:hover { text-decoration: none; }
+
+.species-main {
+  flex: 1 1 auto;
+  padding: 12px 20px 28px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.species-layout { display: block; max-width: 1280px; position: relative; }
+.species-list { max-width: 900px; }
+
+.species-card.active {
+  border-color: #1B4332;
+  box-shadow: 0 0 0 2px rgba(27, 67, 50, 0.15);
+}
+
+/* ---- 15a. Tier headings between groups of cards ---- */
+.species-tier-heading {
+  margin: 24px 0 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e3e3e3;
+}
+
+.species-tier-heading:first-child { margin-top: 0; }
+
+.species-tier-heading.tier-high     { color: #8b0000; border-bottom-color: #e63946; }
+.species-tier-heading.tier-moderate { color: #a15c00; border-bottom-color: #f4a261; }
+.species-tier-heading.tier-low      { color: #7a6000; border-bottom-color: #ffd166; }
+.species-tier-heading.tier-watch    { color: #555;    border-bottom-color: #adb5bd; }
+
+/* ---- 15b. The card itself ---- */
+.species-card {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e3e3e3;
+  padding: 12px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.15s, transform 0.15s;
+  position: relative;
+}
+
+.species-card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08); }
+
+/* ---- 15c. Photo block ---- */
+.species-photo {
+  position: relative;
+  flex: 0 0 132px;
+  width: 132px;
+  align-self: stretch;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #eef2ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.species-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.species-photo-placeholder { flex-direction: column; gap: 4px; color: #fff; text-align: center; }
+.species-photo-placeholder.tier-high     { background: #e63946; }
+.species-photo-placeholder.tier-moderate { background: #f4a261; }
+.species-photo-placeholder.tier-low      { background: #ffd166; color: #5c4700; }
+.species-photo-placeholder.tier-watch    { background: #adb5bd; }
+
+.species-photo-placeholder .spp-initials { font-size: 28px; font-weight: 700; line-height: 1; }
+.species-photo-placeholder .spp-hint {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  opacity: 0.85; font-weight: 600;
+}
+
+/* ---- 15d. Photo credit ---- */
+.species-credit {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 3px 6px;
+  font-size: 9.5px;
+  line-height: 1.3;
+  font-weight: 500;
+  text-align: right;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a.species-credit:hover { text-decoration: underline; }
+
+/* ---- 15e. Observation-count pills (iNat + Sentinelle) ---- */
+.species-counts {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.species-count-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e3e3e3;
+  border-radius: 9px;
+  line-height: 1.4;
+}
+
+.sc-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.sc-dot-inat {
+  background: #e9ecef;
+  border: 1.5px solid #666;
+  border-radius: 50%;
+}
+
+.sc-dot-sentinel {
+  background: #40916c;
+  border: 1.5px solid #1B4332;
+  border-radius: 2px;
+}
+
+/* ---- 15f. Body text + tier badge + pills ---- */
+.species-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+.species-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.species-name { margin: 0; font-size: 15px; font-weight: 600; color: #1B4332; }
+.species-sci  { margin: 0 0 8px; font-size: 12.5px; color: #666; }
+
+.species-tier-badge {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.species-tier-badge.tier-high     { background: #fde2e4; color: #8b0000; }
+.species-tier-badge.tier-moderate { background: #fdead2; color: #7a4500; }
+.species-tier-badge.tier-low      { background: #fff4c2; color: #5c4700; }
+.species-tier-badge.tier-watch    { background: #e9ecef; color: #444; }
+
+.species-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+.pill {
+  display: inline-block;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #eef2ee;
+  color: #333;
+}
+
+.pill-ban { background: #fde2e4; color: #8b0000; font-weight: 600; }
+
+.species-desc { margin: 0 0 10px; font-size: 13px; color: #333; line-height: 1.5; }
+.species-desc-empty { color: #999; font-style: italic; }
+
+/* ---- 15g. Action buttons ---- */
+.species-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; align-items: center; }
+
+.species-tax-btn {
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  background: #fff;
+  color: #1B4332;
+  border: 1px solid #c8d6cd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.species-tax-btn:hover { background: #eef6f0; border-color: #1B4332; }
+
+.species-project-btn {
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  background: #1D4E89;
+  color: #fff;
+  border: 1px solid #1D4E89;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+
+.species-project-btn:hover { background: #163d6c; border-color: #163d6c; }
+
+.species-project-btn .spb-count {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 9px;
+}
+
+.species-project-btn.is-empty,
+.species-project-btn:disabled {
+  background: #fff;
+  color: #7a90ab;
+  border-color: #c3d1e2;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.species-project-btn.is-empty:hover,
+.species-project-btn:disabled:hover { background: #fff; border-color: #c3d1e2; }
+
+.species-wiki {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #1B4332;
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid #c8d6cd;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+
+.species-wiki:hover { background: #eef6f0; border-color: #1B4332; }
+
+/* ---- 15h. Empty state + count label ---- */
+.species-empty { padding: 20px; text-align: center; color: #888; }
+
+.species-count { font-size: 12px; color: #555; }
+
+
+/* ============================================================
+   16. TAXONOMY PANEL — "View scientific classification"
+   ============================================================ */
+.taxonomy-panel {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  font-size: 13px;
+  color: #222;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+@media (min-width: 1000px) {
+  .taxonomy-panel {
+    position: fixed;
+    top: 196px;
+    right: max(60px, calc((100vw - 1280px) / 2 + 60px));
+    width: 340px;
+    z-index: 30;
+    max-height: calc(100vh - 196px - 40px);
+  }
+}
+
+@media (max-width: 999px) {
+  .taxonomy-panel { margin-top: 20px; width: 100%; max-width: 900px; position: static; }
+}
+
+.tax-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: #1B4332;
+  color: #fff;
+}
+
+.tax-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.tax-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tax-close:hover { background: rgba(255, 255, 255, 0.15); }
+
+.tax-body { padding: 12px 14px 14px; }
+
+.tax-species {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.tax-common { font-size: 14px; font-weight: 600; color: #1B4332; }
+.tax-sci    { font-size: 12px; color: #555; margin-top: 2px; }
+
+.tax-rows { display: grid; gap: 4px; }
+
+.tax-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+  border-bottom: 1px dashed #eef1ef;
+  font-size: 12.5px;
+}
+
+.tax-row:last-child { border-bottom: none; }
+
+.tax-label {
+  color: #888;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.tax-value { color: #222; text-align: right; }
+.tax-value em { font-style: italic; color: #222; }
+
+
+/* ============================================================
+   17. PROJECTS PANEL — "View projects & initiatives"
+   ============================================================ */
+.projects-panel {
+  background: #fff;
+  border: 1px solid #cfdcef;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(21, 68, 130, 0.14);
+  overflow: hidden;
+  font-size: 13px;
+  color: #222;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+@media (min-width: 1000px) {
+  .projects-panel {
+    position: fixed;
+    top: 196px;
+    right: max(60px + 340px + 16px, calc((100vw - 1280px) / 2 + 60px + 340px + 16px));
+    width: 340px;
+    z-index: 30;
+    max-height: calc(100vh - 196px - 40px);
+  }
+}
+
+@media (max-width: 999px) {
+  .projects-panel { margin-top: 20px; width: 100%; max-width: 900px; position: static; }
+}
+
+.pp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: #1D4E89;
+  color: #fff;
+}
+
+.pp-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.pp-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pp-close:hover { background: rgba(255, 255, 255, 0.18); }
+
+.pp-body { padding: 12px 14px 14px; }
+
+.pp-species { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #e6edf6; }
+
+.pp-common { font-size: 14px; font-weight: 600; color: #1D4E89; }
+.pp-sci    { font-size: 12px; color: #555; margin-top: 2px; }
+
+.pp-empty { margin: 0; font-size: 12.5px; color: #888; font-style: italic; }
+
+.pp-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+
+.pp-item {
+  background: #f4f8fd;
+  border: 1px solid #dbe7f3;
+  border-left: 3px solid #1D4E89;
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.pp-item-head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 4px; }
+
+.pp-item-name { font-weight: 600; color: #15355a; font-size: 13px; line-height: 1.3; }
+
+.pp-org { font-size: 11.5px; color: #5a6b80; }
+
+.pp-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1D4E89;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.pp-link:hover { color: #0f3563; }
+
+
+/* ============================================================
+   18. SEARCH + SUGGESTIONS — shared search dropdown
+   ============================================================ */
+.species-search-wrap {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 340px;
+}
+
+.species-search-input {
+  margin-bottom: 0;
+}
+
+/* Suggestion dropdown — floats above Leaflet controls and the borough panel */
+.species-suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 6000;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.species-suggest[hidden] { display: none; }
+
+.ss-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  text-align: left;
+  font: inherit;
+  font-size: 12.5px;
+  color: #222;
+  cursor: pointer;
+  position: relative;
+}
+
+.ss-item:hover,
+.ss-item.active { background: #eef6f0; }
+
+.ss-item.is-checked { background: #e6f0ea; }
+
+.ss-common { font-weight: 600; line-height: 1.25; }
+
+.ss-sci {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.2;
+  padding-right: 80px;
+}
+
+.ss-tier {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.ss-tier.tier-high     { background: #fde2e4; color: #8b0000; }
+.ss-tier.tier-moderate { background: #fdead2; color: #7a4500; }
+.ss-tier.tier-low      { background: #fff4c2; color: #5c4700; }
+.ss-tier.tier-watch    { background: #e9ecef; color: #444;    }
+
+.ss-empty {
+  padding: 10px 8px;
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+}
+
+/* ---- 18a. Inside the map's species popover ---- */
+.fp-panel .species-suggest {
+  position: static;
+  margin: 0 0 6px;
+  box-shadow: none;
+  border-color: #e0e0e0;
+  z-index: auto;
+}
+
+/* ---- 18b. Clamp the species popover suggest box ---- */
+#f-species-suggest {
+  max-height: calc(100vh - 300px);
+}
+
+@media (max-height: 600px) {
+  #f-species-suggest { max-height: 180px; }
+}
+
+
+/* ============================================================
+   19. SPECIES CATALOG FILTER BAR — small-screen layout fixes
+   ============================================================ */
+@media (max-width: 700px) {
+  .species-search-wrap { flex: 1 1 100%; max-width: none; }
+}
+
+.filter-row .species-search-input {
+  margin-bottom: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.filter-row .species-search-wrap {
+  flex: 0 1 240px;
+  max-width: 240px;
+}
+
+@media (max-width: 700px) {
+  .filter-row .species-search-wrap {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+}
+
+
+/* ============================================================
+   20. SENTINELLE MARKER — square marker hover
+   ============================================================ */
+.sentinel-square {
+  background: transparent;
+  border: none;
+}
+.sentinel-square:hover > div {
+  background: #52b788 !important;
+  border-color: #121212 !important;
+}
+
+
+/* ============================================================
+   21. LEAFLET FOCUS FIX — remove the default outline on focus
+   ============================================================ */
+.leaflet-interactive:focus,
+.leaflet-interactive:focus-visible {
+  outline: none !important;
+}

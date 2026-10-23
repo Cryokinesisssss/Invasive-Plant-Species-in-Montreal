@@ -58,3 +58,7 @@ How I tested it: The notebook's final check cell asserts that the feature count 
 What stayed human: The risk tiers and TAXON_INFO, the licence policy, the story text, the colors, the "About this map" section.
 
 What I don't yet understand: Clicking a borough works, it outlines and the side panel fills in with the right counts. But I don't fully understand how that click reaches renderSelectionPanel without the map's own click handler also firing and closing the panel. I know L.DomEvent.stopPropagation(e) is involved, because I hit the bug where the panel opened and immediately closed, and adding it fixed it. I just couldn't explain the event order from memory.
+
+After the demo (LAB 5):
+ - What is this map about? "This map is about invasive plant species in Montreal and their levels of risk"
+ - What do the darkest (or the different) colours mean? "The different colors display levels of risk for species, the darkest colors are the most high risk"

@@ -84,6 +84,13 @@ let sentinelLayer = null;
 let sentinelFeatures = [];
 let sentinelVisible = false;
 
+// ---- 3c. Community projects layer ----
+let projectLayer = null;
+let projectFeatures = [];
+let projectsVisible = true;
+let projectsLoaded = false;
+let projectsLoadFailed = false;
+
 // ---- 3c. iNat visibility (analogous to sentinelVisible) ----
 let inatVisible = true;
 
@@ -826,6 +833,11 @@ document.getElementById('f-sentinel').addEventListener('change', function (e) {
   buildSentinelLayer();
 });
 
+document.getElementById('f-projects').addEventListener('change', function (e) {
+  projectsVisible = e.target.checked;
+  buildProjectLayer();
+});
+
 // iNat toggle (same idea as Sentinelle toggle)
 const inatToggleEl = document.getElementById('f-inat');
 if (inatToggleEl) {
@@ -875,6 +887,10 @@ document.getElementById('f-reset').addEventListener('click', function () {
   if (sentinelCb) sentinelCb.checked = false;
   buildSentinelLayer();
 
+  projectsVisible = true;
+  document.getElementById('f-projects').checked = true;
+  buildProjectLayer();
+
   inatVisible = true;
   const inatCb = document.getElementById('f-inat');
   if (inatCb) inatCb.checked = true;
@@ -904,7 +920,8 @@ legend.onAdd = function () {
     '<div class="legend-row"><span class="swatch swatch-dashed"></span>Fuzzed <small>(<100 m)</small></div>' +
     '<div class="legend-divider"></div>' +
     '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
-    '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';
+    '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>' +
+    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects <small>(blue circle)</small></div>';
   return div;
 };
 legend.addTo(map);
@@ -1082,6 +1099,36 @@ function statsFor(obsList) {
   return { byTier: byTier, speciesByTier: speciesByTier };
 }
 
+function projectsInSelection() {
+  if (!projectsLoaded) return null;
+
+  const polygons = [];
+  if (selectedBorough) {
+    polygons.push(selectedBorough);
+  } else {
+    if (filterState.boroughs.has('__boroughs__') && boroughsUnion) {
+      polygons.push(boroughsUnion);
+    }
+    if (boroughData) {
+      boroughData.features.forEach(function (feature) {
+        if (filterState.boroughs.has(nameEn(feature))) polygons.push(feature);
+      });
+    }
+  }
+
+  if (!polygons.length) return projectFeatures.length;
+  if (!window.turf) return 0;
+
+  return projectFeatures.filter(function (feature) {
+    const geometry = feature.geometry;
+    if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates)) return false;
+    const point = turf.point(geometry.coordinates);
+    return polygons.some(function (polygon) {
+      return turf.booleanPointInPolygon(point, polygon);
+    });
+  }).length;
+}
+
 function renderSpeciesListRows(byKey) {
   const rows = Object.values(byKey).sort(function (a, b) { return b.count - a.count; });
   let html = '<div class="bp-species">';
@@ -1129,6 +1176,13 @@ function renderSelectionPanel() {
             '</button>';
     if (isOpen) html += renderSpeciesListRows(stats.speciesByTier[tier]);
   });
+
+  const projectCount = projectsInSelection();
+  const projectCountText = projectCount === null
+    ? (projectsLoadFailed ? 'Unavailable' : 'Loading…')
+    : projectCount + ' project' + (projectCount === 1 ? '' : 's');
+  html += '<div class="bp-project-count"><span>Projects</span><strong>' +
+    projectCountText + '</strong></div>';
 
   BP_BODY.innerHTML = html;
   BOROUGH_PANEL.hidden = false;
@@ -1428,3 +1482,116 @@ fetch('data/sentinel_wgs84.geojson')
     if (sentinelVisible) buildSentinelLayer();
   })
   .catch(function (err) { console.error('Could not load Sentinelle data:', err); });
+
+
+// ============================================================
+// 22. COMMUNITY PROJECTS — maintained in data/projects.geojson
+// ============================================================
+map.createPane('projectPane');
+map.getPane('projectPane').style.zIndex = 660;
+
+function buildProjectLayer() {
+  if (projectLayer) {
+    map.removeLayer(projectLayer);
+    projectLayer = null;
+  }
+  if (!projectsVisible || projectFeatures.length === 0) return;
+
+  projectLayer = L.geoJSON(
+    { type: 'FeatureCollection', features: projectFeatures },
+    {
+      pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, {
+          pane: 'projectPane',
+          radius: 8,
+          color: '#fff',
+          weight: 2,
+          fillColor: '#1D4E89',
+          fillOpacity: 1
+        });
+      },
+      onEachFeature: function (feature, layer) {
+        const p = feature.properties || {};
+        let html = '<div class="project-popup">';
+        html += '<div class="popup-title">' + escapeHtml(p.name || 'Untitled project') + '</div>';
+        html += '<div class="project-meta">' +
+          (p.organization ? escapeHtml(p.organization) : 'Community project') +
+          (p.year ? ' · ' + escapeHtml(p.year) : '') +
+          '</div>';
+        if (p.description) {
+          html += '<p class="project-description">' + escapeHtml(p.description) + '</p>';
+        }
+        if (Array.isArray(p.species) && p.species.length) {
+          html += '<div class="project-species"><strong>Associated species</strong><ul>';
+          p.species.forEach(function (species) {
+            if (!species || !species.common) return;
+            const catalogTerm = species.scientific || species.common;
+            const catalogUrl = 'site/species.html?species=' + encodeURIComponent(catalogTerm);
+            html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '" title="Open species catalog entry">';
+            html += escapeHtml(species.common);
+            if (species.scientific) {
+              html += ' <em>(' + escapeHtml(species.scientific) + ')</em>';
+            }
+            html += '</a></li>';
+          });
+          html += '</ul></div>';
+        } else if (p.species_note) {
+          html += '<div class="project-species"><strong>Associated species</strong><div>' +
+            escapeHtml(p.species_note) + '</div></div>';
+        }
+        const hasDetails = p.project_area || (Array.isArray(p.actions) && p.actions.length);
+        if (hasDetails) {
+          html += '<details class="project-more"><summary>Project sites and restoration work</summary>';
+        }
+        if (p.project_area) {
+          html += '<div class="project-detail"><strong>Sites:</strong> ' + escapeHtml(p.project_area) + '</div>';
+        }
+        if (Array.isArray(p.actions) && p.actions.length) {
+          html += '<div class="project-detail"><strong>Work:</strong><ul>';
+          p.actions.forEach(function (action) {
+            html += '<li>' + escapeHtml(action) + '</li>';
+          });
+          html += '</ul></div>';
+        }
+        if (hasDetails) html += '</details>';
+        if (p.marker_location) {
+          html += '<div class="project-location-note">' + escapeHtml(p.marker_location) + '</div>';
+        }
+        let hasSourceLink = false;
+        if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
+          html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
+          hasSourceLink = true;
+        }
+        if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
+          html += '<a class="popup-btn" href="' + escapeAttr(p.source_url) + '" target="_blank" rel="noopener noreferrer">Project update →</a>';
+          hasSourceLink = true;
+        }
+        if (!hasSourceLink) {
+          html += '<div class="project-source-missing">Source link not added yet.</div>';
+        }
+        html += '</div>';
+        layer.bindPopup(html, { maxWidth: 320, minWidth: 240, maxHeight: 360 });
+      }
+    }
+  ).addTo(map);
+}
+
+fetch('data/projects.geojson')
+  .then(function (response) {
+    if (!response.ok) throw new Error('HTTP ' + response.status + ' loading projects.geojson');
+    return response.json();
+  })
+  .then(function (data) {
+    if (!data || data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
+      throw new Error('projects.geojson must be a GeoJSON FeatureCollection');
+    }
+    projectFeatures = data.features;
+    projectsLoaded = true;
+    buildProjectLayer();
+    if (BOROUGH_PANEL && !BOROUGH_PANEL.hidden) renderSelectionPanel();
+  })
+  .catch(function (err) {
+    projectsLoadFailed = true;
+    console.error('Could not load project data:', err);
+    if (BOROUGH_PANEL && !BOROUGH_PANEL.hidden) renderSelectionPanel();
+  });

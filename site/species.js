@@ -690,18 +690,34 @@ const TIER_META = {
   watch:    { label: 'Undetermined — watch', className: 'tier-watch' }
 };
 
-const PROJECTS = {
-  // Add entries here, for example:
-  // 'Alliaria petiolata': [
-  //   { name: 'Garlic Mustard Pull', org: 'Les Amis de la Montagne',
-  //     url: 'https://example.org/' }
-  // ],
-};
+let projectRecords = [];
 
 function projectsFor(s) {
-  const list = PROJECTS[s.sci];
-  return Array.isArray(list) ? list : [];
+  return projectRecords.filter(function (project) {
+    const species = project.properties && project.properties.species;
+    return Array.isArray(species) && species.some(function (item) {
+      return item && normLatin(item.scientific) === normLatin(s.sci);
+    });
+  });
 }
+
+fetch('../data/projects.geojson')
+  .then(function (response) {
+    if (!response.ok) throw new Error('HTTP ' + response.status + ' loading projects.geojson');
+    return response.json();
+  })
+  .then(function (data) {
+    if (!data || data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
+      throw new Error('projects.geojson must be a GeoJSON FeatureCollection');
+    }
+    projectRecords = data.features.filter(function (feature) {
+      return feature && feature.type === 'Feature' && feature.properties;
+    });
+    render();
+  })
+  .catch(function (err) {
+    console.error('Could not load catalog project data:', err);
+  });
 
 
 // ============================================================
@@ -789,12 +805,12 @@ function renderCounts(s) {
 
   const inatPart = c.inat > 0
     ? '<span class="species-count-pill" title="iNaturalist observations">' +
-        '<span class="sc-dot sc-dot-inat"></span>' + fmt(c.inat) +
+        '<span class="sc-dot sc-dot-inat" title="iNaturalist"></span>' + fmt(c.inat) +
       '</span>'
     : '';
   const sentPart = c.sentinel > 0
     ? '<span class="species-count-pill" title="Sentinelle observations">' +
-        '<span class="sc-dot sc-dot-sentinel"></span>' + fmt(c.sentinel) +
+        '<span class="sc-dot sc-dot-sentinel" title="Sentinelle"></span>' + fmt(c.sentinel) +
       '</span>'
     : '';
 
@@ -960,6 +976,7 @@ const TAX_ROWS = [
 ];
 
 function showTaxonomy(s) {
+  projPanel.hidden = true;
   const header = '<div class="tax-species">' +
       '<div class="tax-common">' + s.common + '</div>' +
       '<div class="tax-sci"><em>' + s.sci + '</em></div>' +
@@ -1007,23 +1024,41 @@ function showProjects(s) {
     html += '<p class="pp-empty">No projects or initiatives recorded for this species yet.</p>';
   } else {
     html += '<ul class="pp-list">';
-    projs.forEach(function (p) {
-      const org = p.org ? '<span class="pp-org">' + p.org + '</span>' : '';
-      const url = p.url
-        ? '<a class="pp-link" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Visit →</a>'
-        : '';
+    projs.forEach(function (project) {
+      const p = project.properties;
+      const org = p.organization ? '<span class="pp-org">' + escapeHtml(p.organization) +
+        (p.year ? ' · ' + escapeHtml(p.year) : '') + '</span>' : '';
+      let links = '';
+      if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
+        links += '<a class="pp-link" href="' + escapeAttr(p.project_url) +
+          '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
+      }
+      if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
+        links += '<a class="pp-link" href="' + escapeAttr(p.source_url) +
+          '" target="_blank" rel="noopener noreferrer">Project update →</a>';
+      }
+      const details = [];
+      if (p.project_area) details.push('<div class="pp-detail"><strong>Sites:</strong> ' + escapeHtml(p.project_area) + '</div>');
+      if (Array.isArray(p.actions) && p.actions.length) {
+        details.push('<div class="pp-detail"><strong>Work:</strong><ul>' +
+          p.actions.map(function (action) { return '<li>' + escapeHtml(action) + '</li>'; }).join('') +
+          '</ul></div>');
+      }
       html += '<li class="pp-item">' +
                 '<div class="pp-item-head">' +
-                  '<span class="pp-item-name">' + p.name + '</span>' +
+                  '<span class="pp-item-name">' + escapeHtml(p.name || 'Untitled project') + '</span>' +
                   org +
                 '</div>' +
-                url +
+                (p.description ? '<p class="pp-description">' + escapeHtml(p.description) + '</p>' : '') +
+                (details.length ? '<details class="pp-more"><summary>Project details</summary>' + details.join('') + '</details>' : '') +
+                (links ? '<div class="pp-links">' + links + '</div>' : '') +
               '</li>';
     });
     html += '</ul>';
   }
 
   projBody.innerHTML = html;
+  taxPanel.hidden = true;
   projPanel.hidden = false;
 
   if (window.matchMedia('(max-width: 999px)').matches) {
@@ -1219,6 +1254,15 @@ function updateCatSummaries() {
 const searchInput = document.getElementById('species-search');
 const suggestBox  = document.getElementById('species-search-suggest');
 let suggestIndex  = -1;
+const requestedSpeciesName = new URLSearchParams(window.location.search).get('species');
+const requestedSpecies = requestedSpeciesName && SPECIES.find(function (species) {
+  return normLatin(species.sci) === normLatin(requestedSpeciesName) ||
+    normalizeSearchText(species.common) === normalizeSearchText(requestedSpeciesName);
+});
+if (requestedSpecies) {
+  catFilters.search = requestedSpecies.common;
+  searchInput.value = requestedSpecies.common;
+}
 
 function hideSearchSuggest() {
   if (suggestBox) suggestBox.hidden = true;
@@ -1341,3 +1385,10 @@ if (resetBtn) resetBtn.addEventListener('click', function () {
 // ============================================================
 render();
 updateCatSummaries();
+if (requestedSpecies) {
+  const speciesCard = Array.from(listEl.querySelectorAll('.species-card')).find(function (card) {
+    const name = card.querySelector('.species-name');
+    return name && name.textContent === requestedSpecies.common;
+  });
+  if (speciesCard) speciesCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}

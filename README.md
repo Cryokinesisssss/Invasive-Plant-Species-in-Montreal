@@ -39,6 +39,23 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 3. Run `notebooks/build_places.ipynb` top-to-bottom to regenerate
    `data/places.geojson`; the final check cell must print four ✓.
 
+## Adding projects to the map
+- Add each project as a GeoJSON `Feature` in `data/projects.geojson`.
+- Store point coordinates in GeoJSON order: `[longitude, latitude]`.
+- Use the `Projects` checkbox to show or hide all project points.
+- Include the organization and project area. Use `project_url` for the
+  original project details and `source_url` for a later project update or
+  additional information.
+  The marker location can represent the organization rather than the project
+  site, so explain that distinction in `marker_location`.
+- Add related species in the `species` array using their catalog common and
+  scientific names. The species catalog uses those scientific names to list
+  associated projects, which can be opened in its projects panel.
+- If the source does not identify the species, leave `species` empty and add
+  a clear explanation in `species_note`.
+- Borough and city project totals are based on each project's mapped point
+  falling inside the selected boundary.
+
 ## Not in this iteration
 - Green spaces (parks, cemeteries, golf courses) are not a separate
   layer — they would clutter the map at this zoom.
@@ -66,17 +83,17 @@ After the demo (LAB 5):
  - What is this map about? "This map is about invasive plant species in Montreal and their levels of risk"
  - What do the darkest (or the different) colours mean? "The different colors display levels of risk for species, the darkest colors are the most high risk"
 
- ## A3
+ ## A3 card and three tests, before any code
 ## A3 feature: Invasive plant species related projects
 For A3 I will add projects as points that would describe various projects ways cities or organizations are working with the invasive plants, so that my reader can learn more about what is happening in the city in terms of invasive plant species prevention/control/etc.
 It has depth because it (computes / responds / brings in) provides another angle, rather than just showing all the invasive species, it would show what is currently or has been done about it.
 I will know it works when i have a point and a pop up of atleast one project.
-My edge case is when an organization works on invasive plants in Montreal but is based outside the city, so its point may not show where the project is actually happening.
+My edge case is when a project source discusses invasive plants but does not name a specific species. The project should still appear on the map, while its pop-up explains that no species was specified and it is not assigned to a species catalog entry.
 
 
 Test 1. I click a project point on the map..
  Expected: A pop-up appears with the project or organization name, a short description, and a link to the source article.
-Test 2. The project records what species its involved with and what borough/city.
- Expected: The related species appears in the species catalog and/or borough/city stats.
-Test 3. I view a project whose organization is based outside of Montreal (if I can find one).
- Expected: The point appears at the organization's location and the pop up makes clear that this where the organization is based, not necessarily where the project takes place.
+Test 2. I select a borough or city from the map filter.
+ Expected: The observation panel shows the number of project points located inside the selected boundary.
+Test 3. I click a project point whose source does not identify a specific invasive species.
+ Expected: Its pop-up says the source does not identify a specific species, and the project is not listed under a species in the catalog.

@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pilot - Eradication of buckthorn",
+        "organization": "Ville de Pointe-Claire",
+        "year": "2021-present",
+        "description": "A pilot project to eliminate buckthorn from natural areas in Pointe-Claire parks.",
+        "species": [
+          {
+            "common": "Glossy buckthorn",
+            "scientific": "Frangula alnus"
+          },
+          {
+            "common": "Common buckthorn",
+            "scientific": "Rhamnus cathartica"
+          }
+        ],
+        "project_area": "Terra Cotta Park, Tony-Proudfoot Park, Cedar Park Heights Park, David-W-Beck Park, and the green space between Kings and Queens Avenues",
+        "actions": [
+          "Cutting buckthorn plants.",
+          "Treating stumps with a naturally occurring pathogenic fungus to prevent regrowth.",
+          "Manually removing and sterilizing stumps, then installing a plastic membrane to block regrowth.",
+          "Inspecting the sites annually and manually removing remaining shoots.",
+          "Planting a diversity of native trees and plants to restore the area."
+        ],
+        "marker_location": "Marker shows the organization's location, not the project sites.",
+        "project_url": "https://www.pointe-claire.ca/en/wildlife-flora-and-species/urban-flora/invasive-harmful-species/buckthorn#:~:text=Pilot%20eradication%20project%20in%20Terra%20Cotta%20Park",
+        "source_url": "https://www.pointe-claire.ca/en/municipal-organization/news-and-media/news/pilot-project-eradication-of-buckthorn-in-terra-cotta-natural-park-2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.808465, 45.445937]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Phytotechnology station for invasive plant management",
+        "organization": "Montréal Botanical Garden / Space for Life",
+        "year": "2021",
+        "description": "A phytotechnology station uses native plants and floating islands to help limit the establishment of invasive plants.",
+        "species": [],
+        "species_note": "The source describes invasive plants but does not identify a specific species.",
+        "project_area": "Montréal Botanical Garden",
+        "actions": [
+          "Established a riparian strip with diverse native plants to compete with invasive plants and filter runoff.",
+          "Installed floating plant islands to make it harder for invasive plants that need sunlight to establish."
+        ],
+        "marker_location": "Marker shows the project location at the Montréal Botanical Garden.",
+        "project_url": "https://aiph.org/green-city-case-studies/montreal-canada-botanical-garden/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.556806, 45.557222]
+      }
+    }
+  ]
+}

@@ -1148,7 +1148,7 @@ function renderSelectionPanel() {
 // 18. LOAD BOUNDARIES — fetch boroughs + the click handler
 //     (this is the stopPropagation / panel-close interaction)
 // ============================================================
-fetch('data/limites-administratives-agglomeration.geojson')
+fetch('data/limites-administratives-agglomeration.GEOjson')
   .then(function (response) {
     if (!response.ok) throw new Error('HTTP ' + response.status + ' loading boundaries');
     return response.json();

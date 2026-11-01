@@ -8,7 +8,7 @@
 //   4.  Species index                   → species list for the popover
 //   5.  Observation filter              → passesFilters() for iNat dots
 //   5b. Sentinelle filter               → passesSentinelFilters()
-//   6.  Render observations             → buildObsLayer() + popup HTML
+//    6.  Render observations             → clustered iNaturalist popups
 //   7.  Initial load                    → fetch places.geojson
 //   8.  Popover open/close              → dropdown behaviour
 //   9.  Summary badges                  → "All" / "N selected" labels
@@ -24,7 +24,7 @@
 //   18. Load boundaries                 → fetch boundaries + click handler
 //   19. Lightbox                        → click thumbnail → full image
 //   20. Story overlay                   → "About this map" modal
-//   21. Sentinelle layer                → toggleable second dataset
+//    21. Sentinelle layer                → toggleable clustered second dataset
 // ============================================================
 
 
@@ -32,16 +32,76 @@
 // 1. MAP SETUP — starting view, bounds, base tiles
 // ============================================================
 const map = L.map('map', {
-  maxBounds: [[45.30, -74.10], [45.75, -73.30]],
+  maxBounds: [[45.05, -74.35], [46.00, -73.05]],
   minZoom: 10.4,
   maxBoundsViscosity: 1.0
 }).setView([45.51, -73.58], 12);
 
+const POPUP_VIEWPORT_PADDING = 40;
+let activeMapPopup = null;
+
+function popupMaxHeight() {
+  return Math.min(360, Math.max(100, map.getSize().y - 80));
+}
+
+function popupOptions(options) {
+  return Object.assign({
+    autoPan: true,
+    autoPanPaddingTopLeft: [POPUP_VIEWPORT_PADDING, POPUP_VIEWPORT_PADDING],
+    autoPanPaddingBottomRight: [POPUP_VIEWPORT_PADDING, POPUP_VIEWPORT_PADDING],
+    maxHeight: popupMaxHeight()
+  }, options);
+}
+
+function keepPopupVisible(popup) {
+  popup.options.maxHeight = popupMaxHeight();
+  popup.update();
+
+  requestAnimationFrame(function () {
+    if (activeMapPopup !== popup || !popup.isOpen()) return;
+    const popupElement = popup.getElement();
+    if (!popupElement) return;
+
+    const popupBounds = popupElement.getBoundingClientRect();
+    const mapBounds = map.getContainer().getBoundingClientRect();
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (popupBounds.left < mapBounds.left + POPUP_VIEWPORT_PADDING) {
+      offsetX = popupBounds.left - mapBounds.left - POPUP_VIEWPORT_PADDING;
+    } else if (popupBounds.right > mapBounds.right - POPUP_VIEWPORT_PADDING) {
+      offsetX = popupBounds.right - mapBounds.right + POPUP_VIEWPORT_PADDING;
+    }
+
+    if (popupBounds.top < mapBounds.top + POPUP_VIEWPORT_PADDING) {
+      offsetY = popupBounds.top - mapBounds.top - POPUP_VIEWPORT_PADDING;
+    } else if (popupBounds.bottom > mapBounds.bottom - POPUP_VIEWPORT_PADDING) {
+      offsetY = popupBounds.bottom - mapBounds.bottom + POPUP_VIEWPORT_PADDING;
+    }
+
+    if (offsetX || offsetY) {
+      map.panBy([offsetX, offsetY], { animate: true, duration: 0.2 });
+    }
+  });
+}
+
+map.on('popupopen', function (event) {
+  activeMapPopup = event.popup;
+  keepPopupVisible(activeMapPopup);
+});
+
+map.on('popupclose', function (event) {
+  if (activeMapPopup === event.popup) activeMapPopup = null;
+});
+
+map.on('resize', function () {
+  if (activeMapPopup) keepPopupVisible(activeMapPopup);
+});
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
+  maxZoom: 20,
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
-
 
 // ============================================================
 // 2. RISK → STYLE MAPPING — dot colours and labels
@@ -68,21 +128,55 @@ const filterState = {
   boroughs: new Set(),
   species: new Set(),
   years: new Set(),        // empty = all years
-  sensitive: false,
-  photo: false
+  fuzzedLocation: false,
+  exactLocation: false,
+  photo: false,
+  presence: new Set(),
+  priorityOnly: false
 };
+
+const PHOTO_LICENSE_URLS = {
+  CC0: 'https://creativecommons.org/publicdomain/zero/1.0/',
+  'CC-BY': 'https://creativecommons.org/licenses/by/4.0/',
+  'CC-BY-NC': 'https://creativecommons.org/licenses/by-nc/4.0/'
+};
+
+function normalizePriorityName(name) {
+  return String(name || '').toLowerCase().trim()
+    .replace(/×/g, 'x')
+    .replace(/\s+subsp\.\s+/g, ' ')
+    .replace(/\s+/g, ' ');
+}
+
+const normalizedPrioritySpecies = new Set(
+  Array.from(PRIORITY_SPECIES, normalizePriorityName)
+);
+
+function isPrioritySpecies(name) {
+  return normalizedPrioritySpecies.has(normalizePriorityName(name));
+}
+
+function hasReusableObservationLicense(properties) {
+  const license = String(properties.license || '').trim().toLowerCase();
+  return license !== '' && license !== 'arr' && license !== 'all rights reserved';
+}
 
 // ---- 3a. Layer + data state ----
 let obsLayer = null;
 let allFeatures = [];
+let observationDataLoaded = false;
 let boroughData = null;
 let boroughsUnion = null;
 let speciesCatalog = [];
+let observationDensityLayer = null;
+let mapMode = 'risk';
+let thematicUpdatePending = false;
 
 // ---- 3b. Sentinelle layer state ----
 let sentinelLayer = null;
 let sentinelFeatures = [];
 let sentinelVisible = false;
+let clustersEnabled = false;
 
 // ---- 3c. Community projects layer ----
 let projectLayer = null;
@@ -182,32 +276,39 @@ function buildSpeciesCatalog() {
 // 5. OBSERVATION FILTER — decides which iNat dots are visible
 //    This is the core action's filtering logic.
 // ============================================================
-function passesFilters(f) {
+function isSensitiveLocation(properties) {
+  return properties.coordinates_obscured ||
+    (properties.taxon_geoprivacy && properties.taxon_geoprivacy !== '');
+}
+
+function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (f.geometry === null) return false;
   const p = f.properties;
+  const ignoreYearFilter = ignoreSelectedYears === true;
 
   const tier = p.risk || 'unknown';
   if (!filterState.risk.has(tier)) return false;
 
   // Year filter
-  if (filterState.years.size > 0) {
+  if (!ignoreYearFilter && filterState.years.size > 0) {
     const y = (p.observed_on || '').slice(0, 4);
     if (!filterState.years.has(y)) return false;
   }
 
-  if (filterState.sensitive) {
-    const isSens = p.coordinates_obscured || (p.taxon_geoprivacy && p.taxon_geoprivacy !== '');
-    if (!isSens) return false;
-  }
+  const sensitiveLocation = isSensitiveLocation(p);
+  if (filterState.fuzzedLocation && !sensitiveLocation) return false;
+  if (filterState.exactLocation && sensitiveLocation) return false;
 
   if (filterState.photo && !p.image_url) return false;
+  if (filterState.presence.size > 0 && !filterState.presence.has(p.presence)) return false;
+  if (filterState.priorityOnly && !isPrioritySpecies(p.scientific_name)) return false;
 
   if (filterState.species.size > 0) {
     const key = (p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || '');
     if (!filterState.species.has(key)) return false;
   }
 
-  if (filterState.boroughs.size > 0 && boroughData && window.turf) {
+  if (!ignoreSelectedBoroughs && filterState.boroughs.size > 0 && boroughData && window.turf) {
     const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
     let inside = false;
 
@@ -232,20 +333,25 @@ function passesFilters(f) {
 // ============================================================
 // 5b. SENTINELLE FILTER — same filters, Sentinelle column names
 // ============================================================
-function passesSentinelFilters(f) {
+function passesSentinelFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (f.geometry === null) return false;
   const p = f.properties;
+  const ignoreYearFilter = ignoreSelectedYears === true;
 
   const tier = p.risk || 'unknown';
   if (!filterState.risk.has(tier)) return false;
 
   // Year filter
-  if (filterState.years.size > 0) {
+  if (!ignoreYearFilter && filterState.years.size > 0) {
     const y = (p['Date_observation'] || '').slice(0, 4);
     if (!filterState.years.has(y)) return false;
   }
 
   if (filterState.photo && !p['Lien_photo']) return false;
+
+  if (filterState.presence.size > 0 && !filterState.presence.has(p.Presence)) return false;
+  if (filterState.priorityOnly &&
+      !isPrioritySpecies(p.scientific_name || p['Nom_espece_latin'])) return false;
 
   if (filterState.species.size > 0) {
     const en    = (p.common_name_en || '').trim();
@@ -258,7 +364,7 @@ function passesSentinelFilters(f) {
   }
 
   // Borough filter: Sentinelle points should respect the same geographic filter
-  if (filterState.boroughs.size > 0 && boroughData && window.turf) {
+  if (!ignoreSelectedBoroughs && filterState.boroughs.size > 0 && boroughData && window.turf) {
     const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
     let inside = false;
 
@@ -277,33 +383,229 @@ function passesSentinelFilters(f) {
   return true;
 }
 
+function observationYear(feature, source) {
+  const props = feature.properties || {};
+  const raw = source === 'sentinel' ? props.Date_observation : props.observed_on;
+  const year = String(raw || '').slice(0, 4);
+  return /^\d{4}$/.test(year) ? year : '';
+}
+
+function renderObservationTrendChart() {
+  const chart = document.getElementById('trend-chart');
+  if (!chart || chart.closest('.trend-panel').hidden) return;
+
+  const years = new Set();
+  const countsByYear = Object.create(null);
+
+  function countFeature(feature, source, passesFilter, countKey) {
+    const year = observationYear(feature, source);
+    if (!year) return;
+    years.add(year);
+    if (!passesFilter(feature, true)) return;
+    if (!countsByYear[year]) countsByYear[year] = { inat: 0, sentinel: 0 };
+    countsByYear[year][countKey]++;
+  }
+
+  allFeatures.forEach(function (feature) {
+    countFeature(feature, 'inat', passesFilters, 'inat');
+  });
+  sentinelFeatures.forEach(function (feature) {
+    countFeature(feature, 'sentinel', passesSentinelFilters, 'sentinel');
+  });
+
+  const orderedYears = Array.from(years).sort();
+  const buckets = [];
+  const earlyYears = orderedYears.filter(function (year) { return Number(year) < 2013; });
+  if (earlyYears.length) buckets.push({ label: 'Before 2013', years: earlyYears });
+  orderedYears.filter(function (year) { return Number(year) >= 2013; }).forEach(function (year) {
+    buckets.push({ label: year, years: [year] });
+  });
+
+  const counts = buckets.map(function (bucket) {
+    const yearly = bucket.years.reduce(function (total, year) {
+      const current = countsByYear[year] || { inat: 0, sentinel: 0 };
+      total.inat += current.inat;
+      total.sentinel += current.sentinel;
+      return total;
+    }, { inat: 0, sentinel: 0 });
+    const inat = yearly.inat;
+    const sentinel = yearly.sentinel;
+    return { bucket: bucket, inat: inat, sentinel: sentinel, total: inat + sentinel };
+  });
+  const maxCount = Math.max.apply(null, counts.map(function (entry) { return entry.total; }).concat([1]));
+
+  if (!counts.length) {
+    chart.innerHTML = '<p class="trend-empty">No dated observation records are available.</p>';
+    return;
+  }
+
+  chart.innerHTML = counts.map(function (entry) {
+    const selectedCount = entry.bucket.years.filter(function (year) {
+      return filterState.years.has(year);
+    }).length;
+    const selected = selectedCount === entry.bucket.years.length &&
+      filterState.years.size > 0;
+    const partial = selectedCount > 0 && !selected;
+    const inatWidth = (entry.inat / maxCount) * 100;
+    const sentinelWidth = (entry.sentinel / maxCount) * 100;
+    const yearLabel = entry.bucket.years.join(',');
+    const label = entry.bucket.label + ': ' + entry.inat.toLocaleString() +
+      ' iNaturalist and ' + entry.sentinel.toLocaleString() +
+      ' Sentinelle records. Click to filter the map.';
+    return '<button type="button" class="trend-row' +
+      (selected ? ' is-selected' : '') + (partial ? ' is-partial' : '') +
+      '" data-years="' + yearLabel + '" aria-pressed="' + selected +
+      '" aria-label="' + escapeAttr(label) + '" title="' + escapeAttr(label) + '">' +
+      '<span class="trend-year">' + entry.bucket.label + '</span>' +
+      '<span class="trend-track" aria-hidden="true">' +
+      '<span class="trend-bar-inat" style="width:' + inatWidth + '%"></span>' +
+      '<span class="trend-bar-sentinel" style="width:' + sentinelWidth + '%"></span>' +
+      '</span><span class="trend-total">' + entry.total.toLocaleString() + '</span></button>';
+  }).join('');
+
+  chart.querySelectorAll('.trend-row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      const selectedYears = row.getAttribute('data-years').split(',');
+      const allSelected = selectedYears.every(function (year) {
+        return filterState.years.has(year);
+      });
+
+      if (filterState.years.size === 0) {
+        filterState.years = new Set(selectedYears);
+      } else if (allSelected) {
+        selectedYears.forEach(function (year) { filterState.years.delete(year); });
+      } else {
+        selectedYears.forEach(function (year) { filterState.years.add(year); });
+      }
+
+      document.querySelectorAll('#f-year-list input[data-year]').forEach(function (checkbox) {
+        checkbox.checked = filterState.years.has(checkbox.getAttribute('data-year'));
+      });
+      syncYearAllCheckbox();
+      updateSummaries();
+      buildObsLayer();
+      buildSentinelLayer();
+    });
+  });
+}
+
+const trendOpen = document.getElementById('trend-open');
+const trendClose = document.getElementById('trend-close');
+const trendPanel = document.getElementById('trend-panel');
+
+if (trendOpen && trendClose && trendPanel) {
+  trendOpen.addEventListener('click', function () {
+    trendPanel.hidden = false;
+    trendOpen.setAttribute('aria-expanded', 'true');
+    renderObservationTrendChart();
+    trendClose.focus();
+  });
+
+  function closeTrendPanel() {
+    trendPanel.hidden = true;
+    trendOpen.setAttribute('aria-expanded', 'false');
+    trendOpen.focus();
+  }
+
+  trendClose.addEventListener('click', closeTrendPanel);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !trendPanel.hidden) closeTrendPanel();
+  });
+}
+
+function observationsForMap(ignoreBoroughFilter) {
+  const features = [];
+  if (inatVisible) {
+    features.push.apply(features, allFeatures.filter(function (feature) {
+      return passesFilters(feature, false, ignoreBoroughFilter);
+    }));
+  }
+  if (sentinelVisible) {
+    features.push.apply(features, sentinelFeatures.filter(function (feature) {
+      return passesSentinelFilters(feature, false, ignoreBoroughFilter);
+    }));
+  }
+  return features;
+}
+
+function updateThematicMapLayers() {
+  if (observationDensityLayer) {
+    map.removeLayer(observationDensityLayer);
+    observationDensityLayer = null;
+  }
+  if (mapMode === 'density') {
+    const heatPoints = observationsForMap(false).filter(function (feature) {
+      return feature.geometry && feature.geometry.type === 'Point' &&
+        Array.isArray(feature.geometry.coordinates);
+    }).map(function (feature) {
+      return [feature.geometry.coordinates[1], feature.geometry.coordinates[0], 1];
+    });
+    if (heatPoints.length) {
+      observationDensityLayer = L.heatLayer(heatPoints, {
+        radius: 25,
+        blur: 20,
+        minOpacity: 0.18,
+        maxZoom: 16,
+        gradient: { 0.2: '#2c7bb6', 0.45: '#abd9e9', 0.65: '#ffffbf', 0.82: '#fdae61', 1: '#d7191c' }
+      }).addTo(map);
+    }
+    return;
+  }
+}
+
+function scheduleThematicMapLayerUpdate() {
+  if (thematicUpdatePending) return;
+  thematicUpdatePending = true;
+  requestAnimationFrame(function () {
+    thematicUpdatePending = false;
+    updateThematicMapLayers();
+  });
+}
+
 
 // ============================================================
-// 6. RENDER OBSERVATIONS — builds the iNat dot layer + popups
+// 6. RENDER OBSERVATIONS — builds the clustered iNat layer + popups
 //    pointToLayer = the dot itself; onEachFeature = the popup.
 // ============================================================
 function buildObsLayer() {
   if (obsLayer) { map.removeLayer(obsLayer); obsLayer = null; }
-  if (!inatVisible) return;
-
+  renderObservationTrendChart();
   const filtered = allFeatures.filter(passesFilters);
+  if (mapMode !== 'risk' || !inatVisible) {
+    if (inatVisible) updateStatusSummary(filtered);
+    scheduleThematicMapLayerUpdate();
+    return;
+  }
 
-  obsLayer = L.geoJSON(
+  const observationMarkers = L.geoJSON(
     { type: 'FeatureCollection', features: filtered },
     {
       // ---- 6a. The dot itself ----
       pointToLayer: function (feature, latlng) {
         const p = feature.properties;
         const s = styleFor(p);
-        const sensitive = p.coordinates_obscured || (p.taxon_geoprivacy && p.taxon_geoprivacy !== '');
-        return L.circleMarker(latlng, {
-          radius: sensitive ? 7 : 6,
-          weight: sensitive ? 2 : 1.5,
-          dashArray: sensitive ? '3,3' : null,
-          color: s.color,
-          fillColor: s.fillColor,
-          fillOpacity: sensitive ? 0.55 : 0.9
+        const sensitiveLocation = isSensitiveLocation(p);
+        if (!clustersEnabled) {
+          return L.circleMarker(latlng, {
+            radius: sensitiveLocation ? 7 : 6,
+            weight: sensitiveLocation ? 2 : 1.5,
+            dashArray: sensitiveLocation ? '3,3' : null,
+            color: s.color,
+            fillColor: s.fillColor,
+            fillOpacity: sensitiveLocation ? 0.55 : 0.9
+          });
+        }
+
+        const markerSize = sensitiveLocation ? 16 : 14;
+        const marker = L.divIcon({
+          className: '',
+          html: '<span class="inat-observation-marker' + (sensitiveLocation ? ' is-sensitive' : '') +
+            '" style="--marker-stroke:' + s.color + ';--marker-fill:' + s.fillColor +
+            ';--marker-opacity:' + (sensitiveLocation ? '0.55' : '0.9') + ';"></span>',
+          iconSize: [markerSize, markerSize],
+          iconAnchor: [markerSize / 2, markerSize / 2]
         });
+        return L.marker(latlng, { icon: marker });
       },
       // ---- 6b. The popup HTML ----
       onEachFeature: function (feature, layer) {
@@ -320,7 +622,7 @@ function buildObsLayer() {
 
         const title = p.common_name || p.scientific_name || p.species_guess || ('Observation ' + p.id);
         const latin = p.scientific_name && p.scientific_name !== title ? p.scientific_name : '';
-        const sensitive = p.coordinates_obscured || (p.taxon_geoprivacy && p.taxon_geoprivacy !== '');
+        const sensitiveLocation = isSensitiveLocation(p);
 
         let html = '<div class="popup-head">';
         if (p.image_url) {
@@ -333,6 +635,13 @@ function buildObsLayer() {
         if (latin) html += '<div class="popup-latin"><em>' + latin + '</em></div>';
         html += '<div class="popup-badge" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</div>';
         html += '</div></div>';
+        if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
+          html += '<div class="popup-photo-attribution">Photo credit: ' +
+            escapeHtml(p.photo_attribution) + ' · <a href="' +
+            PHOTO_LICENSE_URLS[p.photo_license] +
+            '" target="_blank" rel="noopener noreferrer">' +
+            escapeHtml(p.photo_license) + '</a></div>';
+        }
 
         html += '<div class="popup-grid">';
         if (p.observed_on) html += '<div><span class="lbl">Observed</span>' + p.observed_on + '</div>';
@@ -346,16 +655,55 @@ function buildObsLayer() {
         }
         html += '</div>';
 
-        if (sensitive) html += '<div class="popup-sensitive">⚠ Location fuzzed (<100 m)</div>';
-        if (!p.image_url && p.license) html += '<div class="popup-photo-note">No photo — license ' + p.license + ' does not permit reuse.</div>';
+        if (sensitiveLocation) html += '<div class="popup-sensitive">⚠ Location fuzzed (≤100 m)</div>';
+        if (p.photo_present && !p.image_url) {
+          const photoLicense = p.photo_license || 'All rights reserved';
+          const photoNote = !p.photo_license_verified
+            ? 'Photo omitted — its license could not be verified.'
+            : 'Photo omitted — photo license ' + photoLicense + ' does not permit reuse.';
+          html += '<div class="popup-photo-note">' + escapeHtml(photoNote) + '</div>';
+        }
         if (p.url) html += '<a class="popup-btn" href="' + p.url + '" target="_blank" rel="noopener noreferrer">View on iNaturalist →</a>';
+        const license = p.license ? String(p.license).replace(/^CC-/, 'CC ') : 'All rights reserved';
+        html += '<div class="popup-license"><span class="popup-license-label">Observation license:</span> ' + escapeHtml(license) + '</div>';
 
-        layer.bindPopup(html, { maxWidth: 300, minWidth: 260, maxHeight: 420 });
+        layer.bindPopup(html, popupOptions({ maxWidth: 300, minWidth: 260 }));
       }
     }
-  ).addTo(map);
+  );
+
+  if (!clustersEnabled) {
+    obsLayer = observationMarkers.addTo(map);
+    updateStatusSummary(filtered);
+    scheduleThematicMapLayerUpdate();
+    return;
+  }
+
+  obsLayer = L.markerClusterGroup({
+    maxClusterRadius: 50,
+    disableClusteringAtZoom: 16,
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    zoomToBoundsOnClick: true,
+    iconCreateFunction: function (cluster) {
+      const count = cluster.getChildCount();
+      const sizeClass = count < 100 ? 'small' : (count < 1000 ? 'medium' : 'large');
+      const size = count < 100 ? 36 : (count < 1000 ? 44 : 52);
+      return L.divIcon({
+        html: '<div class="observation-cluster observation-cluster-' + sizeClass +
+          '" title="Click to zoom in and explore observations">' +
+          count.toLocaleString() + '</div>',
+        className: '',
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+    }
+  });
+  obsLayer.addLayer(observationMarkers);
+  map.addLayer(obsLayer);
 
   updateStatusSummary(filtered);
+  scheduleThematicMapLayerUpdate();
 }
 
 
@@ -369,13 +717,20 @@ fetch('data/places.geojson')
     return response.json();
   })
   .then(function (data) {
-    allFeatures = data.features;
+    allFeatures = data.features.filter(function (feature) {
+      return hasReusableObservationLicense(feature.properties || {});
+    });
+    observationDataLoaded = true;
     buildSpeciesCatalog();
     buildYearList();
     populateSpeciesList();
     buildObsLayer();
+    if (boroughData) renderSelectionPanel();
 
-    const allLayer = L.geoJSON(data, { filter: function (f) { return f.geometry !== null; } });
+    const allLayer = L.geoJSON(
+      { type: 'FeatureCollection', features: allFeatures },
+      { filter: function (f) { return f.geometry !== null; } }
+    );
     const bounds = allLayer.getBounds();
     if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
   })
@@ -452,6 +807,30 @@ function updateSummaries() {
     ySum.textContent = n === 0 ? 'All' : (n === 1 ? Array.from(filterState.years)[0] : n + ' selected');
     ySum.classList.toggle('is-set', n > 0);
   }
+
+  const observationOptions = [
+    filterState.fuzzedLocation,
+    filterState.exactLocation,
+    filterState.photo,
+    filterState.presence.size > 0,
+    filterState.priorityOnly
+  ].filter(Boolean).length;
+  const observationOptionsSummary = document.getElementById('fp-observation-options-summary');
+  if (observationOptionsSummary) {
+    observationOptionsSummary.textContent = observationOptions === 0 ? 'All' : observationOptions + ' on';
+    observationOptionsSummary.classList.toggle('is-set', observationOptions > 0);
+  }
+
+  const mapLayers = [
+    inatVisible,
+    sentinelVisible,
+    projectsVisible
+  ].filter(Boolean).length;
+  const mapLayersSummary = document.getElementById('fp-map-layers-summary');
+  if (mapLayersSummary) {
+    mapLayersSummary.textContent = mapLayers + ' on';
+    mapLayersSummary.classList.toggle('is-set', mapLayers !== 2);
+  }
 }
 
 
@@ -505,7 +884,6 @@ function renderSpeciesList(query) {
 // ---- 10a. HTML escaping helpers ----
 function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
-
 
 // ---- 10b. Species search with live suggestions ----
 const spSearchInput = document.getElementById('f-species-search');
@@ -818,11 +1196,43 @@ document.getElementById('f-borough-metro').addEventListener('change', function (
 // 13. SIMPLE TOGGLES — sensitive / photo / iNat / Sentinelle
 // ============================================================
 document.getElementById('f-sensitive').addEventListener('change', function (e) {
-  filterState.sensitive = e.target.checked;
+  filterState.fuzzedLocation = e.target.checked;
+  if (filterState.fuzzedLocation) {
+    filterState.exactLocation = false;
+    document.getElementById('f-exact-location').checked = false;
+  }
+  updateSummaries();
+  buildObsLayer();
+});
+document.getElementById('f-exact-location').addEventListener('change', function (e) {
+  filterState.exactLocation = e.target.checked;
+  if (filterState.exactLocation) {
+    filterState.fuzzedLocation = false;
+    document.getElementById('f-sensitive').checked = false;
+  }
+  updateSummaries();
   buildObsLayer();
 });
 document.getElementById('f-photo').addEventListener('change', function (e) {
   filterState.photo = e.target.checked;
+  updateSummaries();
+  buildObsLayer();
+  buildSentinelLayer();
+});
+document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (checkbox) {
+  checkbox.addEventListener('change', function () {
+    filterState.presence = new Set(
+      Array.from(document.querySelectorAll('#f-presence-list input[data-presence]:checked'))
+        .map(function (checked) { return checked.dataset.presence; })
+    );
+    updateSummaries();
+    buildObsLayer();
+    buildSentinelLayer();
+  });
+});
+document.getElementById('f-priority').addEventListener('change', function (e) {
+  filterState.priorityOnly = e.target.checked;
+  updateSummaries();
   buildObsLayer();
   buildSentinelLayer();
 });
@@ -830,12 +1240,27 @@ document.getElementById('f-photo').addEventListener('change', function (e) {
 // Sentinelle toggle
 document.getElementById('f-sentinel').addEventListener('change', function (e) {
   sentinelVisible = e.target.checked;
+  updateSummaries();
+  buildSentinelLayer();
+});
+
+document.getElementById('f-clusters').addEventListener('change', function (e) {
+  clustersEnabled = e.target.checked;
+  buildObsLayer();
   buildSentinelLayer();
 });
 
 document.getElementById('f-projects').addEventListener('change', function (e) {
   projectsVisible = e.target.checked;
+  updateSummaries();
   buildProjectLayer();
+});
+
+document.getElementById('f-map-mode').addEventListener('change', function (e) {
+  mapMode = e.target.value;
+  updateMapLegend();
+  buildObsLayer();
+  buildSentinelLayer();
 });
 
 // iNat toggle (same idea as Sentinelle toggle)
@@ -843,8 +1268,9 @@ const inatToggleEl = document.getElementById('f-inat');
 if (inatToggleEl) {
   inatToggleEl.addEventListener('change', function (e) {
     inatVisible = e.target.checked;
-    buildObsLayer();
-  });
+  updateSummaries();
+  buildObsLayer();
+});
 }
 
 
@@ -856,8 +1282,11 @@ document.getElementById('f-reset').addEventListener('click', function () {
   filterState.boroughs.clear();
   filterState.species.clear();
   filterState.years.clear();
-  filterState.sensitive = false;
+  filterState.fuzzedLocation = false;
+  filterState.exactLocation = false;
   filterState.photo = false;
+  filterState.presence.clear();
+  filterState.priorityOnly = false;
 
   selectedBorough = null;
   selectedBoroughName = null;
@@ -880,7 +1309,15 @@ document.getElementById('f-reset').addEventListener('click', function () {
   if (yearAllElReset) yearAllElReset.checked = true;
 
   document.getElementById('f-sensitive').checked = false;
+  document.getElementById('f-exact-location').checked = false;
   document.getElementById('f-photo').checked = false;
+  document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (cb) { cb.checked = false; });
+  document.getElementById('f-priority').checked = false;
+  clustersEnabled = false;
+  document.getElementById('f-clusters').checked = false;
+  mapMode = 'risk';
+  document.getElementById('f-map-mode').value = mapMode;
+  updateMapLegend();
 
   sentinelVisible = false;
   const sentinelCb = document.getElementById('f-sentinel');
@@ -906,23 +1343,38 @@ document.getElementById('f-reset').addEventListener('click', function () {
 // 15. LEGEND — bottom-right risk legend
 // ============================================================
 const legend = L.control({ position: 'bottomright' });
+let legendElement = null;
+function updateMapLegend() {
+  if (!legendElement) return;
+  let html = '';
+  if (mapMode === 'density') {
+    html = '<div class="legend-title">Reported observation density</div>' +
+      '<div class="legend-gradient density-gradient"></div>' +
+      '<div class="legend-gradient-labels"><span>Fewer records</span><span>More records</span></div>' +
+      '<div class="legend-mode-note">Uses the enabled iNaturalist and Sentinelle sources. This represents reporting patterns, not plant abundance.</div>';
+  } else {
+    html = '<div class="legend-title">Risk</div>' +
+      '<div class="legend-risk-strip">' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span>Mod.</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span>Low</span>' +
+      '</div>' +
+      '<div class="legend-divider"></div>' +
+      '<div class="legend-row"><span class="swatch swatch-solid"></span>Exact</div>' +
+      '<div class="legend-row"><span class="swatch swatch-dashed"></span>Fuzzed <small>(≤100 m)</small></div>' +
+      '<div class="legend-divider"></div>' +
+      '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
+      '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';
+  }
+  html += '<div class="legend-divider"></div>' +
+    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives</div>';
+  legendElement.innerHTML = html;
+}
+
 legend.onAdd = function () {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML =
-    '<div class="legend-title">Risk</div>' +
-    '<div class="legend-risk-strip">' +
-      '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
-      '<span class="legend-risk-item"><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span>Mod.</span>' +
-      '<span class="legend-risk-item"><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span>Low</span>' +
-    '</div>' +
-    '<div class="legend-divider"></div>' +
-    '<div class="legend-row"><span class="swatch swatch-solid"></span>Exact</div>' +
-    '<div class="legend-row"><span class="swatch swatch-dashed"></span>Fuzzed <small>(<100 m)</small></div>' +
-    '<div class="legend-divider"></div>' +
-    '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
-    '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>' +
-    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects <small>(blue circle)</small></div>';
-  return div;
+  legendElement = L.DomUtil.create('div', 'legend');
+  updateMapLegend();
+  return legendElement;
 };
 legend.addTo(map);
 
@@ -1002,11 +1454,13 @@ const BP_TITLE      = document.getElementById('bp-title');
 const BP_BODY       = document.getElementById('bp-body');
 const BP_CLOSE      = document.getElementById('bp-close');
 const openTiers = new Set();
+let projectOrganizationsOpen = false;
 
 if (BP_CLOSE) BP_CLOSE.addEventListener('click', closeBoroughPanel);
 function closeBoroughPanel() {
   if (BOROUGH_PANEL) BOROUGH_PANEL.hidden = true;
   openTiers.clear();
+  projectOrganizationsOpen = false;
 }
 
 const TIER_INFO = {
@@ -1116,8 +1570,8 @@ function projectsInSelection() {
     }
   }
 
-  if (!polygons.length) return projectFeatures.length;
-  if (!window.turf) return 0;
+  if (!polygons.length) return projectFeatures;
+  if (!window.turf) return [];
 
   return projectFeatures.filter(function (feature) {
     const geometry = feature.geometry;
@@ -1126,7 +1580,30 @@ function projectsInSelection() {
     return polygons.some(function (polygon) {
       return turf.booleanPointInPolygon(point, polygon);
     });
-  }).length;
+  });
+}
+
+function renderProjectOrganizationRows(projects) {
+  const counts = new Map();
+  projects.forEach(function (feature) {
+    const organization = feature.properties && feature.properties.organization
+      ? feature.properties.organization
+      : 'Unspecified organization';
+    counts.set(organization, (counts.get(organization) || 0) + 1);
+  });
+
+  const rows = Array.from(counts.entries()).sort(function (a, b) {
+    return b[1] - a[1] || a[0].localeCompare(b[0]);
+  });
+  let html = '<div class="bp-project-organizations">' +
+    '<div class="bp-project-organizations-note">Grouped by credited organization(s).</div>';
+  rows.forEach(function (row) {
+    html += '<div class="bp-project-organization-row">' +
+      '<span>' + escapeHtml(row[0]) + '</span>' +
+      '<strong>' + row[1] + '</strong>' +
+      '</div>';
+  });
+  return html + '</div>';
 }
 
 function renderSpeciesListRows(byKey) {
@@ -1144,7 +1621,7 @@ function renderSpeciesListRows(byKey) {
 
 // ---- 17d. Render the panel ----
 function renderSelectionPanel() {
-  if (!BOROUGH_PANEL) return;
+  if (!BOROUGH_PANEL || !observationDataLoaded) return;
 
   const obs = observationsInSelection();
   const stats = statsFor(obs);
@@ -1177,18 +1654,31 @@ function renderSelectionPanel() {
     if (isOpen) html += renderSpeciesListRows(stats.speciesByTier[tier]);
   });
 
-  const projectCount = projectsInSelection();
+  const selectedProjects = projectsInSelection();
+  const projectCount = selectedProjects === null ? null : selectedProjects.length;
   const projectCountText = projectCount === null
     ? (projectsLoadFailed ? 'Unavailable' : 'Loading…')
-    : projectCount + ' project' + (projectCount === 1 ? '' : 's');
-  html += '<div class="bp-project-count"><span>Projects</span><strong>' +
-    projectCountText + '</strong></div>';
+    : projectCount;
+  const projectToggleDisabled = projectCount === null ? ' disabled' : '';
+  const projectToggleOpen = projectOrganizationsOpen && projectCount !== null;
+  html += '<button class="bp-tier bp-project-toggle' + (projectToggleOpen ? ' open' : '') +
+    '" type="button" aria-expanded="' + projectToggleOpen + '"' + projectToggleDisabled + '>' +
+    '<span>Projects &amp; initiatives</span>' +
+    '<span class="bp-count bp-project-count-value">' + projectCountText + '</span>' +
+    '<span class="bp-caret">' + (projectToggleOpen ? '▾' : '▸') + '</span>' +
+    '</button>';
+  if (projectToggleOpen) html += renderProjectOrganizationRows(selectedProjects);
 
   BP_BODY.innerHTML = html;
   BOROUGH_PANEL.hidden = false;
 
   BP_BODY.querySelectorAll('.bp-tier').forEach(function (btn) {
     btn.addEventListener('click', function () {
+      if (btn.classList.contains('bp-project-toggle')) {
+        projectOrganizationsOpen = !projectOrganizationsOpen;
+        renderSelectionPanel();
+        return;
+      }
       const tier = btn.getAttribute('data-tier');
       if (openTiers.has(tier)) openTiers.delete(tier);
       else openTiers.add(tier);
@@ -1264,6 +1754,7 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
           selectedIsUnion = false;
           highlightBorough(feature);
           openTiers.clear();
+          projectOrganizationsOpen = false;
           renderSelectionPanel();
         });
         layer.on('mouseover', function () { layer.setStyle({ weight: 2, opacity: 1 }); });
@@ -1350,11 +1841,15 @@ function buildSentinelLayer() {
     map.removeLayer(sentinelLayer);
     sentinelLayer = null;
   }
-  if (!sentinelVisible || sentinelFeatures.length === 0) return;
+  renderObservationTrendChart();
+  if (mapMode !== 'risk' || !sentinelVisible || sentinelFeatures.length === 0) {
+    scheduleThematicMapLayerUpdate();
+    return;
+  }
 
   const filtered = sentinelFeatures.filter(passesSentinelFilters);
 
-  sentinelLayer = L.geoJSON(
+  const sentinelMarkers = L.geoJSON(
     { type: 'FeatureCollection', features: filtered },
     {
       // ---- 21a. Square marker instead of a circle ----
@@ -1463,10 +1958,41 @@ function buildSentinelLayer() {
         if (category) html += '<div class="popup-grid-wide"><span class="lbl">Category</span>' + category + '</div>';
         html += '</div>';
 
-        layer.bindPopup(html, { maxWidth: 300, minWidth: 260, maxHeight: 420 });
+        layer.bindPopup(html, popupOptions({ maxWidth: 300, minWidth: 260 }));
       }
     }
-  ).addTo(map);
+  );
+
+  if (!clustersEnabled) {
+    sentinelLayer = sentinelMarkers.addTo(map);
+    scheduleThematicMapLayerUpdate();
+    return;
+  }
+
+  sentinelLayer = L.markerClusterGroup({
+    clusterPane: 'sentinelPane',
+    maxClusterRadius: 50,
+    disableClusteringAtZoom: 16,
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    zoomToBoundsOnClick: true,
+    iconCreateFunction: function (cluster) {
+      const count = cluster.getChildCount();
+      const sizeClass = count < 100 ? 'small' : (count < 1000 ? 'medium' : 'large');
+      const size = count < 100 ? 36 : (count < 1000 ? 44 : 52);
+      return L.divIcon({
+        html: '<div class="observation-cluster sentinel-observation-cluster observation-cluster-' +
+          sizeClass + '" title="Click to zoom in and explore Sentinelle observations">' +
+          count.toLocaleString() + '</div>',
+        className: '',
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+    }
+  });
+  sentinelLayer.addLayer(sentinelMarkers);
+  map.addLayer(sentinelLayer);
+  scheduleThematicMapLayerUpdate();
 }
 
 // ---- 21c. Fetch Sentinelle data and draw if visible ----
@@ -1497,83 +2023,139 @@ function buildProjectLayer() {
   }
   if (!projectsVisible || projectFeatures.length === 0) return;
 
-  projectLayer = L.geoJSON(
-    { type: 'FeatureCollection', features: projectFeatures },
-    {
-      pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, {
-          pane: 'projectPane',
-          radius: 8,
-          color: '#fff',
-          weight: 2,
-          fillColor: '#1D4E89',
-          fillOpacity: 1
-        });
-      },
-      onEachFeature: function (feature, layer) {
-        const p = feature.properties || {};
-        let html = '<div class="project-popup">';
-        html += '<div class="popup-title">' + escapeHtml(p.name || 'Untitled project') + '</div>';
-        html += '<div class="project-meta">' +
-          (p.organization ? escapeHtml(p.organization) : 'Community project') +
-          (p.year ? ' · ' + escapeHtml(p.year) : '') +
-          '</div>';
-        if (p.description) {
-          html += '<p class="project-description">' + escapeHtml(p.description) + '</p>';
-        }
-        if (Array.isArray(p.species) && p.species.length) {
-          html += '<div class="project-species"><strong>Associated species</strong><ul>';
-          p.species.forEach(function (species) {
-            if (!species || !species.common) return;
-            const catalogTerm = species.scientific || species.common;
-            const catalogUrl = 'site/species.html?species=' + encodeURIComponent(catalogTerm);
-            html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '" title="Open species catalog entry">';
-            html += escapeHtml(species.common);
-            if (species.scientific) {
-              html += ' <em>(' + escapeHtml(species.scientific) + ')</em>';
-            }
-            html += '</a></li>';
-          });
-          html += '</ul></div>';
-        } else if (p.species_note) {
-          html += '<div class="project-species"><strong>Associated species</strong><div>' +
-            escapeHtml(p.species_note) + '</div></div>';
-        }
-        const hasDetails = p.project_area || (Array.isArray(p.actions) && p.actions.length);
-        if (hasDetails) {
-          html += '<details class="project-more"><summary>Project sites and restoration work</summary>';
-        }
-        if (p.project_area) {
-          html += '<div class="project-detail"><strong>Sites:</strong> ' + escapeHtml(p.project_area) + '</div>';
-        }
-        if (Array.isArray(p.actions) && p.actions.length) {
-          html += '<div class="project-detail"><strong>Work:</strong><ul>';
-          p.actions.forEach(function (action) {
-            html += '<li>' + escapeHtml(action) + '</li>';
-          });
-          html += '</ul></div>';
-        }
-        if (hasDetails) html += '</details>';
-        if (p.marker_location) {
-          html += '<div class="project-location-note">' + escapeHtml(p.marker_location) + '</div>';
-        }
-        let hasSourceLink = false;
-        if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
-          html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
-          hasSourceLink = true;
-        }
-        if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
-          html += '<a class="popup-btn" href="' + escapeAttr(p.source_url) + '" target="_blank" rel="noopener noreferrer">Project update →</a>';
-          hasSourceLink = true;
-        }
-        if (!hasSourceLink) {
-          html += '<div class="project-source-missing">Source link not added yet.</div>';
-        }
-        html += '</div>';
-        layer.bindPopup(html, { maxWidth: 320, minWidth: 240, maxHeight: 360 });
+  const projectLayerOptions = {
+    pointToLayer: function (feature, latlng) {
+      return L.marker(latlng, {
+        pane: 'projectPane',
+        icon: L.divIcon({
+          className: 'project-marker-icon',
+          html: '<span></span>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        })
+      });
+    },
+    onEachFeature: function (feature, layer) {
+      const p = feature.properties || {};
+      let html = '<div class="project-popup">';
+      html += '<div class="popup-title">' + escapeHtml(p.name || 'Untitled project') + '</div>';
+      html += '<div class="project-meta">' +
+        (p.organization ? escapeHtml(p.organization) : 'Community project') +
+        (p.year ? ' · ' + escapeHtml(p.year) : '') +
+        '</div>';
+      if (p.description) {
+        html += '<p class="project-description">' + escapeHtml(p.description) + '</p>';
       }
+      const hasSpecies = Array.isArray(p.species) && p.species.length;
+      if (hasSpecies) {
+        html += '<div class="project-species"><strong>Associated species</strong><ul>';
+        p.species.forEach(function (species) {
+          if (!species || !species.common) return;
+          if (species.scientific) {
+            const catalogUrl = 'site/species.html?species=' + encodeURIComponent(species.scientific);
+            html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '" title="Open species catalog entry">';
+          } else {
+            html += '<li>';
+          }
+          html += escapeHtml(species.common);
+          if (species.scientific) {
+            html += ' <em>(' + escapeHtml(species.scientific) + ')</em>';
+            html += '</a>';
+          }
+          html += '</li>';
+        });
+        html += '</ul></div>';
+      }
+      if (p.species_note && !hasSpecies) {
+        html += '<div class="project-species"><strong>Associated species</strong><div>' +
+          escapeHtml(p.species_note) + '</div></div>';
+      } else if (p.species_note) {
+        html += '<div class="project-species-note">' + escapeHtml(p.species_note) + '</div>';
+      }
+      const hasDetails = p.project_area || (Array.isArray(p.actions) && p.actions.length);
+      if (hasDetails) {
+        html += '<details class="project-more"><summary>Project sites and restoration work</summary>';
+      }
+      if (p.project_area) {
+        html += '<div class="project-detail"><strong>Sites:</strong> ' + escapeHtml(p.project_area) + '</div>';
+      }
+      if (Array.isArray(p.actions) && p.actions.length) {
+        html += '<div class="project-detail"><strong>Work:</strong><ul>';
+        p.actions.forEach(function (action) {
+          html += '<li>' + escapeHtml(action) + '</li>';
+        });
+        html += '</ul></div>';
+      }
+      if (hasDetails) html += '</details>';
+      if (p.marker_location) {
+        html += '<div class="project-location-note">' + escapeHtml(p.marker_location) + '</div>';
+      }
+      let hasSourceLink = false;
+      if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
+        html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
+        hasSourceLink = true;
+      }
+      if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
+        html += '<a class="popup-btn" href="' + escapeAttr(p.source_url) + '" target="_blank" rel="noopener noreferrer">Project update →</a>';
+        hasSourceLink = true;
+      }
+      if (!hasSourceLink) {
+        html += '<div class="project-source-missing">Source link not added yet.</div>';
+      }
+      html += '</div>';
+      layer.bindPopup(html, popupOptions({ maxWidth: 360, minWidth: 240 }));
     }
-  ).addTo(map);
+  };
+
+  const projectSiteGroups = new Map();
+  projectFeatures.forEach(function (feature, index) {
+    const properties = feature.properties || {};
+    const siteGroup = typeof properties.cluster_group === 'string'
+      ? properties.cluster_group.trim()
+      : '';
+    const area = properties.project_area;
+    const siteKey = (siteGroup || (typeof area === 'string' ? area.trim() : ''))
+      .toLocaleLowerCase() || 'project-' + index;
+    if (!projectSiteGroups.has(siteKey)) projectSiteGroups.set(siteKey, []);
+    projectSiteGroups.get(siteKey).push(feature);
+  });
+
+  projectLayer = L.featureGroup();
+  projectSiteGroups.forEach(function (features) {
+    const siteLayer = L.geoJSON(
+      { type: 'FeatureCollection', features: features },
+      projectLayerOptions
+    );
+    if (features.length === 1) {
+      projectLayer.addLayer(siteLayer);
+      return;
+    }
+
+    const siteCluster = L.markerClusterGroup({
+      clusterPane: 'projectPane',
+      maxClusterRadius: 50,
+      maxClusterZoom: 20,
+      showCoverageOnHover: false,
+      spiderfyOnMaxZoom: true,
+      zoomToBoundsOnClick: true,
+      iconCreateFunction: function (cluster) {
+        const count = cluster.getChildCount();
+        const sizeClass = count < 10 ? 'small' : 'large';
+        const size = count < 10 ? 32 : 40;
+        return L.divIcon({
+          html: '<div class="project-cluster project-cluster-' + sizeClass +
+            '" title="Click to zoom in or separate projects at this site">' +
+            count.toLocaleString() + '</div>',
+          className: '',
+          iconSize: [size, size],
+          iconAnchor: [size / 2, size / 2]
+        });
+      }
+    });
+    siteCluster.addLayer(siteLayer);
+    projectLayer.addLayer(siteCluster);
+  });
+  projectLayer.addTo(map);
 }
 
 fetch('data/projects.geojson')

@@ -333,7 +333,9 @@ const SPECIES = [
     presence: 'Established', ban: false,
     wiki: 'Butomus_umbellatus',
     desc: '<em>Butomus umbellatus</em> is the Old World Palearctic and Asian plant species in the family Butomaceae. Common names include flowering rush or grass rush.',
-    photo: '', photoCredit: 'iNaturalist', photoCreditUrl: '',
+    photo: 'https://inaturalist-open-data.s3.amazonaws.com/photos/426961745/medium.jpeg',
+    photoCredit: 'RDP-PAT, QC<br>weilival / iNaturalist',
+    photoCreditUrl: 'https://www.inaturalist.org/observations/239708197',
     tax: { kingdom: 'Plantae', clade: 'Tracheophytes', clade2: 'Angiosperms',
            clade3: 'Monocots', order: 'Alismatales',
            family: 'Butomaceae', genus: 'Butomus', species: 'B. umbellatus' } },
@@ -635,6 +637,10 @@ const SPECIES = [
            family: 'Pinaceae', genus: 'Pinus', species: 'P. mugo' } }
 ];
 
+SPECIES.forEach(function (species) {
+  species.priority = PRIORITY_SPECIES.has(species.sci);
+});
+
 
 // ============================================================
 // B. OBSERVATION COUNTS — auto-loaded from the two GeoJSON files
@@ -661,12 +667,14 @@ Promise.all([
   var inat = results[0];
   var sent = results[1];
 
-  (inat.features || []).forEach(function (f) {
-    bumpCount((f.properties.scientific_name || '').trim(), 'inat');
-  });
-
   var byNorm = {};
   SPECIES.forEach(function (s) { byNorm[normLatin(s.sci)] = s.sci; });
+  byNorm[normLatin('Phragmites australis australis')] = 'Phragmites australis subsp. australis';
+
+  (inat.features || []).forEach(function (f) {
+    var raw = (f.properties.scientific_name || '').trim();
+    bumpCount(byNorm[normLatin(raw)] || raw, 'inat');
+  });
 
   (sent.features || []).forEach(function (f) {
     var raw = (f.properties.scientific_name || f.properties['Nom_espece_latin'] || '').trim();
@@ -742,7 +750,9 @@ const catFilters = {
   search: '',
   tier: new Set(),
   presence: new Set(),
-  rank: new Set()
+  rank: new Set(),
+  priorityOnly: false,
+  sort: 'default'
 };
 
 
@@ -817,6 +827,11 @@ function renderCounts(s) {
   return '<div class="species-counts">' + inatPart + sentPart + '</div>';
 }
 
+function observationTotal(s) {
+  const counts = OBS_COUNTS[s.sci];
+  return counts ? counts.inat + counts.sentinel : 0;
+}
+
 // ---- F3. Rank detection (species / hybrid / subspecies / genus) ----
 function rankOf(s) {
   if (s.rank) return s.rank;
@@ -844,6 +859,7 @@ function render() {
   const ranks = catFilters.rank;
 
   const filtered = SPECIES.filter(function (s) {
+    if (catFilters.priorityOnly && !s.priority) return false;
     if (tiers.size && !tiers.has(s.tier)) return false;
     if (pres.size  && !pres.has(s.presence)) return false;
     if (ranks.size) {
@@ -859,6 +875,14 @@ function render() {
 
   const tierOrder = { high: 0, moderate: 1, low: 2, watch: 3 };
   filtered.sort(function (a, b) {
+    if (catFilters.sort !== 'default') {
+      const sortByObservations = catFilters.sort.indexOf('observations-') === 0;
+      const direction = catFilters.sort.endsWith('-asc') ? 1 : -1;
+      const countA = sortByObservations ? observationTotal(a) : projectsFor(a).length;
+      const countB = sortByObservations ? observationTotal(b) : projectsFor(b).length;
+      if (countA !== countB) return (countA - countB) * direction;
+    }
+
     const d = tierOrder[a.tier] - tierOrder[b.tier];
     return d !== 0 ? d : a.common.localeCompare(b.common);
   });
@@ -873,7 +897,7 @@ function render() {
   let html = '';
   let currentTier = null;
   filtered.forEach(function (s) {
-    if (s.tier !== currentTier) {
+    if (catFilters.sort === 'default' && s.tier !== currentTier) {
       currentTier = s.tier;
       const meta = TIER_META[s.tier];
       html += '<h2 class="species-tier-heading ' + meta.className + '">' + meta.label + '</h2>';
@@ -944,6 +968,9 @@ function renderCard(s) {
         '<p class="species-sci"><em>' + s.sci + '</em></p>' +
         '<div class="species-pills">' +
           '<span class="pill">' + presenceLabel + '</span>' +
+          (s.priority
+            ? '<span class="pill pill-priority" title="One of Québec’s 26 priority plant species for control">Québec priority</span>'
+            : '') +
           banPill +
         '</div>' +
         descHtml +
@@ -1252,6 +1279,8 @@ function updateCatSummaries() {
 // P. LIVE SEARCH SUGGESTIONS — keyboard + click
 // ============================================================
 const searchInput = document.getElementById('species-search');
+const sortSelect = document.getElementById('species-sort');
+const priorityFilter = document.getElementById('cf-priority');
 const suggestBox  = document.getElementById('species-search-suggest');
 let suggestIndex  = -1;
 const requestedSpeciesName = new URLSearchParams(window.location.search).get('species');
@@ -1262,6 +1291,20 @@ const requestedSpecies = requestedSpeciesName && SPECIES.find(function (species)
 if (requestedSpecies) {
   catFilters.search = requestedSpecies.common;
   searchInput.value = requestedSpecies.common;
+}
+
+if (sortSelect) {
+  sortSelect.addEventListener('change', function () {
+    catFilters.sort = sortSelect.value;
+    render();
+  });
+}
+
+if (priorityFilter) {
+  priorityFilter.addEventListener('change', function () {
+    catFilters.priorityOnly = priorityFilter.checked;
+    render();
+  });
 }
 
 function hideSearchSuggest() {
@@ -1361,6 +1404,8 @@ if (resetBtn) resetBtn.addEventListener('click', function () {
   catFilters.tier.clear();
   catFilters.presence.clear();
   catFilters.rank.clear();
+  catFilters.priorityOnly = false;
+  catFilters.sort = 'default';
 
   document.querySelectorAll('#cf-tier-list input[data-value], #cf-presence-list input[data-value], #cf-rank-list input[data-value]').forEach(function (cb) {
     cb.checked = false;
@@ -1373,6 +1418,8 @@ if (resetBtn) resetBtn.addEventListener('click', function () {
   if (rAll) rAll.checked = false;
 
   if (searchInput) searchInput.value = '';
+  if (priorityFilter) priorityFilter.checked = false;
+  if (sortSelect) sortSelect.value = 'default';
   hideSearchSuggest();
 
   updateCatSummaries();

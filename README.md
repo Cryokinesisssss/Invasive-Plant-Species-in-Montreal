@@ -10,19 +10,23 @@ Mapping invasive plant species observations in Montreal boroughs and cities usin
 2. It is for nature enthusiasts, students, and researchers who are interested in Montreal's invasive fauna
    and want to know what is growing there and how serious it is.
 3. On this map you can filter observations by risk tier, species, borough,
-   and year, and click a borough to see which species were recorded there.
-4. The data comes from iNaturalist (CC0 / CC-BY / CC-BY-NC), the Québec
+   year, Québec presence, Québec priority status, location precision, and
+   photo availability, and click a borough to see which species were recorded there.
+4. The data comes from iNaturalist, the Québec
    invasive-species list (REFEE), the Sentinelle dataset (CC-BY 4.0), and
    Ville de Montréal administrative boundaries.
-5. A snapshot from October 2026; updated periodically.
+5. iNaturalist observations and photo-license metadata are scheduled for
+   daily refresh; other reference datasets are updated manually.
 
 ## Core action
 "Nature enthusiasts, students, and researchers in Montréal can filter iNaturalist observations by
 risk tier and borough to see which invasive species are recorded where."
 
 ## Data sources and licences
-- iNaturalist observations — iNaturalist / user  — CC0 / CC-BY / CC-BY-NC per observation — Accessed October 19, 2026
+- iNaturalist observations — iNaturalist / user — observation license shown per record — Accessed October 19, 2026
   https://www.inaturalist.org/
+  Photo licenses are looked up separately through the iNaturalist API; photos
+  are shown only when their own license permits reuse and required attribution is available.
 - Liste des espèces exotiques envahissantes (MELCCFP) —
 https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes-animales/liste-especes#note3
 - Sentinelle — Espèces exotiques envahissantes — MINISTÈRE DE L’ENVIRONNEMENT, DE LA LUTTE CONTRE LES CHANGEMENTS CLIMATIQUES, DE LA FAUNE ET DES PARCS — CC-BY 4.0 — Accessed October 20, 2026
@@ -36,8 +40,18 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 1. Open the project folder in VS Code.
 2. Right-click `site/index.html`, Open with Live Server
    (**rooted at the project folder**, so `../data/` resolves).
-3. Run `notebooks/build_places.ipynb` top-to-bottom to regenerate
-   `data/places.geojson`; the final check cell must print four ✓.
+3. Run `notebooks/ChecksPassed.ipynb` top-to-bottom to regenerate
+   `data/places.geojson`; observations outside the Montréal borough/city
+   boundaries are excluded, and the final check cell verifies the result.
+   To refresh from iNaturalist first, run `python scripts/update_observations.py`,
+   then run `python scripts/run_data_pipeline.py`. Both commands need internet
+   access; the full refresh may take a few minutes.
+   The map excludes observations whose observation license is blank or
+   All Rights Reserved; the source GeoJSON and CSV remain unchanged by that
+   display filter.
+4. GitHub Actions is configured to refresh and publish changed map data daily
+   at 06:17 UTC. It can also be started manually from the repository's Actions tab.
+   The workflow becomes active after these changes are committed and pushed to GitHub.
 
 ## Adding projects to the map
 - Add each project as a GeoJSON `Feature` in `data/projects.geojson`.
@@ -52,15 +66,28 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
   scientific names. The species catalog uses those scientific names to list
   associated projects, which can be opened in its projects panel.
 - If the source does not identify the species, leave `species` empty and add
-  a clear explanation in `species_note`.
+  a concise `species_note` describing what is known, such as "Buckthorn
+  species not identified."
+- If a source names a park but not an exact work site, place a representative
+  point inside that park and explain the approximation in `marker_location`
+  from the reader's perspective (for example, "Approximate point within [park];
+  exact treatment area is not mapped"), rather than narrating what the source
+  does not show.
+- If one initiative covers multiple mapped sites, use a separate feature for
+  each site and explain which project details apply across the initiative
+  rather than to an individual site.
+- Projects at different points within a shared park or island can use the same
+  optional `cluster_group` value to cluster together without changing their
+  individual project areas or popup details.
 - Borough and city project totals are based on each project's mapped point
   falling inside the selected boundary.
 
 ## Not in this iteration
 - Green spaces (parks, cemeteries, golf courses) are not a separate
   layer — they would clutter the map at this zoom.
-- Local anti-invasive projects are planned for a later version; they
-  need their own source, cleaning, and licence review.
+- Selected municipal invasive-plant projects are mapped as project points;
+  park-level points are approximate when the source does not provide exact
+  intervention coordinates.
 
 
 ## AI Disclusore
@@ -91,9 +118,9 @@ I will know it works when i have a point and a pop up of atleast one project.
 My edge case is when a project source discusses invasive plants but does not name a specific species. The project should still appear on the map, while its pop-up explains that no species was specified and it is not assigned to a species catalog entry.
 
 
-Test 1. I click a project point on the map..
+Test 1. I click a project point on the map.. PASSED
  Expected: A pop-up appears with the project or organization name, a short description, and a link to the source article.
-Test 2. I select a borough or city from the map filter.
+Test 2. I select a borough or city from the map filter. PASSED
  Expected: The observation panel shows the number of project points located inside the selected boundary.
-Test 3. I click a project point whose source does not identify a specific invasive species.
- Expected: Its pop-up says the source does not identify a specific species, and the project is not listed under a species in the catalog.
+Test 3. I click a project point whose source does not identify a specific invasive species. PASSED
+ Expected: Its pop-up says the source does not identify a specific species, and the project is not listed under a species in the catalog. 

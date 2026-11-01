@@ -29,6 +29,8 @@
          target="_blank" rel="noopener noreferrer">Québec Ministère de l'Environnement</a>.
       These are invasive or potentially invasive species in Québec; presence varies by region
       (observations in Montréal are shown on the <a href="../index.html">map</a>).
+      Québec also identifies 26 priority plant species for control; this designation is separate
+      from the catalog’s risk levels.
     </p>
   </header>
 
@@ -102,7 +104,25 @@
         </div>
       </div>
 
-      <!-- ---- 3e. Reset + live count ---- -->
+      <!-- ---- 3e. Sort by observations or projects ---- -->
+      <label class="species-sort" for="species-sort">
+        Sort
+        <select id="species-sort" aria-label="Sort species by">
+          <option value="default">Risk tier</option>
+          <option value="observations-desc">Observations: high to low</option>
+          <option value="observations-asc">Observations: low to high</option>
+          <option value="projects-desc">Projects: high to low</option>
+          <option value="projects-asc">Projects: low to high</option>
+        </select>
+      </label>
+
+      <!-- ---- 3f. Priority species filter ---- -->
+      <label class="species-priority-filter" for="cf-priority">
+        <input id="cf-priority" type="checkbox" />
+        <span>Priority species only</span>
+      </label>
+
+      <!-- ---- 3g. Reset + live count ---- -->
       <button class="filter-reset" type="button" id="cf-reset">Reset</button>
       <span id="species-count" class="filter-count"></span>
     </div>
@@ -152,6 +172,7 @@
   <!-- ============================================================
        6. SCRIPT
        ============================================================ -->
+  <script src="priority-species.js"></script>
   <script src="species.js"></script>
 </body>
 </html>

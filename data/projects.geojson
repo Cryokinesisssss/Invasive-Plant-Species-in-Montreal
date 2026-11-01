@@ -1,5 +1,8 @@
 {
   "type": "FeatureCollection",
+  "metadata": {
+    "sources_last_checked": "October 2026"
+  },
   "features": [
     {
       "type": "Feature",

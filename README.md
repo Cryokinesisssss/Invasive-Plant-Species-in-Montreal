@@ -52,6 +52,9 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 4. GitHub Actions is configured to refresh and publish changed map data daily
    at 06:17 UTC. It can also be started manually from the repository's Actions tab.
    The workflow becomes active after these changes are committed and pushed to GitHub.
+   The map's upper-right status badge displays the last successful observation refresh.
+   Organization project source links are reviewed manually; update the
+   `sources_last_checked` date in `data/projects.geojson` when reviewing them.
 
 ## Adding projects to the map
 - Add each project as a GeoJSON `Feature` in `data/projects.geojson`.

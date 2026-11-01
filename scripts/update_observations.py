@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_PATH = ROOT / "notebooks" / "ChecksPassed.ipynb"
 CSV_PATH = ROOT / "data" / "obs_H_M_L.csv"
 PHOTO_LICENSES_PATH = ROOT / "data" / "photo_licenses.json"
+REFRESH_METADATA_PATH = ROOT / "data" / "refresh_metadata.json"
 API_URL = "https://api.inaturalist.org/v1/observations"
 PLACE_ID = 27630
 PAGE_SIZE = 200
@@ -235,6 +236,24 @@ def main():
         json.dump(photo_license_data, destination, ensure_ascii=False, indent=2)
     temporary_csv.replace(CSV_PATH)
     temporary_photo_licenses.replace(PHOTO_LICENSES_PATH)
+    temporary_refresh_metadata = REFRESH_METADATA_PATH.with_suffix(
+        REFRESH_METADATA_PATH.suffix + ".tmp"
+    )
+    with temporary_refresh_metadata.open(
+        "w",
+        encoding="utf-8",
+        newline="\n",
+    ) as destination:
+        json.dump(
+            {
+                "source": "GitHub Actions daily iNaturalist refresh",
+                "last_updated": datetime.now(timezone.utc).isoformat(),
+            },
+            destination,
+            indent=2,
+        )
+        destination.write("\n")
+    temporary_refresh_metadata.replace(REFRESH_METADATA_PATH)
     print(
         f"Saved {len(rows)} observations and {len(photo_licenses)} photo-license "
         f"records to {CSV_PATH.parent}",

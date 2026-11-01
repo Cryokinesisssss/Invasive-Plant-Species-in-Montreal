@@ -184,6 +184,9 @@ let projectFeatures = [];
 let projectsVisible = true;
 let projectsLoaded = false;
 let projectsLoadFailed = false;
+let projectsSourcesLastChecked = null;
+let observationDataUpdatedAt = null;
+let statusFeatures = [];
 
 // ---- 3c. iNat visibility (analogous to sentinelVisible) ----
 let inatVisible = true;
@@ -201,6 +204,7 @@ let selectedIsUnion = false;
 function updateStatusSummary(filtered) {
   const el = document.getElementById('status');
   if (!el) return;
+  statusFeatures = filtered;
 
   const total = allFeatures.length;
   const shown = filtered.length;
@@ -238,6 +242,17 @@ function updateStatusSummary(filtered) {
              '<div class="status-line">' +
                speciesSet.size.toLocaleString() + ' species' +
              '</div>';
+  html += '<div class="status-line status-line-updated">iNaturalist data updated: ' +
+    (observationDataUpdatedAt
+      ? new Date(observationDataUpdatedAt).toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      })
+      : 'no successful refresh yet') +
+    '</div>';
 
   if (boroughData) {
     html += '<div class="status-line">' +
@@ -249,6 +264,23 @@ function updateStatusSummary(filtered) {
   el.innerHTML = html;
   el.classList.toggle('is-filtered', shown !== total);
 }
+
+fetch('data/refresh_metadata.json', { cache: 'no-store' })
+  .then(function (response) {
+    if (!response.ok) throw new Error('HTTP ' + response.status + ' loading refresh metadata');
+    return response.json();
+  })
+  .then(function (metadata) {
+    if (!metadata || (metadata.last_updated !== null &&
+        (typeof metadata.last_updated !== 'string' || Number.isNaN(Date.parse(metadata.last_updated))))) {
+      throw new Error('refresh_metadata.json has an invalid last_updated value');
+    }
+    observationDataUpdatedAt = metadata.last_updated;
+    updateStatusSummary(statusFeatures);
+  })
+  .catch(function (error) {
+    console.error('Could not load iNaturalist refresh metadata:', error);
+  });
 
 
 // ============================================================
@@ -2090,6 +2122,10 @@ function buildProjectLayer() {
       if (p.marker_location) {
         html += '<div class="project-location-note">' + escapeHtml(p.marker_location) + '</div>';
       }
+      if (projectsSourcesLastChecked) {
+        html += '<div class="project-source-checked">Project sources last checked: ' +
+          escapeHtml(projectsSourcesLastChecked) + '</div>';
+      }
       let hasSourceLink = false;
       if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
         html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
@@ -2168,6 +2204,9 @@ fetch('data/projects.geojson')
       throw new Error('projects.geojson must be a GeoJSON FeatureCollection');
     }
     projectFeatures = data.features;
+    projectsSourcesLastChecked = data.metadata && data.metadata.sources_last_checked
+      ? data.metadata.sources_last_checked
+      : null;
     projectsLoaded = true;
     buildProjectLayer();
     if (BOROUGH_PANEL && !BOROUGH_PANEL.hidden) renderSelectionPanel();

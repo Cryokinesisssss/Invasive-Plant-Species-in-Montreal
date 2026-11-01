@@ -679,6 +679,7 @@ footer a {
 .project-detail ul { margin: 3px 0 0 16px; padding: 0; }
 .project-detail li { margin: 2px 0; }
 .project-location-note,
+.project-source-checked,
 .project-source-missing {
   margin-top: 6px;
   font-size: 11px;
@@ -983,6 +984,15 @@ footer a {
   font-weight: 500;
   opacity: 0.85;
   line-height: 1.35;
+}
+
+.map-status .status-line-updated {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  white-space: normal;
+  max-width: 260px;
 }
 
 .map-status .status-line-main {
@@ -1327,6 +1337,12 @@ footer a {
   line-height: 1.6;
   color: #2a2f3a;
   margin: 0 0 16px;
+}
+
+.story-content .story-caveat {
+  padding: 10px 12px;
+  border-left: 3px solid #DCBD23;
+  background: #f7f4e3;
 }
 
 .story-content p {

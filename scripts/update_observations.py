@@ -170,6 +170,13 @@ def observation_row(observation, photo_licenses):
 
 
 def main():
+    previous_observation_ids = set()
+    if CSV_PATH.exists():
+        with CSV_PATH.open("r", encoding="utf-8", newline="") as source:
+            previous_observation_ids = {
+                row["id"] for row in csv.DictReader(source)
+            }
+
     taxon_ids = risk_taxon_ids()
     first_page = fetch_page(taxon_ids, 1)
     total_results = int(first_page.get("total_results", 0))
@@ -209,6 +216,9 @@ def main():
         raise RuntimeError(
             f"Received duplicate observation IDs: {len(rows)} unique of {total_results}."
         )
+    new_observations = sum(
+        row["id"] not in previous_observation_ids for row in rows
+    )
 
     photo_license_data = {
         "source": "iNaturalist API observation photo metadata",
@@ -248,6 +258,7 @@ def main():
             {
                 "source": "GitHub Actions daily iNaturalist refresh",
                 "last_updated": datetime.now(timezone.utc).isoformat(),
+                "new_observations": new_observations,
             },
             destination,
             indent=2,
@@ -256,7 +267,8 @@ def main():
     temporary_refresh_metadata.replace(REFRESH_METADATA_PATH)
     print(
         f"Saved {len(rows)} observations and {len(photo_licenses)} photo-license "
-        f"records to {CSV_PATH.parent}",
+        f"records to {CSV_PATH.parent}; {new_observations} new qualifying "
+        "observations since the previous refresh",
         flush=True,
     )
 

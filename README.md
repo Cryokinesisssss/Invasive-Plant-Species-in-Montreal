@@ -53,6 +53,9 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
    at 06:17 UTC. It can also be started manually from the repository's Actions tab.
    The workflow becomes active after these changes are committed and pushed to GitHub.
    The map's upper-right status badge displays the last successful observation refresh.
+   It also reports how many newly qualifying observation IDs were added compared
+   with the CSV from the previous refresh; this is not necessarily the number
+   observed during that calendar day.
    Organization project source links are reviewed manually; update the
    `sources_last_checked` date in `data/projects.geojson` when reviewing them.
 

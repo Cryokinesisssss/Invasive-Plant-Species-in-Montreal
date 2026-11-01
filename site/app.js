@@ -186,6 +186,7 @@ let projectsLoaded = false;
 let projectsLoadFailed = false;
 let projectsSourcesLastChecked = null;
 let observationDataUpdatedAt = null;
+let newObservationsLastRefresh = null;
 let statusFeatures = [];
 
 // ---- 3c. iNat visibility (analogous to sentinelVisible) ----
@@ -253,6 +254,13 @@ function updateStatusSummary(filtered) {
       })
       : 'no successful refresh yet') +
     '</div>';
+  if (newObservationsLastRefresh !== null) {
+    html += '<div class="status-line status-line-updated">' +
+      newObservationsLastRefresh.toLocaleString() +
+      ' new qualifying observation' + (newObservationsLastRefresh === 1 ? '' : 's') +
+      ' since previous refresh' +
+      '</div>';
+  }
 
   if (boroughData) {
     html += '<div class="status-line">' +
@@ -271,11 +279,15 @@ fetch('data/refresh_metadata.json', { cache: 'no-store' })
     return response.json();
   })
   .then(function (metadata) {
-    if (!metadata || (metadata.last_updated !== null &&
-        (typeof metadata.last_updated !== 'string' || Number.isNaN(Date.parse(metadata.last_updated))))) {
-      throw new Error('refresh_metadata.json has an invalid last_updated value');
+    if (!metadata ||
+        (metadata.last_updated !== null &&
+          (typeof metadata.last_updated !== 'string' || Number.isNaN(Date.parse(metadata.last_updated)))) ||
+        (metadata.new_observations !== null &&
+          (!Number.isInteger(metadata.new_observations) || metadata.new_observations < 0))) {
+      throw new Error('refresh_metadata.json contains invalid refresh metadata');
     }
     observationDataUpdatedAt = metadata.last_updated;
+    newObservationsLastRefresh = metadata.new_observations;
     updateStatusSummary(statusFeatures);
   })
   .catch(function (error) {

@@ -293305,6 +293305,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5653733177,
+          45.4519094663
+        ]
+      },
+      "properties": {
+        "id": "411758132",
+        "observed_on": "2026-10-30",
+        "time_observed_at": "2026-10-30 14:15:33 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/411758132",
+        "image_url": "",
+        "place_guess": "LaSalle / Woodland, Montréal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5654032944,
           45.4515569634
         ]
@@ -293404,6 +293441,43 @@
         "taxon_id": "55972",
         "positional_accuracy": "2",
         "public_positional_accuracy": "2",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.567324223,
+          45.4492639186
+        ]
+      },
+      "properties": {
+        "id": "411760962",
+        "observed_on": "2026-10-30",
+        "time_observed_at": "2026-10-30 14:31:33 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/411760962",
+        "image_url": "",
+        "place_guess": "LaSalle / Beatty, Montréal, QC H4H 1P4, Canada",
+        "place_town_name": "",
+        "species_guess": "Roseau commun d'Eurasie",
+        "scientific_name": "Phragmites australis australis",
+        "common_name": "European common reed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "556361",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",
@@ -294001,6 +294075,43 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.621112695,
+          45.4605987808
+        ]
+      },
+      "properties": {
+        "id": "411764503",
+        "observed_on": "2026-10-30",
+        "time_observed_at": "2026-10-30 14:54:05 UTC",
+        "user_login": "navidelip",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Navid Elahipanah, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/411764503",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/757547668/medium.jpg",
+        "place_guess": "Saint-Jacques / No 6360, Montréal, QC H4B 1T6, Canada",
+        "place_town_name": "",
+        "species_guess": "lesser periwinkle",
+        "scientific_name": "Vinca minor",
+        "common_name": "lesser periwinkle",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55844",
+        "positional_accuracy": "18",
+        "public_positional_accuracy": "18",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
       }
     },
     {
@@ -294674,6 +294785,80 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6211773194,
+          45.4605065379
+        ]
+      },
+      "properties": {
+        "id": "411771123",
+        "observed_on": "2026-10-30",
+        "time_observed_at": "2026-10-30 15:30:23 UTC",
+        "user_login": "navidelip",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Navid Elahipanah, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/411771123",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/757559675/medium.jpg",
+        "place_guess": "Saint-Jacques / Cavendish, Montréal, QC H4B 1T6, Canada",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5650826992,
+          45.4525798659
+        ]
+      },
+      "properties": {
+        "id": "411771365",
+        "observed_on": "2026-10-30",
+        "time_observed_at": "2026-10-30 15:32:20 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/411771365",
+        "image_url": "",
+        "place_guess": "LaSalle / Woodland, Montréal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5643898357,
           45.4535332255
         ]
@@ -294859,6 +295044,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6173348252,
+          45.4931022103
+        ]
+      },
+      "properties": {
+        "id": "412039577",
+        "observed_on": "2026-10-31",
+        "time_observed_at": "2026-10-31 20:45:34 UTC",
+        "user_login": "elliotsimard",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Elliot Simard, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412039577",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758095342/medium.jpg",
+        "place_guess": "Rue Coronet, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cerfeuil des bois",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.8371414555,
           45.5141116022
         ]
@@ -294889,6 +295111,154 @@
         "risk": "high",
         "presence": "Established",
         "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7579805556,
+          45.5102166667
+        ]
+      },
+      "properties": {
+        "id": "412223669",
+        "observed_on": "2026-09-21",
+        "time_observed_at": "2026-09-21 18:53:00 UTC",
+        "user_login": "inesgouhey",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) inesgouhey, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412223669",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758465821/medium.jpg",
+        "place_guess": "Ahuntsic-Cartierville, Montréal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "Salicaire commune",
+        "scientific_name": "Lythrum salicaria",
+        "common_name": "purple loosestrife",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "61321",
+        "positional_accuracy": "13",
+        "public_positional_accuracy": "13",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7580638889,
+          45.5102666667
+        ]
+      },
+      "properties": {
+        "id": "412223678",
+        "observed_on": "2026-09-21",
+        "time_observed_at": "2026-09-21 19:00:00 UTC",
+        "user_login": "inesgouhey",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) inesgouhey, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412223678",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758468389/medium.jpg",
+        "place_guess": "Ahuntsic-Cartierville, Montréal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "Iris faux-acore",
+        "scientific_name": "Iris pseudacorus",
+        "common_name": "Yellow Iris",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "47779",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.622549437,
+          45.4597365009
+        ]
+      },
+      "properties": {
+        "id": "412249104",
+        "observed_on": "2026-11-01",
+        "time_observed_at": "2026-11-01 19:46:24 UTC",
+        "user_login": "maximelaterreur",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Maxime Laterreur, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412249104",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758524335/medium.jpg",
+        "place_guess": "Saint-Jacques / Cavendish, Montréal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7564,
+          45.5126583333
+        ]
+      },
+      "properties": {
+        "id": "412345709",
+        "observed_on": "2026-11-01",
+        "time_observed_at": "2026-11-01 21:40:56 UTC",
+        "user_login": "tristangoy",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) tristangoy, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412345709",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758722612/medium.jpg",
+        "place_guess": "Île de Montréal, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
       }
     }
   ]

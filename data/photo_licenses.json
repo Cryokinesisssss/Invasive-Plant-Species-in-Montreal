@@ -1,6 +1,6 @@
 {
   "source": "iNaturalist API observation photo metadata",
-  "checked_at": "2026-11-02T15:56:44.793202+00:00",
+  "checked_at": "2026-11-03T14:18:40.431213+00:00",
   "photos": {
     "4276938": {
       "photo_id": "5126423",
@@ -57561,6 +57561,20 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758722612/medium.jpg",
       "license_code": "cc-by-nc",
       "attribution": "(c) tristangoy, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "412424443": {
+      "photo_id": "758883593",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758883593/medium.jpg",
+      "license_code": "cc-by-nc-sa",
+      "attribution": "(c) Miguel Castañeda-Zárate, some rights reserved (CC BY-NC-SA)",
+      "verified": true
+    },
+    "412446803": {
+      "photo_id": "758927440",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758927440/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) Laila Naas, some rights reserved (CC BY-NC)",
       "verified": true
     }
   }

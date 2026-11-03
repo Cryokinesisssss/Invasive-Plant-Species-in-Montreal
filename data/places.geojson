@@ -295260,6 +295260,80 @@
         "presence": "Established",
         "banned": true
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.61808,
+          45.483475
+        ]
+      },
+      "properties": {
+        "id": "412424443",
+        "observed_on": "2026-11-02",
+        "time_observed_at": "2026-11-02 12:48:32 UTC",
+        "user_login": "mcastaneda-zarate",
+        "license": "CC-BY-NC-SA",
+        "photo_license": "CC-BY-NC-SA",
+        "photo_attribution": "(c) Miguel Castañeda-Zárate, some rights reserved (CC BY-NC-SA)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412424443",
+        "image_url": "",
+        "place_guess": "Ch de la Côte-Saint-Luc, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.6720381907,
+          45.5159339767
+        ]
+      },
+      "properties": {
+        "id": "412446803",
+        "observed_on": "2026-10-22",
+        "time_observed_at": "2026-10-22 09:13:37 UTC",
+        "user_login": "laila_naas",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Laila Naas, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412446803",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758927440/medium.jpg",
+        "place_guess": "Vanier College, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
     }
   ]
 }

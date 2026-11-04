@@ -126372,7 +126372,7 @@
         "user_login": "xavmaclaren",
         "license": "CC-BY-NC",
         "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) xavmaclaren, some rights reserved (CC BY-NC)",
+        "photo_attribution": "(c) Xavier, some rights reserved (CC BY-NC)",
         "photo_present": true,
         "photo_license_verified": true,
         "url": "https://www.inaturalist.org/observations/182515298",
@@ -292946,7 +292946,7 @@
         "user_login": "xavmaclaren",
         "license": "CC-BY-NC",
         "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) xavmaclaren, some rights reserved (CC BY-NC)",
+        "photo_attribution": "(c) Xavier, some rights reserved (CC BY-NC)",
         "photo_present": true,
         "photo_license_verified": true,
         "url": "https://www.inaturalist.org/observations/411181792",
@@ -292983,7 +292983,7 @@
         "user_login": "xavmaclaren",
         "license": "CC-BY-NC",
         "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) xavmaclaren, some rights reserved (CC BY-NC)",
+        "photo_attribution": "(c) Xavier, some rights reserved (CC BY-NC)",
         "photo_present": true,
         "photo_license_verified": true,
         "url": "https://www.inaturalist.org/observations/411182591",
@@ -293020,7 +293020,7 @@
         "user_login": "xavmaclaren",
         "license": "CC-BY-NC",
         "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) xavmaclaren, some rights reserved (CC BY-NC)",
+        "photo_attribution": "(c) Xavier, some rights reserved (CC BY-NC)",
         "photo_present": true,
         "photo_license_verified": true,
         "url": "https://www.inaturalist.org/observations/411182652",
@@ -295018,7 +295018,7 @@
         "user_login": "xavmaclaren",
         "license": "CC-BY-NC",
         "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) xavmaclaren, some rights reserved (CC BY-NC)",
+        "photo_attribution": "(c) Xavier, some rights reserved (CC BY-NC)",
         "photo_present": true,
         "photo_license_verified": true,
         "url": "https://www.inaturalist.org/observations/412037328",
@@ -295333,6 +295333,43 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5388899639,
+          45.5578853694
+        ]
+      },
+      "properties": {
+        "id": "412500828",
+        "observed_on": "2026-10-06",
+        "time_observed_at": "2026-10-06 21:09:24 UTC",
+        "user_login": "samallow",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) samallow, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412500828",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/759037466/medium.jpg",
+        "place_guess": "Rue Leclaire, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Rosier rugueux",
+        "scientific_name": "Rosa rugosa",
+        "common_name": "rugosa rose",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "83653",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
       }
     }
   ]

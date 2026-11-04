@@ -811,7 +811,11 @@ fetch('data/places.geojson')
 // 8. POPOVER OPEN/CLOSE — dropdown behaviour for the filter bar
 // ============================================================
 function closeAllPopovers() {
-  document.querySelectorAll('.fp-panel').forEach(function (p) { p.hidden = true; });
+  document.querySelectorAll('.fp-panel').forEach(function (p) {
+    p.hidden = true;
+    p.style.removeProperty('left');
+    p.style.removeProperty('top');
+  });
   document.querySelectorAll('.fp-btn').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
   hideSpSuggest();
 }
@@ -824,7 +828,23 @@ document.querySelectorAll('.fp').forEach(function (wrap) {
     e.stopPropagation();
     const wasOpen = !panel.hidden;
     closeAllPopovers();
-    if (!wasOpen) { panel.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+    if (!wasOpen) {
+      panel.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      if (window.matchMedia('(max-width: 700px)').matches) {
+        const buttonBounds = btn.getBoundingClientRect();
+        const panelBounds = panel.getBoundingClientRect();
+        const margin = 8;
+        panel.style.left = Math.max(
+          margin,
+          Math.min(buttonBounds.left, window.innerWidth - panelBounds.width - margin)
+        ) + 'px';
+        panel.style.top = Math.max(
+          margin,
+          Math.min(buttonBounds.bottom + 6, window.innerHeight - panelBounds.height - margin)
+        ) + 'px';
+      }
+    }
   });
   panel.addEventListener('click', function (e) { e.stopPropagation(); });
 });

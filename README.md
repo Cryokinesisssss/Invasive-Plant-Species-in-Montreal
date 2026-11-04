@@ -130,3 +130,25 @@ Test 2. I select a borough or city from the map filter. PASSED
  Expected: The observation panel shows the number of project points located inside the selected boundary.
 Test 3. I click a project point whose source does not identify a specific invasive species. PASSED
  Expected: Its pop-up says the source does not identify a specific species, and the project is not listed under a species in the catalog. 
+
+## LAB 7
+
+
+Test 1. Click a project point; its popup shows the project or organization name, a description, and a source link. PASSED.
+
+Test 2. Select a borough or city; the panel shows the number of project points inside it. PASSED.
+
+Test 3. Click a project whose source doesn’t name a species; its popup explains this, and it isn’t linked to a species in the catalog. PASSED.
+
+
+## Pre-flight report (Lab 7)
+| Check | Result | What I did |
+| --- | --- | --- |
+| 1. Cold start | pass / fault: PASS | fixed in commit "..." / known issue |
+| 2. Read every label | PASS | ... |
+| 3. Ask twice | PASS | ... |
+| 4. The edge | PASS | ... |
+| 5. The data does not come | PASS | Added a message that lets the user know that a file failed to load |
+| 6. On a phone (size view and my phone) | PASS | fixed layout ish   |
+| 7. Mouse in my pocket | PASS | ... |
+| 8. Accessibility audit | 96/100, some points in my A3 layer did not pass | ... |

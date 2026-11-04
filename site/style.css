@@ -1008,6 +1008,30 @@ footer a {
   margin-left: 2px;
 }
 
+.map-status.is-error {
+  background: #7a1f1f;
+  border-color: #4b1212;
+}
+
+.map-status.is-error::before {
+  background: #ff9f1c;
+}
+
+.map-data-error {
+  position: absolute;
+  inset: 16px 16px auto 16px;
+  z-index: 450;
+  padding: 12px 14px;
+  background: rgba(72, 14, 14, 0.9);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
 .trend-open {
   position: fixed;
   right: 12px;

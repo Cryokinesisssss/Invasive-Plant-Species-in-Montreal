@@ -98,6 +98,30 @@ map.on('resize', function () {
   if (activeMapPopup) keepPopupVisible(activeMapPopup);
 });
 
+function showDataLoadError(message, err) {
+  const statusEl = document.getElementById('status');
+  if (statusEl) {
+    statusEl.innerHTML =
+      '<div class="status-line status-line-main">Data unavailable</div>' +
+      '<div class="status-line">' + message + '</div>';
+    statusEl.classList.add('is-error');
+    statusEl.classList.remove('is-filtered');
+  }
+
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    let errorPanel = mapEl.querySelector('.map-data-error');
+    if (!errorPanel) {
+      errorPanel = document.createElement('div');
+      errorPanel.className = 'map-data-error';
+      mapEl.appendChild(errorPanel);
+    }
+    errorPanel.textContent = message;
+  }
+
+  if (err) console.error(message, err);
+}
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 20,
   attribution: '&copy; OpenStreetMap contributors'
@@ -779,9 +803,7 @@ fetch('data/places.geojson')
     if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
   })
   .catch(function (err) {
-    document.getElementById('status').textContent =
-      'Could not load places.geojson. Open the console (F12) for details.';
-    console.error(err);
+    showDataLoadError('Could not load the observation data (places.geojson). The map is blank until the request succeeds.', err);
   });
 
 
@@ -1820,7 +1842,9 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
     buildObsLayer();
     renderSelectionPanel();
   })
-  .catch(function (err) { console.error('Could not load boundaries:', err); });
+  .catch(function (err) {
+    showDataLoadError('Could not load the borough/city boundaries. The map still loads, but area filters and counts will be unavailable.', err);
+  });
 
 
 // ============================================================
@@ -2051,7 +2075,9 @@ fetch('data/sentinel_wgs84.geojson')
     buildYearList();   // pick up years only present in Sentinelle data
     if (sentinelVisible) buildSentinelLayer();
   })
-  .catch(function (err) { console.error('Could not load Sentinelle data:', err); });
+  .catch(function (err) {
+    showDataLoadError('Could not load the Sentinelle data layer. The map stays available, but that layer is disabled.', err);
+  });
 
 
 // ============================================================
@@ -2225,6 +2251,6 @@ fetch('data/projects.geojson')
   })
   .catch(function (err) {
     projectsLoadFailed = true;
-    console.error('Could not load project data:', err);
+    showDataLoadError('Could not load the project data. Project points and initiative details are unavailable.', err);
     if (BOROUGH_PANEL && !BOROUGH_PANEL.hidden) renderSelectionPanel();
   });

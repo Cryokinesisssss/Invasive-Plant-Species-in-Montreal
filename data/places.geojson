@@ -100960,11 +100960,11 @@
         "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/271950768/medium.jpg",
         "place_guess": "Île de Montréal, Kirkland, QC, CA",
         "place_town_name": "",
-        "species_guess": "Gewöhnliche Goldnessel",
-        "scientific_name": "Lamium galeobdolon",
-        "common_name": "yellow archangel",
+        "species_guess": "Variegated Yellow Archangel",
+        "scientific_name": "Lamium galeobdolon argentatum",
+        "common_name": "Variegated Yellow Archangel",
         "iconic_taxon_name": "Plantae",
-        "taxon_id": "204339",
+        "taxon_id": "707386",
         "positional_accuracy": "5",
         "public_positional_accuracy": "5",
         "coordinates_obscured": false,
@@ -105437,11 +105437,11 @@
         "image_url": "",
         "place_guess": "Île de Montréal, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "Gewöhnliche Goldnessel",
-        "scientific_name": "Lamium galeobdolon",
-        "common_name": "yellow archangel",
+        "species_guess": "Variegated Yellow Archangel",
+        "scientific_name": "Lamium galeobdolon argentatum",
+        "common_name": "Variegated Yellow Archangel",
         "iconic_taxon_name": "Plantae",
-        "taxon_id": "204339",
+        "taxon_id": "707386",
         "positional_accuracy": "22",
         "public_positional_accuracy": "22",
         "coordinates_obscured": false,
@@ -119275,11 +119275,11 @@
         "image_url": "",
         "place_guess": "Île de Montréal, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "yellow archangel",
-        "scientific_name": "Lamium galeobdolon",
-        "common_name": "yellow archangel",
+        "species_guess": "Variegated Yellow Archangel",
+        "scientific_name": "Lamium galeobdolon argentatum",
+        "common_name": "Variegated Yellow Archangel",
         "iconic_taxon_name": "Plantae",
-        "taxon_id": "204339",
+        "taxon_id": "707386",
         "positional_accuracy": "9",
         "public_positional_accuracy": "9",
         "coordinates_obscured": false,
@@ -264593,6 +264593,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5690723891,
+          45.5573801381
+        ]
+      },
+      "properties": {
+        "id": "391556530",
+        "observed_on": "2026-08-15",
+        "time_observed_at": "2026-08-15 22:18:21 UTC",
+        "user_login": "marcolivierbeausoleil",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/391556530",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/717483138/medium.jpg",
+        "place_guess": "Rue Masson, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Vigne vierge à cinq folioles",
+        "scientific_name": "Parthenocissus quinquefolia",
+        "common_name": "Virginia creeper",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "50278",
+        "positional_accuracy": "14",
+        "public_positional_accuracy": "14",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.9481774253,
           45.4406556088
         ]
@@ -287477,11 +287514,11 @@
         "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/739948873/medium.jpg",
         "place_guess": "Rue Joliette, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "Lamier jaune",
-        "scientific_name": "Lamium galeobdolon",
-        "common_name": "yellow archangel",
+        "species_guess": "Lamier jaune à feuilles argentées",
+        "scientific_name": "Lamium galeobdolon argentatum",
+        "common_name": "Variegated Yellow Archangel",
         "iconic_taxon_name": "Plantae",
-        "taxon_id": "204339",
+        "taxon_id": "707386",
         "positional_accuracy": "7",
         "public_positional_accuracy": "7",
         "coordinates_obscured": false,
@@ -295370,6 +295407,117 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5898019281,
+          45.5355065503
+        ]
+      },
+      "properties": {
+        "id": "412855110",
+        "observed_on": "2026-11-04",
+        "time_observed_at": "2026-11-04 20:03:56 UTC",
+        "user_login": "marcolivierbeausoleil",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412855110",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/759748772/medium.jpg",
+        "place_guess": "Rue Pauline-Julien, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cerfeuil des bois",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5895598587,
+          45.5357795908
+        ]
+      },
+      "properties": {
+        "id": "412855254",
+        "observed_on": "2026-11-04",
+        "time_observed_at": "2026-11-04 20:04:54 UTC",
+        "user_login": "marcolivierbeausoleil",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412855254",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/759749077/medium.jpg",
+        "place_guess": "Rue des Carrières, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cerfeuil des bois",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5833226981,
+          45.5405118248
+        ]
+      },
+      "properties": {
+        "id": "412856652",
+        "observed_on": "2026-11-04",
+        "time_observed_at": "2026-11-04 20:13:52 UTC",
+        "user_login": "marcolivierbeausoleil",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/412856652",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/759751785/medium.jpg",
+        "place_guess": "Av de Lorimier, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "10",
+        "public_positional_accuracy": "10",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
       }
     }
   ]

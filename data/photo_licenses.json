@@ -1,6 +1,6 @@
 {
   "source": "iNaturalist API observation photo metadata",
-  "checked_at": "2026-11-06T14:20:32.176559+00:00",
+  "checked_at": "2026-11-07T13:04:14.264828+00:00",
   "photos": {
     "4276938": {
       "photo_id": "5126423",
@@ -57610,6 +57610,27 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/759751785/medium.jpg",
       "license_code": "cc-by",
       "attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+      "verified": true
+    },
+    "413166943": {
+      "photo_id": "760382183",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/760382183/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) benjomer, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "413170856": {
+      "photo_id": "760389866",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/760389866/medium.jpg",
+      "license_code": "cc-by",
+      "attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
+      "verified": true
+    },
+    "413184338": {
+      "photo_id": "760416344",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/760416344/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) ishakecology, some rights reserved (CC BY-NC)",
       "verified": true
     }
   }

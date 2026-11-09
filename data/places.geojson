@@ -222080,6 +222080,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.8498437024,
+          45.4923504168
+        ]
+      },
+      "properties": {
+        "id": "316076141",
+        "observed_on": "2025-09-23",
+        "time_observed_at": "2025-09-23 15:55:17 UTC",
+        "user_login": "christina_lafleur",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Christina Lafleur, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/316076141",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/571038354/medium.jpg",
+        "place_guess": "Rue René-Émard, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5690757677,
           45.5091740259
         ]
@@ -295777,6 +295814,191 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.6099153876,
+          45.44318135
+        ]
+      },
+      "properties": {
+        "id": "413653434",
+        "observed_on": "2026-11-08",
+        "time_observed_at": "2026-11-08 18:45:04 UTC",
+        "user_login": "kelly55285",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Kelly McLeod, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413653434",
+        "image_url": "",
+        "place_guess": "Rue Louis-Hébert, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8272221822,
+          45.5157432323
+        ]
+      },
+      "properties": {
+        "id": "413666764",
+        "observed_on": "2026-11-08",
+        "time_observed_at": "2026-11-08 18:13:02 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413666764",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761392467/medium.jpg",
+        "place_guess": "Rapides du Cheval Blanc, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "érable de Norvège",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8314771103,
+          45.5163730538
+        ]
+      },
+      "properties": {
+        "id": "413667109",
+        "observed_on": "2026-11-08",
+        "time_observed_at": "2026-11-08 18:35:52 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413667109",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761392926/medium.jpg",
+        "place_guess": "Rapides du Cheval Blanc, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "20",
+        "public_positional_accuracy": "20",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8277776178,
+          45.5161808999
+        ]
+      },
+      "properties": {
+        "id": "413667210",
+        "observed_on": "2026-11-08",
+        "time_observed_at": "2026-11-08 18:41:23 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413667210",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761393085/medium.jpg",
+        "place_guess": "Rapides du Cheval Blanc, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8208190351,
+          45.5136160597
+        ]
+      },
+      "properties": {
+        "id": "413669685",
+        "observed_on": "2026-11-08",
+        "time_observed_at": "2026-11-08 20:21:54 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413669685",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761399215/medium.jpg",
+        "place_guess": "Rapides du Cheval Blanc, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "34",
+        "public_positional_accuracy": "34",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
       }
     }
   ]

@@ -1054,6 +1054,18 @@ footer a {
 
 .lightbox-close:hover { background: #eee; }
 
+.lightbox-caption:empty { display: none; }
+.lightbox-caption {
+  margin-top: 8px;
+  color: #eee;
+  font-size: 12.5px;
+  text-align: center;
+}
+.lightbox-content img { max-height: calc(92vh - 32px); }
+
+.species-photo-zoom { cursor: zoom-in; }
+.species-photo-zoom:focus-visible { outline: 3px solid #DCBD23; outline-offset: -3px; }
+
 
 /* ============================================================
    11. MAP STATUS BADGE — top-right "N observations" block

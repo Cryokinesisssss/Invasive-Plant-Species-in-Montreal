@@ -812,7 +812,10 @@ function renderPhoto(s) {
 
   return (
     '<div class="species-photo">' +
-      '<img src="' + s.photo + '" alt="" loading="lazy" />' +
+      '<img class="species-photo-zoom" src="' + s.photo + '" data-full="' + escapeAttr(s.photo) + '"' +
+        ' data-caption="' + escapeAttr(s.common + (credit ? ' — ' + credit.replace(/<[^>]*>/g, '') : '')) + '"' +
+        ' alt="' + escapeAttr(s.common) + '" loading="lazy" tabindex="0" role="button"' +
+        ' title="Click to enlarge" />' +
       creditEl +
     '</div>'
   );
@@ -1506,3 +1509,44 @@ if (requestedSpecies) {
     speciesCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
+
+// ============================================================
+// S. LIGHTBOX — click a species photo → full-size image
+//    (same look as the map's popup lightbox; styles in style.css)
+// ============================================================
+function openPhotoLightbox(img) {
+  const full = img.getAttribute('data-full');
+  if (!full) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox-overlay';
+  overlay.innerHTML =
+    '<div class="lightbox-content"><img src="' + escapeAttr(full) + '" alt="">' +
+    '<button class="lightbox-close" type="button" aria-label="Close">×</button>' +
+    '<div class="lightbox-caption"></div></div>';
+  overlay.querySelector('.lightbox-caption').textContent = img.getAttribute('data-caption') || '';
+  const returnFocus = document.activeElement;
+  function close() {
+    overlay.remove();
+    document.removeEventListener('keydown', onKey);
+    if (returnFocus && returnFocus.focus) returnFocus.focus();
+  }
+  function onKey(ev) { if (ev.key === 'Escape') close(); }
+  overlay.addEventListener('click', function (ev) {
+    if (ev.target === overlay || ev.target.classList.contains('lightbox-close')) close();
+  });
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(overlay);
+  overlay.querySelector('.lightbox-close').focus();
+}
+
+document.addEventListener('click', function (e) {
+  const img = e.target.closest('.species-photo-zoom');
+  if (img) openPhotoLightbox(img);
+});
+document.addEventListener('keydown', function (e) {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList &&
+      e.target.classList.contains('species-photo-zoom')) {
+    e.preventDefault();
+    openPhotoLightbox(e.target);
+  }
+});

@@ -713,7 +713,8 @@ function scheduleThematicMapLayerUpdate() {
 function buildObsLayer() {
   if (obsLayer) { map.removeLayer(obsLayer); obsLayer = null; }
   renderObservationTrendChart();
-  const filtered = allFeatures.filter(passesFilters);
+  // Wrap the call: Array.filter would pass (index, array) into the "ignore" flags
+  const filtered = allFeatures.filter(function (f) { return passesFilters(f); });
   if (mapMode !== 'risk' || !inatVisible) {
     if (inatVisible) updateStatusSummary(filtered);
     scheduleThematicMapLayerUpdate();
@@ -2112,7 +2113,7 @@ function buildSentinelLayer() {
     return;
   }
 
-  const filtered = sentinelFeatures.filter(passesSentinelFilters);
+  const filtered = sentinelFeatures.filter(function (f) { return passesSentinelFilters(f); });
 
   const sentinelMarkers = L.geoJSON(
     { type: 'FeatureCollection', features: filtered },

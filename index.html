@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=23" />
+  <link rel="stylesheet" href="site/style.css?v=24" />
 </head>
 <body class="map-page compact-filters">
 
@@ -127,13 +127,15 @@
             <span>With photo only</span>
           </label>
           <div class="fp-divider"></div>
-          <div class="fp-group-label">Québec presence</div>
+          <div class="fp-group-label">Québec status
+            <button type="button" class="fp-info-link fp-info-inline" data-info="presence">What's this?</button>
+          </div>
           <div id="f-presence-list">
             <label class="fp-check"><input type="checkbox" data-presence="Established"><span>Established</span></label>
             <label class="fp-check"><input type="checkbox" data-presence="Absent"><span>Absent</span></label>
-            <label class="fp-check"><input type="checkbox" data-presence="Single observation"><span>Single observation</span></label>
+            <label class="fp-check"><input type="checkbox" data-presence="Single observation"><span>Occasional observation</span></label>
           </div>
-          <div class="fp-note">Sentinelle records do not include presence values and are hidden while this filter is active.</div>
+          <div class="fp-note">Sentinelle records do not include a Québec status and are hidden while this filter is active.</div>
           <div class="fp-divider"></div>
           <label class="fp-check">
             <input id="f-priority" type="checkbox">
@@ -421,7 +423,7 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="site/priority-species.js"></script>
-  <script src="site/info-dialogs.js?v=20"></script>
-  <script src="site/app.js?v=20"></script>
+  <script src="site/info-dialogs.js?v=24"></script>
+  <script src="site/app.js?v=24"></script>
 </body>
 </html>

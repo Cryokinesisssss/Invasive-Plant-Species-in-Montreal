@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>Species Catalog — Invasive Species</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="style.css?v=24" />
 </head>
 <body class="species-page compact-filters">
 
@@ -75,18 +75,20 @@
       <!-- ---- 3c. PRESENCE popover ---- -->
       <div class="fp">
         <button class="fp-btn" type="button" aria-expanded="false">
-          Presence <span class="fp-summary" id="cf-presence-summary">All</span>
+          <span class="hide-phone">Québec </span>Status <span class="fp-summary" id="cf-presence-summary">All</span>
         </button>
         <div class="fp-panel" hidden>
           <label class="fp-check fp-check-all">
-            <input type="checkbox" id="cf-presence-all" /> <span>All presences</span>
+            <input type="checkbox" id="cf-presence-all" /> <span>All statuses</span>
           </label>
           <div class="fp-divider"></div>
           <div id="cf-presence-list">
             <label class="fp-check"><input type="checkbox" data-value="Established" />        <span>Established</span></label>
             <label class="fp-check"><input type="checkbox" data-value="Absent" />             <span>Absent</span></label>
-            <label class="fp-check"><input type="checkbox" data-value="Single observation" /> <span>Single observation</span></label>
+            <label class="fp-check"><input type="checkbox" data-value="Single observation" /> <span>Occasional observation</span></label>
           </div>
+          <div class="fp-divider"></div>
+          <button type="button" class="fp-info-link" data-info="presence">What does the Québec status mean?</button>
         </div>
       </div>
 
@@ -179,7 +181,7 @@
        6. SCRIPT
        ============================================================ -->
   <script src="priority-species.js"></script>
-  <script src="info-dialogs.js?v=20"></script>
-  <script src="species.js?v=22"></script>
+  <script src="info-dialogs.js?v=24"></script>
+  <script src="species.js?v=24"></script>
 </body>
 </html>

@@ -2902,3 +2902,26 @@ button.species-tier-badge {
   cursor: pointer;
 }
 button.species-tier-badge:hover { filter: brightness(0.95); }
+
+
+/* Québec status: catalog pill + popup value open the status explainer */
+button.pill-status {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted rgba(0, 0, 0, 0.35);
+  text-underline-offset: 2px;
+}
+button.pill-status:hover { background: #e2e9e3; }
+.popup-status-link {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted rgba(0, 0, 0, 0.4);
+  text-underline-offset: 2px;
+}
+.popup-status-link:hover { color: #1B4332; text-decoration-style: solid; }
+.fp-info-inline { padding: 0 0 0 6px; font-size: 10.5px; text-transform: none; letter-spacing: 0; font-weight: 400; }

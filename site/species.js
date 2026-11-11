@@ -992,7 +992,7 @@ function renderCard(s) {
   const presenceLabel =
     s.presence === 'Established'        ? 'Established' :
     s.presence === 'Absent'             ? 'Absent' :
-    s.presence === 'Single observation' ? 'Single observation' :
+    s.presence === 'Single observation' ? 'Occasional observation' :
     s.presence;
 
   const banPill = s.ban
@@ -1029,7 +1029,7 @@ function renderCard(s) {
         '</div>' +
         '<p class="species-sci"><em>' + s.sci + '</em></p>' +
         '<div class="species-pills">' +
-          '<span class="pill">' + presenceLabel + '</span>' +
+          '<button type="button" class="pill pill-status" data-info="presence" title="What does the Québec status mean?">Québec: ' + presenceLabel + '</button>' +
           (s.priority
             ? '<span class="pill pill-priority" title="One of Québec’s 26 priority plant species for control">Québec priority</span>'
             : '') +

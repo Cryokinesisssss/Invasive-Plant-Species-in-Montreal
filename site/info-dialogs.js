@@ -8,7 +8,27 @@
 (function () {
   const RISK_GUIDANCE_URL = 'https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/E5E862_E86_2026.pdf';
 
+  const QC_LIST_URL = 'https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes-animales/liste-especes';
+
   const DIALOGS = {
+    presence: {
+      title: 'What does the Québec status mean?',
+      body:
+        '<p>The status comes from the Québec government\'s list of main invasive species ' +
+          '(Ministère de l\'Environnement). It describes the species across <strong>all of Québec</strong>, ' +
+          'not just Montréal or this map:</p>' +
+        '<ul class="info-list">' +
+          '<li><strong>Established</strong> (<em>Établie</em>): the species is observed in Québec and there is evidence, ' +
+            'or good reason to believe, that it survives there.</li>' +
+          '<li><strong>Occasional observation</strong> (<em>Observation ponctuelle</em>): the species has been observed in Québec ' +
+            'on some occasions, but there is no evidence that it survives.</li>' +
+          '<li><strong>Absent</strong> (<em>Absente</em>): the species has never been observed in Québec.</li>' +
+        '</ul>' +
+        '<p class="risk-info-note">The official list can lag behind recent sightings, so a species listed as Absent or Occasional ' +
+          'may still have points on this map, for example a garden planting or a new arrival.</p>' +
+        '<p class="risk-info-note">Source: <a href="' + QC_LIST_URL + '" target="_blank" rel="noopener noreferrer">' +
+          'Liste des principales espèces exotiques envahissantes</a>, Gouvernement du Québec (list updated September 29, 2026).</p>'
+    },
     risk: {
       title: 'What do the risk levels mean?',
       body:

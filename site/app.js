@@ -797,10 +797,11 @@ function buildObsLayer() {
         if (p.user_login)  html += '<div><span class="lbl">By</span>' + p.user_login + '</div>';
         if (p.place_guess) html += '<div class="popup-grid-wide"><span class="lbl">Place</span>' + p.place_guess + '</div>';
         if (p.presence) {
-          let qc = p.presence;
-          if (p.presence === 'Absent') qc += ' (not established)';
-          if (p.banned) qc += ' · REFEE';
-          html += '<div class="popup-grid-wide"><span class="lbl">Québec</span>' + qc + '</div>';
+          const statusLabel = p.presence === 'Single observation' ? 'Occasional observation' : p.presence;
+          html += '<div class="popup-grid-wide"><span class="lbl">Québec status</span>' +
+            '<button type="button" class="popup-status-link" data-info="presence" title="What does the Québec status mean?">' +
+            escapeHtml(statusLabel) + '</button>' +
+            (p.banned ? ' · REFEE' : '') + '</div>';
         }
         html += '</div>';
 

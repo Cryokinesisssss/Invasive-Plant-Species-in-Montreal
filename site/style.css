@@ -1835,11 +1835,13 @@ footer a {
 .species-card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08); }
 
 /* ---- 15c. Photo block ---- */
+/* Every photo is the same square, regardless of how long the card's text is */
 .species-photo {
   position: relative;
-  flex: 0 0 132px;
-  width: 132px;
-  align-self: stretch;
+  flex: 0 0 160px;
+  width: 160px;
+  height: 160px;
+  align-self: flex-start;
   border-radius: 6px;
   overflow: hidden;
   background: #eef2ee;
@@ -1849,6 +1851,10 @@ footer a {
 }
 
 .species-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 600px) {
+  .species-photo { flex-basis: 112px; width: 112px; height: 112px; }
+}
 
 .species-photo-placeholder { flex-direction: column; gap: 4px; color: #fff; text-align: center; }
 .species-photo-placeholder.tier-high     { background: #e63946; }

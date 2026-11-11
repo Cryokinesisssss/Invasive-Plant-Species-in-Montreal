@@ -1028,9 +1028,7 @@ function showTaxonomy(s) {
   taxBody.innerHTML = header + '<div class="tax-rows">' + rows + '</div>';
   taxPanel.hidden = false;
 
-  if (window.matchMedia('(max-width: 999px)').matches) {
-    taxPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  revealPanel(taxPanel);
 
   markActiveCard(s);
 }
@@ -1088,11 +1086,27 @@ function showProjects(s) {
   taxPanel.hidden = true;
   projPanel.hidden = false;
 
-  if (window.matchMedia('(max-width: 999px)').matches) {
-    projPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  revealPanel(projPanel);
 
   markActiveCard(s);
+}
+
+
+// On phones the list and the open panel sit side by side (see .has-panel in
+// style.css), so the panel stays next to the card instead of jumping to the bottom.
+const layoutEl = document.querySelector('.species-layout');
+const PHONE_QUERY = window.matchMedia('(max-width: 700px)');
+function syncLayoutPanelState() {
+  if (!layoutEl) return;
+  layoutEl.classList.toggle('has-panel', !taxPanel.hidden || !projPanel.hidden);
+}
+function revealPanel(panel) {
+  syncLayoutPanelState();
+  panel.scrollTop = 0;
+  if (PHONE_QUERY.matches) return;   // sticky side column — already visible
+  if (window.matchMedia('(max-width: 999px)').matches) {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 
@@ -1114,6 +1128,7 @@ function markActiveCard(s) {
 if (taxClose) {
   taxClose.addEventListener('click', function () {
     taxPanel.hidden = true;
+    syncLayoutPanelState();
     listEl.querySelectorAll('.species-card').forEach(function (c) {
       c.classList.remove('active');
     });
@@ -1123,6 +1138,7 @@ if (taxClose) {
 if (projClose) {
   projClose.addEventListener('click', function () {
     projPanel.hidden = true;
+    syncLayoutPanelState();
     listEl.querySelectorAll('.species-card').forEach(function (c) {
       c.classList.remove('active');
     });

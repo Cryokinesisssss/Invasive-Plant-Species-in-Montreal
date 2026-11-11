@@ -1439,7 +1439,9 @@ function updateMapLegend() {
       '<div class="legend-gradient-labels"><span>Fewer records</span><span>More records</span></div>' +
       '<div class="legend-mode-note">Uses the enabled iNaturalist and Sentinelle sources. This represents reporting patterns, not plant abundance.</div>';
   } else {
-    html = '<div class="legend-title">Risk</div>' +
+    html = '<div class="legend-title">Risk ' +
+        '<button type="button" class="legend-help" data-risk-info aria-label="What do the risk levels mean?" title="What do the risk levels mean?">?</button>' +
+      '</div>' +
       '<div class="legend-risk-strip">' +
         '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
         '<span class="legend-risk-item"><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span>Mod.</span>' +
@@ -1462,10 +1464,36 @@ legend.onAdd = function () {
   // Let touch/wheel scrolling inside the legend scroll it instead of panning the map
   L.DomEvent.disableScrollPropagation(legendElement);
   L.DomEvent.disableClickPropagation(legendElement);
+  legendElement.addEventListener('click', function (e) {
+    if (e.target.closest('[data-risk-info]')) openRiskInfo();
+  });
   updateMapLegend();
   return legendElement;
 };
 legend.addTo(map);
+
+// ---- 15a. Risk info dialog (opened from the legend's "?") ----
+const RISK_INFO_OVERLAY = document.getElementById('risk-info-overlay');
+const RISK_INFO_CLOSE   = document.getElementById('risk-info-close');
+let riskInfoReturnFocus = null;
+function openRiskInfo() {
+  if (!RISK_INFO_OVERLAY) return;
+  riskInfoReturnFocus = document.activeElement;
+  RISK_INFO_OVERLAY.hidden = false;
+  if (RISK_INFO_CLOSE) RISK_INFO_CLOSE.focus();
+}
+function closeRiskInfo() {
+  if (!RISK_INFO_OVERLAY || RISK_INFO_OVERLAY.hidden) return;
+  RISK_INFO_OVERLAY.hidden = true;
+  if (riskInfoReturnFocus && riskInfoReturnFocus.focus) riskInfoReturnFocus.focus();
+}
+if (RISK_INFO_CLOSE) RISK_INFO_CLOSE.addEventListener('click', closeRiskInfo);
+if (RISK_INFO_OVERLAY) RISK_INFO_OVERLAY.addEventListener('click', function (e) {
+  if (e.target === RISK_INFO_OVERLAY) closeRiskInfo();
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeRiskInfo();
+});
 
 
 // ============================================================

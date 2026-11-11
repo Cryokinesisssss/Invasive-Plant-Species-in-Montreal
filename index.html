@@ -216,6 +216,30 @@
     <div id="bp-body" class="bp-body"></div>
   </aside>
 
+  <!-- ============================================================
+       4b. RISK INFO DIALOG — opened from the "?" in the map legend
+       ============================================================ -->
+  <div id="risk-info-overlay" class="risk-info-overlay" hidden>
+    <div class="risk-info" role="dialog" aria-modal="true" aria-labelledby="risk-info-title">
+      <div class="risk-info-head">
+        <h2 id="risk-info-title">What do the risk levels mean?</h2>
+        <button id="risk-info-close" class="risk-info-close" type="button" aria-label="Close">×</button>
+      </div>
+      <p>Québec classifies harmful invasive plant species by their known risk to biodiversity and the environment:</p>
+      <ul class="risk-info-list">
+        <li><span class="swatch" style="background:#e63946;border-color:#8b0000"></span><div><strong>High risk:</strong> a major threat to biodiversity and the proper functioning of ecosystems.</div></li>
+        <li><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span><div><strong>Moderate risk:</strong> may harm some native species or disrupt some ecosystems, but without causing severe impacts.</div></li>
+        <li><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span><div><strong>Low risk:</strong> impacts on biodiversity and ecosystems are limited.</div></li>
+        <li><span class="swatch" style="background:#adb5bd;border-color:#444"></span><div><strong>Undetermined — watch</strong> (shown as “Unclassified”): impacts and risk in Québec are not yet sufficiently understood.</div></li>
+      </ul>
+      <p class="risk-info-note">Priority for control is a separate classification: a species can be a priority even if its risk level is moderate or low.</p>
+      <p class="risk-info-note">
+        Source: Québec's
+        <a href="https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/E5E862_E86_2026.pdf" target="_blank" rel="noopener noreferrer">risk criteria and control guidance</a>.
+      </p>
+    </div>
+  </div>
+
 
   <!-- ============================================================
        5. MAP STATUS BADGE — top-right count block

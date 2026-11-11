@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="species-page">
 
   <!-- ============================================================
        1. TOP NAVIGATION — brand + Map / Species Catalog links
@@ -47,6 +47,9 @@
                placeholder="Search species…" autocomplete="off" />
         <div class="species-suggest" id="species-search-suggest" hidden></div>
       </div>
+
+      <!-- Chips row: becomes one compact scrollable row on phones -->
+      <div class="filter-chips">
 
       <!-- ---- 3b. RISK popover ---- -->
       <div class="fp">
@@ -119,11 +122,12 @@
       <!-- ---- 3f. Priority species filter ---- -->
       <label class="species-priority-filter" for="cf-priority">
         <input id="cf-priority" type="checkbox" />
-        <span>Priority species only</span>
+        <span>Priority<span class="hide-phone"> species</span> only</span>
       </label>
 
       <!-- ---- 3g. Reset + live count ---- -->
       <button class="filter-reset" type="button" id="cf-reset">Reset</button>
+      </div>
       <span id="species-count" class="filter-count"></span>
     </div>
   </section>

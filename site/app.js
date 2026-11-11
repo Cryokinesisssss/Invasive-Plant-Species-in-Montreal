@@ -340,6 +340,40 @@ function buildSpeciesCatalog() {
 }
 
 
+// ---- 4a. Open the map pre-filtered from the species catalog (?species=Latin name) ----
+// Names are compared on genus + species so "Phragmites australis subsp. australis"
+// (catalog) matches "Phragmites australis australis" (iNaturalist), and a genus
+// entry ("Rhamnus spp.") matches every species in that genus.
+function latinBinomial(name) {
+  const parts = String(name || '').toLowerCase()
+    .replace(/×/g, ' x ')
+    .replace(/\b(var|subsp|ssp|f|forma)\.\s*/g, ' ')
+    .split(/\s+/)
+    .filter(function (w) { return w && w !== 'x'; });
+  if (!parts.length) return '';
+  if (!parts[1] || parts[1] === 'spp.' || parts[1] === 'sp.') return parts[0];
+  return parts[0] + ' ' + parts[1];
+}
+
+let requestedSpeciesApplied = false;
+function applyRequestedSpecies() {
+  const requested = new URLSearchParams(window.location.search).get('species');
+  if (!requested) return false;
+  const target = latinBinomial(requested);
+  if (!target) return false;
+  const genusOnly = target.indexOf(' ') === -1;
+  const matches = speciesCatalog.filter(function (s) {
+    const b = latinBinomial(s.sci);
+    return genusOnly ? b.split(' ')[0] === target : b === target;
+  });
+  if (!matches.length) return false;
+  filterState.species.clear();
+  matches.forEach(function (s) { filterState.species.add(s.key); });
+  requestedSpeciesApplied = true;
+  return true;
+}
+
+
 // ============================================================
 // 5. OBSERVATION FILTER — decides which iNat dots are visible
 //    This is the core action's filtering logic.
@@ -810,13 +844,25 @@ fetch('data/places.geojson')
     });
     observationDataLoaded = true;
     buildSpeciesCatalog();
+    applyRequestedSpecies();
     buildYearList();
     populateSpeciesList();
+    if (requestedSpeciesApplied) {
+      syncSpeciesAllCheckbox();
+      updateSummaries();
+    }
     buildObsLayer();
     if (boroughData) renderSelectionPanel();
 
+    // Zoom to the requested species if one came from the catalog, else to everything
+    const fitFeatures = requestedSpeciesApplied
+      ? allFeatures.filter(function (f) {
+          const p = f.properties;
+          return filterState.species.has((p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || ''));
+        })
+      : allFeatures;
     const allLayer = L.geoJSON(
-      { type: 'FeatureCollection', features: allFeatures },
+      { type: 'FeatureCollection', features: fitFeatures },
       { filter: function (f) { return f.geometry !== null; } }
     );
     const bounds = allLayer.getBounds();

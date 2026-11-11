@@ -671,17 +671,29 @@ Promise.all([
   SPECIES.forEach(function (s) { byNorm[normLatin(s.sci)] = s.sci; });
   byNorm[normLatin('Phragmites australis australis')] = 'Phragmites australis subsp. australis';
 
+  var byBinomial = {};
+  SPECIES.forEach(function (s) {
+    var b = normLatin(s.sci).split(' ').slice(0, 2).join(' ');
+    if (!byBinomial[b]) byBinomial[b] = s.sci;
+  });
+  // Catalog name for a raw Latin name; falls back to genus + species so
+  // subspecies records ("Lamium galeobdolon argentatum") count toward their entry.
+  function catalogSci(raw) {
+    return byNorm[normLatin(raw)] ||
+      byBinomial[normLatin(raw).split(' ').slice(0, 2).join(' ')] || null;
+  }
+
   (inat.features || []).forEach(function (f) {
     // Skip obscured-coordinate records, matching the map
     var obscured = f.properties.coordinates_obscured;
     if (obscured === true || obscured === 'true' || obscured === 'True') return;
     var raw = (f.properties.scientific_name || '').trim();
-    bumpCount(byNorm[normLatin(raw)] || raw, 'inat');
+    bumpCount(catalogSci(raw) || raw, 'inat');
   });
 
   (sent.features || []).forEach(function (f) {
     var raw = (f.properties.scientific_name || f.properties['Nom_espece_latin'] || '').trim();
-    var key = byNorm[normLatin(raw)];
+    var key = catalogSci(raw);
     if (key) bumpCount(key, 'sentinel');
   });
 
@@ -950,6 +962,12 @@ function renderCard(s) {
     ? '<p class="species-desc">' + s.desc + '</p>'
     : '<p class="species-desc species-desc-empty">Description coming soon.</p>';
 
+  const counts = OBS_COUNTS[s.sci];
+  const hasObs = counts && (counts.inat > 0 || counts.sentinel > 0);
+  const mapBtn = hasObs
+    ? '<a class="species-map-btn" href="../?species=' + encodeURIComponent(s.sci) + '">View in map</a>'
+    : '<span class="species-map-btn is-empty" title="No mapped observations in Montréal">Not on map</span>';
+
   const projectBtn = hasProj
     ? '<button class="species-project-btn" data-idx="' + idx + '" type="button">' +
         'View projects &amp; initiatives <span class="spb-count">' + projs.length + '</span>' +
@@ -978,6 +996,7 @@ function renderCard(s) {
         '</div>' +
         descHtml +
         '<div class="species-actions">' +
+          mapBtn +
           '<button class="species-tax-btn" data-idx="' + idx + '" type="button">View scientific classification</button>' +
           projectBtn +
           '<a class="species-wiki" href="' + wikiUrl + '" target="_blank" rel="noopener noreferrer">Wikipedia →</a>' +

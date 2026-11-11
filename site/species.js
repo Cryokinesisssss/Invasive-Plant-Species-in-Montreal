@@ -1095,7 +1095,7 @@ function showProjects(s) {
 // On phones the list and the open panel sit side by side (see .has-panel in
 // style.css), so the panel stays next to the card instead of jumping to the bottom.
 const layoutEl = document.querySelector('.species-layout');
-const PHONE_QUERY = window.matchMedia('(max-width: 700px)');
+const PHONE_QUERY = window.matchMedia('(max-width: 999px)');
 function syncLayoutPanelState() {
   if (!layoutEl) return;
   layoutEl.classList.toggle('has-panel', !taxPanel.hidden || !projPanel.hidden);

@@ -1028,9 +1028,8 @@ function showTaxonomy(s) {
   taxBody.innerHTML = header + '<div class="tax-rows">' + rows + '</div>';
   taxPanel.hidden = false;
 
-  revealPanel(taxPanel);
-
   markActiveCard(s);
+  revealPanel(taxPanel);
 }
 
 
@@ -1086,9 +1085,8 @@ function showProjects(s) {
   taxPanel.hidden = true;
   projPanel.hidden = false;
 
-  revealPanel(projPanel);
-
   markActiveCard(s);
+  revealPanel(projPanel);
 }
 
 
@@ -1103,10 +1101,24 @@ function syncLayoutPanelState() {
 function revealPanel(panel) {
   syncLayoutPanelState();
   panel.scrollTop = 0;
-  if (PHONE_QUERY.matches) return;   // sticky side column — already visible
-  if (window.matchMedia('(max-width: 999px)').matches) {
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  // Reset any offset from a previous selection
+  taxPanel.style.marginTop = '';
+  projPanel.style.marginTop = '';
+
+  if (!PHONE_QUERY.matches) return;   // desktop: fixed side panel, nothing to do
+
+  // Line the panel up with the selected card (cards re-flow narrower once the
+  // panel column appears, so measure after the layout change).
+  const card = listEl.querySelector('.species-card.active');
+  if (!card || !layoutEl) return;
+  requestAnimationFrame(function () {
+    const layoutTop = layoutEl.getBoundingClientRect().top;
+    const cardTop = card.getBoundingClientRect().top - layoutTop;
+    // Don't let the panel hang past the end of the list
+    const maxTop = Math.max(0, listEl.offsetHeight - panel.offsetHeight);
+    panel.style.marginTop = Math.min(cardTop, maxTop) + 'px';
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 
@@ -1128,6 +1140,7 @@ function markActiveCard(s) {
 if (taxClose) {
   taxClose.addEventListener('click', function () {
     taxPanel.hidden = true;
+    taxPanel.style.marginTop = '';
     syncLayoutPanelState();
     listEl.querySelectorAll('.species-card').forEach(function (c) {
       c.classList.remove('active');
@@ -1138,6 +1151,7 @@ if (taxClose) {
 if (projClose) {
   projClose.addEventListener('click', function () {
     projPanel.hidden = true;
+    projPanel.style.marginTop = '';
     syncLayoutPanelState();
     listEl.querySelectorAll('.species-card').forEach(function (c) {
       c.classList.remove('active');

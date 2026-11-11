@@ -2684,11 +2684,10 @@ a.species-credit:hover { text-decoration: underline; }
 
   .species-layout.has-panel .taxonomy-panel,
   .species-layout.has-panel .projects-panel {
-    position: sticky;
-    top: 0;
+    position: static;   /* JS sets margin-top to line it up with the selected card */
     margin-top: 0;
     width: auto;
-    max-height: calc(100dvh - 190px);
+    max-height: 70dvh;
     overflow-y: auto;
     font-size: 12px;
   }
@@ -2697,6 +2696,8 @@ a.species-credit:hover { text-decoration: underline; }
   .species-layout.has-panel .pp-body { padding: 8px 10px; }
   .species-layout.has-panel .tax-row { flex-direction: column; gap: 0; }
   .species-layout.has-panel .tax-value { text-align: left; }
+
+  .species-layout.has-panel .species-card { scroll-margin-top: 8px; }
 
   /* Narrow cards: photo on top, tighter text */
   .species-layout.has-panel .species-card {

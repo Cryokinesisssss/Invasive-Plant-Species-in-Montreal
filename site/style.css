@@ -2792,3 +2792,16 @@ a.species-credit:hover { text-decoration: underline; }
   .species-layout.has-panel .species-actions { gap: 6px; }
   .species-layout.has-panel .species-actions > * { font-size: 11.5px; }
 }
+
+/* Per-species observation count in the Species filter (shown when a borough filter is set) */
+.fp-count {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: #eef6f0;
+  color: #1B4332;
+  font-size: 10.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

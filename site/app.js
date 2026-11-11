@@ -422,25 +422,54 @@ function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
     if (!filterState.species.has(key)) return false;
   }
 
-  if (!ignoreSelectedBoroughs && filterState.boroughs.size > 0 && boroughData && window.turf) {
-    const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
-    let inside = false;
-
-    if (filterState.boroughs.has('__boroughs__') && boroughsUnion) {
-      if (turf.booleanPointInPolygon(pt, boroughsUnion)) inside = true;
-    }
-
-    if (!inside) {
-      inside = boroughData.features.some(function (b) {
-        if (!filterState.boroughs.has(nameEn(b))) return false;
-        return turf.booleanPointInPolygon(pt, b);
-      });
-    }
-
-    if (!inside) return false;
-  }
+  if (!ignoreSelectedBoroughs && !inSelectedBoroughs(f)) return false;
 
   return true;
+}
+
+// True when no borough filter is set, or the point lies in a selected borough/city
+function inSelectedBoroughs(f) {
+  if (filterState.boroughs.size === 0 || !boroughData || !window.turf) return true;
+  if (f.geometry === null) return false;
+  const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
+  if (filterState.boroughs.has('__boroughs__') && boroughsUnion &&
+      turf.booleanPointInPolygon(pt, boroughsUnion)) return true;
+  return boroughData.features.some(function (b) {
+    if (!filterState.boroughs.has(nameEn(b))) return false;
+    return turf.booleanPointInPolygon(pt, b);
+  });
+}
+
+// ---- 5a. Species present in the selected boroughs (cached per borough selection) ----
+let boroughSpeciesCacheKey = null;
+let boroughSpeciesCounts = null;   // null = no borough filter → every species available
+function speciesCountsInSelectedBoroughs() {
+  const key = Array.from(filterState.boroughs).sort().join('||') + '#' + (boroughData ? 1 : 0);
+  if (key === boroughSpeciesCacheKey) return boroughSpeciesCounts;
+  boroughSpeciesCacheKey = key;
+  if (filterState.boroughs.size === 0 || !boroughData || !window.turf) {
+    boroughSpeciesCounts = null;
+    return null;
+  }
+  const counts = new Map();
+  allFeatures.forEach(function (f) {
+    if (!inSelectedBoroughs(f)) return;
+    const p = f.properties;
+    const k = (p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || '');
+    counts.set(k, (counts.get(k) || 0) + 1);
+  });
+  boroughSpeciesCounts = counts;
+  return counts;
+}
+
+// Catalog entries to offer in the Species filter: only those observed in the
+// selected boroughs (plus any already checked, so they can be unchecked).
+function availableSpecies() {
+  const counts = speciesCountsInSelectedBoroughs();
+  if (!counts) return speciesCatalog;
+  return speciesCatalog.filter(function (s) {
+    return counts.has(s.key) || filterState.species.has(s.key);
+  });
 }
 
 
@@ -866,7 +895,8 @@ fetch('data/places.geojson')
       { filter: function (f) { return f.geometry !== null; } }
     );
     const bounds = allLayer.getBounds();
-    if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
+    // maxZoom keeps a single observation from zooming in to street level
+    if (bounds.isValid()) map.fitBounds(bounds.pad(0.1), { maxZoom: requestedSpeciesApplied ? 14 : 18 });
   })
   .catch(function (err) {
     showDataLoadError('Could not load the observation data (places.geojson). The map is blank until the request succeeds.', err);
@@ -924,7 +954,19 @@ document.addEventListener('keydown', function (e) {
 // ============================================================
 // 9. SUMMARY BADGES — the "All" / "N selected" labels on each button
 // ============================================================
+let speciesListBoroughKey = '';
+function refreshSpeciesListForBoroughs() {
+  const key = Array.from(filterState.boroughs).sort().join('||') + '#' + (boroughData ? 1 : 0);
+  if (key === speciesListBoroughKey) return;
+  speciesListBoroughKey = key;
+  if (observationDataLoaded) {
+    renderSpeciesList('');
+    syncSpeciesAllCheckbox();
+  }
+}
+
 function updateSummaries() {
+  refreshSpeciesListForBoroughs();
   const spCount = filterState.species.size;
   const spSum = document.getElementById('fp-species-summary');
   if (spSum) {
@@ -1000,13 +1042,15 @@ function renderSpeciesList(query) {
   if (!listEl) return;
   const q = (query || '').toLowerCase().trim();
 
-  const matches = speciesCatalog.filter(function (s) {
+  const counts = speciesCountsInSelectedBoroughs();
+  const matches = availableSpecies().filter(function (s) {
     if (!q) return true;
     return (s.common + ' ' + s.sci).toLowerCase().indexOf(q) !== -1;
   });
 
   if (!matches.length) {
-    listEl.innerHTML = '<div class="fp-empty">No matches</div>';
+    listEl.innerHTML = '<div class="fp-empty">' +
+      (counts ? 'No species observed in the selected area' : 'No matches') + '</div>';
     return;
   }
 
@@ -1016,6 +1060,7 @@ function renderSpeciesList(query) {
              '<input type="checkbox" data-sp-key="' + escapeAttr(s.key) + '"' + checked + '>' +
              '<span>' + escapeHtml(s.common) +
                (s.sci ? ' <em style="color:#888">(' + escapeHtml(s.sci) + ')</em>' : '') +
+               (counts ? ' <span class="fp-count">' + (counts.get(s.key) || 0) + '</span>' : '') +
              '</span>' +
            '</label>';
   }).join('');
@@ -1052,7 +1097,7 @@ function showSpSuggest(query) {
   const q = (query || '').toLowerCase().trim();
   if (!q) { hideSpSuggest(); return; }
 
-  const matches = speciesCatalog.filter(function (s) {
+  const matches = availableSpecies().filter(function (s) {
     return (s.common + ' ' + s.sci).toLowerCase().indexOf(q) !== -1;
   }).slice(0, 8);
 

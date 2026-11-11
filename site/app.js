@@ -782,7 +782,7 @@ function buildObsLayer() {
           html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
             '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em></a></div>';
         }
-        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + ' <span class="badge-help" aria-hidden="true">?</span></button>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</button>';
         html += '</div></div>';
         if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
           html += '<div class="popup-photo-attribution">Photo credit: ' +
@@ -2193,7 +2193,7 @@ function buildSentinelLayer() {
         html += '<div class="popup-title">' + title + '</div>';
         if (latinLine) html += '<div class="popup-latin"><em>' + latinLine + '</em></div>';
         html += '<div class="popup-badge" style="background:#d8f3dc;color:#1b4332;border:1px solid #40916c;margin-right:4px;">Sentinelle</div>';
-        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + ' <span class="badge-help" aria-hidden="true">?</span></button>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + '</button>';
         html += '</div></div>';
 
         html += '<div class="popup-grid">';
@@ -2290,7 +2290,6 @@ function buildProjectLayer() {
         (p.organization ? escapeHtml(p.organization) : 'Community project') +
         (p.year ? ' · ' + escapeHtml(p.year) : '') +
         '</div>';
-      html += '<button type="button" class="popup-info-link" data-info="projects">What is this?</button>';
       if (p.description) {
         html += '<p class="project-description">' + escapeHtml(p.description) + '</p>';
       }
@@ -2354,6 +2353,7 @@ function buildProjectLayer() {
       if (!hasSourceLink) {
         html += '<div class="project-source-missing">Source link not added yet.</div>';
       }
+      html += '<button type="button" class="popup-info-link" data-info="projects">Learn more about projects</button>';
       html += '</div>';
       layer.bindPopup(html, popupOptions({ maxWidth: 360, minWidth: 240 }));
     }

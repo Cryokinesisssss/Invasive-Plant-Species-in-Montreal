@@ -2827,7 +2827,6 @@ a.species-credit:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .popup-badge-info:hover { filter: brightness(0.95); }
-.badge-help { margin-left: 2px; font-weight: 700; opacity: 0.7; }
 
 /* Text links: project popup "What is this?" and filter-menu link */
 .popup-info-link,
@@ -2843,7 +2842,13 @@ a.species-credit:hover { text-decoration: underline; }
   text-underline-offset: 2px;
   cursor: pointer;
 }
-.popup-info-link { margin: 0 0 6px; }
+.popup-info-link {
+  display: block;
+  margin: 8px 0 0;
+  color: #888;
+  font-size: 11px;
+}
+.popup-info-link:hover { color: #1D4E89; }
 .fp-info-link { color: #1B4332; padding: 4px 6px 2px; }
 .popup-info-link:hover,
 .fp-info-link:hover { text-decoration-style: solid; }

@@ -1477,6 +1477,7 @@ function updateMapLegend() {
   html += '<div class="legend-divider"></div>' +
     '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives</div>';
   legendElement.innerHTML = html;
+  positionTrendButton();
 }
 
 legend.onAdd = function () {
@@ -1491,6 +1492,19 @@ legend.onAdd = function () {
   return legendElement;
 };
 legend.addTo(map);
+
+// Keep the "Observation trends" button just above the legend (desktop layout;
+// the phone layout in style.css places it in the bottom corner instead).
+function positionTrendButton() {
+  if (!legendElement) return;
+  const rect = legendElement.getBoundingClientRect();
+  if (!rect.height) return;   // not in the DOM yet
+  const gap = 10;
+  const bottom = Math.round(window.innerHeight - rect.top + gap);
+  document.documentElement.style.setProperty('--trend-bottom', bottom + 'px');
+}
+positionTrendButton();
+window.addEventListener('resize', positionTrendButton);
 
 // ---- 15a. Risk info dialog (opened from the legend's "?") ----
 const RISK_INFO_OVERLAY = document.getElementById('risk-info-overlay');

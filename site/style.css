@@ -1139,7 +1139,8 @@ footer a {
 .trend-open {
   position: fixed;
   right: 12px;
-  bottom: 250px;
+  /* --trend-bottom is set by app.js to sit just above the map legend */
+  bottom: var(--trend-bottom, 290px);
   z-index: 1100;
   padding: 9px 13px;
   border: 0;
@@ -1165,10 +1166,10 @@ footer a {
 .trend-panel {
   position: fixed;
   right: 12px;
-  bottom: 294px;
+  bottom: calc(var(--trend-bottom, 290px) + 44px);
   z-index: 1100;
   width: min(390px, calc(100vw - 24px));
-  max-height: min(620px, calc(100vh - 340px));
+  max-height: min(620px, calc(100vh - var(--trend-bottom, 290px) - 90px));
   overflow: auto;
   padding: 14px;
   border: 1px solid #d5ddd8;

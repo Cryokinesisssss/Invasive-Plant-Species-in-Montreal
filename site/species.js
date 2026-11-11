@@ -647,6 +647,32 @@ SPECIES.forEach(function (species) {
 // ============================================================
 const OBS_COUNTS = {};
 
+// ---- B1. Photo licenses, keyed by iNaturalist observation id ----
+const PHOTO_LICENSES = {};
+const LICENSE_URLS = {
+  'CC0':         'https://creativecommons.org/publicdomain/zero/1.0/',
+  'CC-BY':       'https://creativecommons.org/licenses/by/4.0/',
+  'CC-BY-SA':    'https://creativecommons.org/licenses/by-sa/4.0/',
+  'CC-BY-ND':    'https://creativecommons.org/licenses/by-nd/4.0/',
+  'CC-BY-NC':    'https://creativecommons.org/licenses/by-nc/4.0/',
+  'CC-BY-NC-SA': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  'CC-BY-NC-ND': 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+};
+
+// License for a catalog photo, only if it is the same photo as the observation's
+function photoLicenseFor(s) {
+  const obs = /\/observations\/(\d+)/.exec(s.photoCreditUrl || '');
+  const photo = /\/photos\/(\d+)\//.exec(s.photo || '');
+  if (!obs || !photo) return null;
+  const lic = PHOTO_LICENSES[obs[1]];
+  if (!lic || lic.photoId !== photo[1]) return null;
+  const code = String(lic.code).toUpperCase();
+  return {
+    label: code === 'CC0' ? 'CC0' : code.replace(/^CC-/, 'CC '),   // "CC-BY-NC" -> "CC BY-NC"
+    url: LICENSE_URLS[code] || ''
+  };
+}
+
 function normLatin(s) {
   return (s || '').toLowerCase().trim()
     .replace(/\s+(var\.|subsp\.|f\.|forma)\s+\S+/, '')
@@ -666,6 +692,14 @@ Promise.all([
 ]).then(function (results) {
   var inat = results[0];
   var sent = results[1];
+
+  // Photo licenses for the catalog photos (they come from these observations)
+  (inat.features || []).forEach(function (f) {
+    var p = f.properties || {};
+    if (!p.id || !p.photo_license || !p.image_url) return;
+    var m = /\/photos\/(\d+)\//.exec(p.image_url);
+    PHOTO_LICENSES[String(p.id)] = { code: p.photo_license, photoId: m ? m[1] : null };
+  });
 
   var byNorm = {};
   SPECIES.forEach(function (s) { byNorm[normLatin(s.sci)] = s.sci; });
@@ -791,7 +825,8 @@ function escapeAttr(s) {
 // ---- F1. Photo (or placeholder with tier colour) ----
 function renderPhoto(s) {
   const hasPhoto = typeof s.photo === 'string' && s.photo.length > 0;
-  const credit   = s.photoCredit || '';
+  const license  = hasPhoto ? photoLicenseFor(s) : null;
+  const credit   = (s.photoCredit || '') + (s.photoCredit && license ? ' · ' + license.label : '');
   const creditEl = credit
     ? (s.photoCreditUrl
         ? '<a class="species-credit" href="' + s.photoCreditUrl +
@@ -813,7 +848,8 @@ function renderPhoto(s) {
   return (
     '<div class="species-photo">' +
       '<img class="species-photo-zoom" src="' + s.photo + '" data-full="' + escapeAttr(s.photo) + '"' +
-        ' data-caption="' + escapeAttr(s.common + (credit ? ' — ' + credit.replace(/<br\s*\/?>/gi, ' · ').replace(/<[^>]*>/g, '') : '')) + '"' +
+        ' data-caption="' + escapeAttr(s.common + (s.photoCredit ? ' — ' + s.photoCredit.replace(/<br\s*\/?>/gi, ' · ').replace(/<[^>]*>/g, '') : '')) + '"' +
+        (license ? ' data-license="' + escapeAttr(license.label) + '" data-license-url="' + escapeAttr(license.url) + '"' : '') +
         ' alt="' + escapeAttr(s.common) + '" loading="lazy" tabindex="0" role="button"' +
         ' title="Click to enlarge" />' +
       creditEl +
@@ -1523,7 +1559,21 @@ function openPhotoLightbox(img) {
     '<div class="lightbox-content"><img src="' + escapeAttr(full) + '" alt="">' +
     '<button class="lightbox-close" type="button" aria-label="Close">×</button>' +
     '<div class="lightbox-caption"></div></div>';
-  overlay.querySelector('.lightbox-caption').textContent = img.getAttribute('data-caption') || '';
+  const captionEl = overlay.querySelector('.lightbox-caption');
+  captionEl.textContent = img.getAttribute('data-caption') || '';
+  const licenseLabel = img.getAttribute('data-license');
+  if (licenseLabel) {
+    captionEl.appendChild(document.createTextNode(' · '));
+    const licenseUrl = img.getAttribute('data-license-url');
+    const el = document.createElement(licenseUrl ? 'a' : 'span');
+    el.textContent = licenseLabel;
+    if (licenseUrl) {
+      el.href = licenseUrl;
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
+    }
+    captionEl.appendChild(el);
+  }
   const returnFocus = document.activeElement;
   function close() {
     overlay.remove();

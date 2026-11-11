@@ -1062,6 +1062,7 @@ footer a {
   text-align: center;
 }
 .lightbox-content img { max-height: calc(92vh - 32px); }
+.lightbox-caption a { color: #DCBD23; }
 
 .species-photo-zoom { cursor: zoom-in; }
 .species-photo-zoom:focus-visible { outline: 3px solid #DCBD23; outline-offset: -3px; }

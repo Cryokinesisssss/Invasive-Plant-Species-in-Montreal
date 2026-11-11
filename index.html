@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=6" />
+  <link rel="stylesheet" href="site/style.css?v=7" />
 </head>
 <body class="map-page compact-filters">
 
@@ -114,11 +114,11 @@
         <div class="fp-panel" hidden>
           <label class="fp-check">
             <input id="f-sensitive" type="checkbox">
-            <span>Fuzzed (≤100 m) only</span>
+            <span>Approximate location only (10–100 m)</span>
           </label>
           <label class="fp-check">
             <input id="f-exact-location" type="checkbox">
-            <span>Exact location only</span>
+            <span>Precise location only (≤10 m)</span>
           </label>
           <label class="fp-check">
             <input id="f-photo" type="checkbox">
@@ -287,7 +287,7 @@
       <!-- ---- 7d. What the reader can do ---- -->
       <p>
         <strong>What you can do here:</strong> filter observations by risk tier,
-        species, borough or city, year, sensitive location, and photo
+        species, borough or city, year, location precision, and photo
         availability. Choose a map view to see risk-colored records, reported
         observation density. Open “Observation trends” to compare dated records by year from iNaturalist
         and Sentinelle, and click a year to filter the map.
@@ -440,6 +440,6 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="site/priority-species.js"></script>
-  <script src="site/app.js?v=6"></script>
+  <script src="site/app.js?v=7"></script>
 </body>
 </html>

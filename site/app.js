@@ -349,9 +349,16 @@ function isObscured(properties) {
   return v === true || v === 'true' || v === 'True';
 }
 
+// Location precision: every iNaturalist record is downloaded with accuracy
+// under 100 m. Records with a stated accuracy above 10 m are "approximate"
+// (dashed outline); 10 m or better (or no accuracy value, e.g. Sentinelle)
+// counts as precise.
+const PRECISE_ACCURACY_M = 10;
 function isSensitiveLocation(properties) {
-  return properties.coordinates_obscured ||
-    (properties.taxon_geoprivacy && properties.taxon_geoprivacy !== '');
+  const raw = properties.public_positional_accuracy;
+  if (raw === null || raw === undefined || raw === '') return false;
+  const accuracy = Number(raw);
+  return Number.isFinite(accuracy) && accuracy > PRECISE_ACCURACY_M;
 }
 
 function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
@@ -728,7 +735,7 @@ function buildObsLayer() {
         }
         html += '</div>';
 
-        if (sensitiveLocation) html += '<div class="popup-sensitive">⚠ Location fuzzed (≤100 m)</div>';
+        if (sensitiveLocation) html += '<div class="popup-sensitive">Approximate location (10–100 m)</div>';
         if (p.photo_present && !p.image_url) {
           const photoLicense = p.photo_license || 'All rights reserved';
           const photoNote = !p.photo_license_verified
@@ -1456,8 +1463,8 @@ function updateMapLegend() {
         '<span class="legend-risk-item"><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span>Low</span>' +
       '</div>' +
       '<div class="legend-divider"></div>' +
-      '<div class="legend-row"><span class="swatch swatch-solid"></span>Exact</div>' +
-      '<div class="legend-row"><span class="swatch swatch-dashed"></span>Fuzzed <small>(≤100 m)</small></div>' +
+      '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
+      '<div class="legend-row"><span class="swatch swatch-dashed"></span>Approx. <small>(10–100 m)</small></div>' +
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
       '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';

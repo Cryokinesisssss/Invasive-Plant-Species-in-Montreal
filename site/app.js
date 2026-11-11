@@ -1568,6 +1568,7 @@ function updateMapLegend() {
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
       '<div class="legend-row"><span class="swatch swatch-dashed"></span>Approx. <small>(10–100 m)</small></div>' +
       '<div class="legend-divider"></div>' +
+      '<div class="legend-title">Observations</div>' +
       '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
       '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';
   }

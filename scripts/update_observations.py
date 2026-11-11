@@ -206,16 +206,27 @@ def main():
             "refusing to overwrite the current data."
         )
 
+    # acc_below filters on the observer's private GPS accuracy. Observations whose
+    # coordinates iNaturalist obscures (observer or taxon geoprivacy) still pass it,
+    # but the public coordinates are randomized within a ~27 km cell, so drop them.
+    unique_ids = {observation.get("id") for observation in observations}
+    if len(unique_ids) != total_results:
+        raise RuntimeError(
+            f"Received duplicate observation IDs: {len(unique_ids)} unique of {total_results}."
+        )
+    public_observations = [
+        observation for observation in observations
+        if not observation.get("obscured")
+    ]
+    obscured_skipped = len(observations) - len(public_observations)
+    print(f"Skipped {obscured_skipped} observations with obscured coordinates", flush=True)
+
     rows_by_id = {}
     photo_licenses = {}
-    for observation in observations:
+    for observation in public_observations:
         row = observation_row(observation, photo_licenses)
         rows_by_id[row["id"]] = row
     rows = sorted(rows_by_id.values(), key=lambda row: int(row["id"]))
-    if len(rows) != total_results:
-        raise RuntimeError(
-            f"Received duplicate observation IDs: {len(rows)} unique of {total_results}."
-        )
     new_observations = sum(
         row["id"] not in previous_observation_ids for row in rows
     )

@@ -672,6 +672,9 @@ Promise.all([
   byNorm[normLatin('Phragmites australis australis')] = 'Phragmites australis subsp. australis';
 
   (inat.features || []).forEach(function (f) {
+    // Skip obscured-coordinate records, matching the map
+    var obscured = f.properties.coordinates_obscured;
+    if (obscured === true || obscured === 'true' || obscured === 'True') return;
     var raw = (f.properties.scientific_name || '').trim();
     bumpCount(byNorm[normLatin(raw)] || raw, 'inat');
   });

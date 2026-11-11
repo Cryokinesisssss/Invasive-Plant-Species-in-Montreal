@@ -344,6 +344,11 @@ function buildSpeciesCatalog() {
 // 5. OBSERVATION FILTER — decides which iNat dots are visible
 //    This is the core action's filtering logic.
 // ============================================================
+function isObscured(properties) {
+  const v = properties.coordinates_obscured;
+  return v === true || v === 'true' || v === 'True';
+}
+
 function isSensitiveLocation(properties) {
   return properties.coordinates_obscured ||
     (properties.taxon_geoprivacy && properties.taxon_geoprivacy !== '');
@@ -786,7 +791,10 @@ fetch('data/places.geojson')
   })
   .then(function (data) {
     allFeatures = data.features.filter(function (feature) {
-      return hasReusableObservationLicense(feature.properties || {});
+      const p = feature.properties || {};
+      // Obscured coordinates are randomized within ~27 km — too imprecise to map
+      if (isObscured(p)) return false;
+      return hasReusableObservationLicense(p);
     });
     observationDataLoaded = true;
     buildSpeciesCatalog();

@@ -701,7 +701,6 @@ function buildObsLayer() {
         const badge = badgeColors[p.risk] || badgeColors.unknown;
 
         const title = p.common_name || p.scientific_name || p.species_guess || ('Observation ' + p.id);
-        const latin = p.scientific_name && p.scientific_name !== title ? p.scientific_name : '';
         const approximateLocation = isApproximateLocation(p);
 
         let html = '<div class="popup-head">';
@@ -712,7 +711,13 @@ function buildObsLayer() {
         }
         html += '<div class="popup-headtext">';
         html += '<div class="popup-title">' + title + '</div>';
-        if (latin) html += '<div class="popup-latin"><em>' + latin + '</em></div>';
+        // Latin name links to this species' entry in the catalog
+        const latinName = p.scientific_name || '';
+        if (latinName) {
+          const catalogUrl = 'site/species.html?species=' + encodeURIComponent(latinName);
+          html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
+            '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em> →</a></div>';
+        }
         html += '<div class="popup-badge" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</div>';
         html += '</div></div>';
         if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {

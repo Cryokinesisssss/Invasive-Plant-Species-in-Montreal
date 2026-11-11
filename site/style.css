@@ -608,6 +608,13 @@ footer a {
   overflow: hidden;
 }
 
+.popup-latin-link {
+  color: #1B4332;
+  text-decoration: underline dotted rgba(27, 67, 50, 0.5);
+  text-underline-offset: 2px;
+}
+.popup-latin-link:hover { text-decoration-style: solid; color: #2D6A4F; }
+
 .popup-badge {
   display: inline-block;
   padding: 1px 8px;

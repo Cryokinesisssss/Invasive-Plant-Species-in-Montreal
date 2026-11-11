@@ -1317,10 +1317,20 @@ const priorityFilter = document.getElementById('cf-priority');
 const suggestBox  = document.getElementById('species-search-suggest');
 let suggestIndex  = -1;
 const requestedSpeciesName = new URLSearchParams(window.location.search).get('species');
-const requestedSpecies = requestedSpeciesName && SPECIES.find(function (species) {
-  return normLatin(species.sci) === normLatin(requestedSpeciesName) ||
-    normalizeSearchText(species.common) === normalizeSearchText(requestedSpeciesName);
-});
+// Map data can use trinomials without a rank ("Phragmites australis australis"),
+// so fall back to matching on genus + species.
+function binomial(name) {
+  return normLatin(name).split(' ').slice(0, 2).join(' ');
+}
+const requestedSpecies = requestedSpeciesName && (
+  SPECIES.find(function (species) {
+    return normLatin(species.sci) === normLatin(requestedSpeciesName) ||
+      normalizeSearchText(species.common) === normalizeSearchText(requestedSpeciesName);
+  }) ||
+  SPECIES.find(function (species) {
+    return binomial(species.sci) === binomial(requestedSpeciesName);
+  })
+);
 if (requestedSpecies) {
   catFilters.search = requestedSpecies.common;
   searchInput.value = requestedSpecies.common;
@@ -1470,5 +1480,8 @@ if (requestedSpecies) {
     const name = card.querySelector('.species-name');
     return name && name.textContent === requestedSpecies.common;
   });
-  if (speciesCard) speciesCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (speciesCard) {
+    speciesCard.classList.add('active');
+    speciesCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }

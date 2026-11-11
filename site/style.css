@@ -910,6 +910,14 @@ footer a {
   box-sizing: border-box;
 }
 .risk-info-note { font-size: 12px; color: #555; }
+.info-list {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+.legend-row .legend-help { margin-left: 4px; background: #1D4E89; }
+.legend-row .legend-help:hover { background: #163d6c; }
 .risk-info-note a { color: #1B4332; }
 
 /* ---- 9a. Risk strip: three items inline ---- */

@@ -1567,7 +1567,9 @@ function updateMapLegend() {
       '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';
   }
   html += '<div class="legend-divider"></div>' +
-    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives</div>';
+    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives' +
+      '<button type="button" class="legend-help" data-projects-info aria-label="What are projects and initiatives?" title="What are projects and initiatives?">?</button>' +
+    '</div>';
   legendElement.innerHTML = html;
   positionTrendButton();
 }
@@ -1579,6 +1581,7 @@ legend.onAdd = function () {
   L.DomEvent.disableClickPropagation(legendElement);
   legendElement.addEventListener('click', function (e) {
     if (e.target.closest('[data-risk-info]')) openRiskInfo();
+    if (e.target.closest('[data-projects-info]')) openProjectsInfo();
   });
   updateMapLegend();
   return legendElement;
@@ -1618,7 +1621,27 @@ if (RISK_INFO_OVERLAY) RISK_INFO_OVERLAY.addEventListener('click', function (e) 
   if (e.target === RISK_INFO_OVERLAY) closeRiskInfo();
 });
 document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') closeRiskInfo();
+  if (e.key === 'Escape') { closeRiskInfo(); closeProjectsInfo(); }
+});
+
+// ---- 15b. Projects info dialog (same design, opened from the legend's second "?") ----
+const PROJECTS_INFO_OVERLAY = document.getElementById('projects-info-overlay');
+const PROJECTS_INFO_CLOSE = PROJECTS_INFO_OVERLAY ? PROJECTS_INFO_OVERLAY.querySelector('.info-close') : null;
+let projectsInfoReturnFocus = null;
+function openProjectsInfo() {
+  if (!PROJECTS_INFO_OVERLAY) return;
+  projectsInfoReturnFocus = document.activeElement;
+  PROJECTS_INFO_OVERLAY.hidden = false;
+  if (PROJECTS_INFO_CLOSE) PROJECTS_INFO_CLOSE.focus();
+}
+function closeProjectsInfo() {
+  if (!PROJECTS_INFO_OVERLAY || PROJECTS_INFO_OVERLAY.hidden) return;
+  PROJECTS_INFO_OVERLAY.hidden = true;
+  if (projectsInfoReturnFocus && projectsInfoReturnFocus.focus) projectsInfoReturnFocus.focus();
+}
+if (PROJECTS_INFO_CLOSE) PROJECTS_INFO_CLOSE.addEventListener('click', closeProjectsInfo);
+if (PROJECTS_INFO_OVERLAY) PROJECTS_INFO_OVERLAY.addEventListener('click', function (e) {
+  if (e.target === PROJECTS_INFO_OVERLAY) closeProjectsInfo();
 });
 
 

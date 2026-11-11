@@ -1459,6 +1459,9 @@ function updateMapLegend() {
 
 legend.onAdd = function () {
   legendElement = L.DomUtil.create('div', 'legend');
+  // Let touch/wheel scrolling inside the legend scroll it instead of panning the map
+  L.DomEvent.disableScrollPropagation(legendElement);
+  L.DomEvent.disableClickPropagation(legendElement);
   updateMapLegend();
   return legendElement;
 };
@@ -1542,6 +1545,27 @@ const BP_CLOSE      = document.getElementById('bp-close');
 const openTiers = new Set();
 let projectOrganizationsOpen = false;
 
+const BP_TOGGLE     = document.getElementById('bp-toggle');
+const BP_HEAD       = BOROUGH_PANEL ? BOROUGH_PANEL.querySelector('.bp-head') : null;
+const PHONE_QUERY   = window.matchMedia('(max-width: 700px)');
+
+// On phones the panel starts minimized (header bar only) so it doesn't cover the map.
+function setBoroughPanelCollapsed(collapsed) {
+  if (!BOROUGH_PANEL) return;
+  BOROUGH_PANEL.classList.toggle('is-collapsed', collapsed);
+  if (BP_TOGGLE) {
+    BP_TOGGLE.textContent = collapsed ? '▴' : '▾';
+    BP_TOGGLE.setAttribute('aria-expanded', String(!collapsed));
+    BP_TOGGLE.setAttribute('aria-label', collapsed ? 'Expand panel' : 'Minimize panel');
+  }
+}
+setBoroughPanelCollapsed(PHONE_QUERY.matches);
+PHONE_QUERY.addEventListener('change', function (e) { setBoroughPanelCollapsed(e.matches); });
+
+if (BP_HEAD) BP_HEAD.addEventListener('click', function (e) {
+  if (BP_CLOSE && BP_CLOSE.contains(e.target)) return;
+  setBoroughPanelCollapsed(!BOROUGH_PANEL.classList.contains('is-collapsed'));
+});
 if (BP_CLOSE) BP_CLOSE.addEventListener('click', closeBoroughPanel);
 function closeBoroughPanel() {
   if (BOROUGH_PANEL) BOROUGH_PANEL.hidden = true;

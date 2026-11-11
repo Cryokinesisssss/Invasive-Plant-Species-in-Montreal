@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=4" />
+  <link rel="stylesheet" href="site/style.css?v=5" />
 </head>
-<body>
+<body class="map-page compact-filters">
 
   <!-- ============================================================
        1. TOP NAVIGATION — brand + Map / Species Catalog links
@@ -26,6 +26,8 @@
        ============================================================ -->
   <section class="filters" aria-label="Filter observations">
     <div class="filter-row">
+      <!-- Chips row: becomes one compact scrollable row on phones -->
+      <div class="filter-chips">
 
       <!-- ---- 2a. SPECIES filter (search + checkboxes) ---- -->
       <div class="fp">
@@ -66,7 +68,7 @@
       <!-- ---- 2c. BOROUGH / CITY filter ---- -->
       <div class="fp" data-fp="borough">
         <button id="fp-borough-btn" class="fp-btn" type="button" aria-expanded="false">
-          Borough / City <span id="fp-borough-summary" class="fp-summary">All</span>
+          Borough<span class="hide-phone"> / City</span> <span id="fp-borough-summary" class="fp-summary">All</span>
         </button>
         <div id="fp-borough-panel" class="fp-panel fp-panel-wide" hidden>
           <label class="fp-check fp-check-all">
@@ -98,7 +100,7 @@
 
       <!-- ---- 2e. Compact filter and layer dropdowns ---- -->
       <label class="map-mode-control" for="f-map-mode">
-        <span>Map view</span>
+        <span class="hide-phone">Map view</span>
         <select id="f-map-mode">
           <option value="risk">Risk-colored points</option>
           <option value="density">Observation density</option>
@@ -107,7 +109,7 @@
 
       <div class="fp" data-fp="observation-options">
         <button class="fp-btn" type="button" aria-expanded="false">
-          Observation filters <span id="fp-observation-options-summary" class="fp-summary">All</span>
+          <span class="hide-phone">Observation filters</span><span class="show-phone">Filters</span> <span id="fp-observation-options-summary" class="fp-summary">All</span>
         </button>
         <div class="fp-panel" hidden>
           <label class="fp-check">
@@ -140,7 +142,7 @@
 
       <div class="fp" data-fp="map-layers">
         <button class="fp-btn" type="button" aria-expanded="false">
-          Map layers <span id="fp-map-layers-summary" class="fp-summary">2 on</span>
+          <span class="hide-phone">Map layers</span><span class="show-phone">Layers</span> <span id="fp-map-layers-summary" class="fp-summary">2 on</span>
         </button>
         <div class="fp-panel" hidden>
           <label class="fp-check">
@@ -160,11 +162,12 @@
 
       <label class="filter filter-check">
         <input id="f-clusters" type="checkbox">
-        <span>Group nearby observations</span>
+        <span>Group<span class="hide-phone"> nearby observations</span></span>
       </label>
 
       <!-- ---- 2f. Reset + live count ---- -->
       <button id="f-reset" type="button" class="filter-reset">Reset</button>
+      </div>
       <span id="f-count" class="filter-count"></span>
     </div>
   </section>
@@ -437,6 +440,6 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="site/priority-species.js"></script>
-  <script src="site/app.js?v=4"></script>
+  <script src="site/app.js?v=5"></script>
 </body>
 </html>

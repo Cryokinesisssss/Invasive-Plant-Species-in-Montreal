@@ -2611,22 +2611,25 @@ a.species-credit:hover { text-decoration: underline; }
    ============================================================ */
 /* Desktop: the chips wrapper is invisible to layout */
 .filter-chips { display: contents; }
+.show-phone { display: none; }
 
 /* Applies to phones in portrait AND landscape (and small tablets) */
 @media (max-width: 999px) {
   .hide-phone { display: none; }
+  .show-phone { display: inline; }
+  .compact-filters .filter-count { display: none; }
 
   /* ---- 21a. Compact filter bar: search on top, one scrollable chip row ---- */
-  .species-page .filters { padding: 6px 8px; }
-  .species-page .filter-row { gap: 6px; }
-  .species-page .filter-row .species-search-input {
+  .compact-filters .filters { padding: 6px 8px; }
+  .compact-filters .filter-row { gap: 6px; }
+  .compact-filters .filter-row .species-search-input {
     height: 32px;
     font-size: 13px;
     border-radius: 999px;
     padding: 4px 12px;
   }
 
-  .species-page .filter-chips {
+  .compact-filters .filter-chips {
     display: flex;
     flex: 1 1 100%;
     gap: 6px;
@@ -2635,13 +2638,13 @@ a.species-credit:hover { text-decoration: underline; }
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
-  .species-page .filter-chips::-webkit-scrollbar { display: none; }
-  .species-page .filter-chips > * { flex: 0 0 auto; }
+  .compact-filters .filter-chips::-webkit-scrollbar { display: none; }
+  .compact-filters .filter-chips > * { flex: 0 0 auto; }
 
-  .species-page .fp-btn,
-  .species-page .filter-reset,
-  .species-page .species-sort select,
-  .species-page .species-priority-filter {
+  .compact-filters .fp-btn,
+  .compact-filters .filter-reset,
+  .compact-filters .species-sort select,
+  .compact-filters .species-priority-filter {
     min-height: 30px;
     height: 30px;
     padding: 0 10px;
@@ -2652,13 +2655,55 @@ a.species-credit:hover { text-decoration: underline; }
     background: #fff;
     box-sizing: border-box;
   }
-  .species-page .fp-btn[aria-expanded="true"] { background: #eef6f0; border-color: #1B4332; }
+  .compact-filters .fp-btn[aria-expanded="true"] { background: #eef6f0; border-color: #1B4332; }
 
-  .species-page .species-sort { gap: 0; font-size: 0; }   /* hide "Sort" word, keep select */
-  .species-page .species-sort select { max-width: 150px; padding-right: 6px; }
+  .compact-filters .species-sort { gap: 0; font-size: 0; }   /* hide "Sort" word, keep select */
+  .compact-filters .species-sort select { max-width: 150px; padding-right: 6px; }
 
-  .species-page .species-priority-filter { gap: 5px; display: inline-flex; align-items: center; }
-  .species-page .filter-reset { color: #8b0000; border-color: #f0c8cb; }
+  .compact-filters .species-priority-filter { gap: 5px; display: inline-flex; align-items: center; }
+  .compact-filters .filter-reset { color: #8b0000; border-color: #f0c8cb; }
+
+  /* Popovers must escape the horizontally scrolling chip row */
+  .compact-filters .fp-panel,
+  .compact-filters .fp-panel-wide {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    width: min(320px, calc(100vw - 16px));
+    max-height: min(60dvh, 440px);
+    overflow-y: auto;
+    z-index: 7000;
+  }
+
+  /* Map page: dropdown + checkbox styled as pills too */
+  .compact-filters .map-mode-control,
+  .compact-filters .filter-check {
+    min-height: 30px;
+    height: 30px;
+    padding: 0 10px;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #d6d6d6;
+    border-radius: 999px;
+    background: #fff;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .compact-filters .map-mode-control select {
+    min-height: 0;
+    height: 26px;
+    max-width: 120px;
+    padding: 0 2px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .compact-filters .filter-check input { margin: 0; accent-color: #1B4332; }
+
 
   /* ---- 21b. Header: trim the intro so the list gets more room ---- */
   .species-page .species-header { min-height: 0; padding: 8px 12px; }

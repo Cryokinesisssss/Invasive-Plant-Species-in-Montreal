@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=7" />
+  <link rel="stylesheet" href="site/style.css?v=8" />
 </head>
 <body class="map-page compact-filters">
 
@@ -113,7 +113,7 @@
         </button>
         <div class="fp-panel" hidden>
           <label class="fp-check">
-            <input id="f-sensitive" type="checkbox">
+            <input id="f-approximate-location" type="checkbox">
             <span>Approximate location only (10–100 m)</span>
           </label>
           <label class="fp-check">
@@ -271,8 +271,8 @@
         Invasive plants are affecting Montréal's green spaces, and their spread is uneven as
         some are established across the island, while others are only starting to appear.
         This map shows where each species has been recorded by iNaturalist contributors,
-        limited to research-grade observations with a positional accuracy of at most 100 m,
-        alongside the risk tier assigned by Québec's Ministère de l'Environnement.
+        limited to research-grade observations with a positional accuracy of at most 100 m
+        (records whose location iNaturalist hides are left out), alongside the risk tier assigned by Québec's Ministère de l'Environnement.
         The data is a snapshot from October 2026 and will be updated periodically.
       </p>
 
@@ -421,7 +421,8 @@
   <footer>
     Records include research-grade
     <a href="https://www.inaturalist.org/" target="_blank" rel="noopener noreferrer">iNaturalist observations</a>
-    with positional accuracy of 100 m or less and
+    with positional accuracy of 100 m or less (solid outline: within 10 m; dashed: 10–100 m;
+    records with hidden or obscured locations are excluded) and
     <a href="https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes"
        target="_blank" rel="noopener noreferrer">Québec Sentinelle records</a>
     filtered to Montréal's administrative region. iNaturalist usernames, photo credits, and applicable 
@@ -440,6 +441,6 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="site/priority-species.js"></script>
-  <script src="site/app.js?v=7"></script>
+  <script src="site/app.js?v=8"></script>
 </body>
 </html>

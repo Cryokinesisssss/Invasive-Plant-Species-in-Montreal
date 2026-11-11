@@ -470,7 +470,7 @@ footer a {
   opacity: var(--marker-opacity);
 }
 
-.inat-observation-marker.is-sensitive {
+.inat-observation-marker.is-approximate {
   width: 15px;
   height: 15px;
   border-style: dashed;
@@ -718,7 +718,7 @@ footer a {
 }
 
 /* ---- 8c. Warning + photo note + CTA ---- */
-.popup-sensitive {
+.popup-approximate {
   margin: 6px 0;
   padding: 4px 8px;
   background: #f1f3f5;

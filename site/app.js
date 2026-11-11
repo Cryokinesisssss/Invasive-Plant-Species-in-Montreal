@@ -16,7 +16,7 @@
 //   11. Risk checkboxes                 → risk filter UI
 //   11b.Year filter                     → year filter UI
 //   12. Borough list (popover)          → borough filter UI
-//   13. Simple toggles                  → sensitive / photo / iNat / Sentinelle
+//   13. Simple toggles                  → precision / photo / iNat / Sentinelle
 //   14. Reset                           → Reset button
 //   15. Legend                          → bottom-right legend
 //   16. Names / highlights              → borough outline highlight
@@ -152,8 +152,8 @@ const filterState = {
   boroughs: new Set(),
   species: new Set(),
   years: new Set(),        // empty = all years
-  fuzzedLocation: false,
-  exactLocation: false,
+  approximateLocation: false,
+  preciseLocation: false,
   photo: false,
   presence: new Set(),
   priorityOnly: false
@@ -354,7 +354,7 @@ function isObscured(properties) {
 // (dashed outline); 10 m or better (or no accuracy value, e.g. Sentinelle)
 // counts as precise.
 const PRECISE_ACCURACY_M = 10;
-function isSensitiveLocation(properties) {
+function isApproximateLocation(properties) {
   const raw = properties.public_positional_accuracy;
   if (raw === null || raw === undefined || raw === '') return false;
   const accuracy = Number(raw);
@@ -375,9 +375,9 @@ function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
     if (!filterState.years.has(y)) return false;
   }
 
-  const sensitiveLocation = isSensitiveLocation(p);
-  if (filterState.fuzzedLocation && !sensitiveLocation) return false;
-  if (filterState.exactLocation && sensitiveLocation) return false;
+  const approximateLocation = isApproximateLocation(p);
+  if (filterState.approximateLocation && !approximateLocation) return false;
+  if (filterState.preciseLocation && approximateLocation) return false;
 
   if (filterState.photo && !p.image_url) return false;
   if (filterState.presence.size > 0 && !filterState.presence.has(p.presence)) return false;
@@ -664,24 +664,24 @@ function buildObsLayer() {
       pointToLayer: function (feature, latlng) {
         const p = feature.properties;
         const s = styleFor(p);
-        const sensitiveLocation = isSensitiveLocation(p);
+        const approximateLocation = isApproximateLocation(p);
         if (!clustersEnabled) {
           return L.circleMarker(latlng, {
-            radius: sensitiveLocation ? 7 : 6,
-            weight: sensitiveLocation ? 2 : 1.5,
-            dashArray: sensitiveLocation ? '3,3' : null,
+            radius: approximateLocation ? 7 : 6,
+            weight: approximateLocation ? 2 : 1.5,
+            dashArray: approximateLocation ? '3,3' : null,
             color: s.color,
             fillColor: s.fillColor,
-            fillOpacity: sensitiveLocation ? 0.55 : 0.9
+            fillOpacity: approximateLocation ? 0.55 : 0.9
           });
         }
 
-        const markerSize = sensitiveLocation ? 16 : 14;
+        const markerSize = approximateLocation ? 16 : 14;
         const marker = L.divIcon({
           className: '',
-          html: '<span class="inat-observation-marker' + (sensitiveLocation ? ' is-sensitive' : '') +
+          html: '<span class="inat-observation-marker' + (approximateLocation ? ' is-approximate' : '') +
             '" style="--marker-stroke:' + s.color + ';--marker-fill:' + s.fillColor +
-            ';--marker-opacity:' + (sensitiveLocation ? '0.55' : '0.9') + ';"></span>',
+            ';--marker-opacity:' + (approximateLocation ? '0.55' : '0.9') + ';"></span>',
           iconSize: [markerSize, markerSize],
           iconAnchor: [markerSize / 2, markerSize / 2]
         });
@@ -702,7 +702,7 @@ function buildObsLayer() {
 
         const title = p.common_name || p.scientific_name || p.species_guess || ('Observation ' + p.id);
         const latin = p.scientific_name && p.scientific_name !== title ? p.scientific_name : '';
-        const sensitiveLocation = isSensitiveLocation(p);
+        const approximateLocation = isApproximateLocation(p);
 
         let html = '<div class="popup-head">';
         if (p.image_url) {
@@ -735,7 +735,7 @@ function buildObsLayer() {
         }
         html += '</div>';
 
-        if (sensitiveLocation) html += '<div class="popup-sensitive">Approximate location (10–100 m)</div>';
+        if (approximateLocation) html += '<div class="popup-approximate">Approximate location (10–100 m)</div>';
         if (p.photo_present && !p.image_url) {
           const photoLicense = p.photo_license || 'All rights reserved';
           const photoNote = !p.photo_license_verified
@@ -910,8 +910,8 @@ function updateSummaries() {
   }
 
   const observationOptions = [
-    filterState.fuzzedLocation,
-    filterState.exactLocation,
+    filterState.approximateLocation,
+    filterState.preciseLocation,
     filterState.photo,
     filterState.presence.size > 0,
     filterState.priorityOnly
@@ -1294,22 +1294,22 @@ document.getElementById('f-borough-metro').addEventListener('change', function (
 
 
 // ============================================================
-// 13. SIMPLE TOGGLES — sensitive / photo / iNat / Sentinelle
+// 13. SIMPLE TOGGLES — location precision / photo / iNat / Sentinelle
 // ============================================================
-document.getElementById('f-sensitive').addEventListener('change', function (e) {
-  filterState.fuzzedLocation = e.target.checked;
-  if (filterState.fuzzedLocation) {
-    filterState.exactLocation = false;
+document.getElementById('f-approximate-location').addEventListener('change', function (e) {
+  filterState.approximateLocation = e.target.checked;
+  if (filterState.approximateLocation) {
+    filterState.preciseLocation = false;
     document.getElementById('f-exact-location').checked = false;
   }
   updateSummaries();
   buildObsLayer();
 });
 document.getElementById('f-exact-location').addEventListener('change', function (e) {
-  filterState.exactLocation = e.target.checked;
-  if (filterState.exactLocation) {
-    filterState.fuzzedLocation = false;
-    document.getElementById('f-sensitive').checked = false;
+  filterState.preciseLocation = e.target.checked;
+  if (filterState.preciseLocation) {
+    filterState.approximateLocation = false;
+    document.getElementById('f-approximate-location').checked = false;
   }
   updateSummaries();
   buildObsLayer();
@@ -1383,8 +1383,8 @@ document.getElementById('f-reset').addEventListener('click', function () {
   filterState.boroughs.clear();
   filterState.species.clear();
   filterState.years.clear();
-  filterState.fuzzedLocation = false;
-  filterState.exactLocation = false;
+  filterState.approximateLocation = false;
+  filterState.preciseLocation = false;
   filterState.photo = false;
   filterState.presence.clear();
   filterState.priorityOnly = false;
@@ -1409,7 +1409,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
   const yearAllElReset = document.getElementById('f-year-all');
   if (yearAllElReset) yearAllElReset.checked = true;
 
-  document.getElementById('f-sensitive').checked = false;
+  document.getElementById('f-approximate-location').checked = false;
   document.getElementById('f-exact-location').checked = false;
   document.getElementById('f-photo').checked = false;
   document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (cb) { cb.checked = false; });

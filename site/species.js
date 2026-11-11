@@ -915,7 +915,9 @@ function render() {
     if (catFilters.sort === 'default' && s.tier !== currentTier) {
       currentTier = s.tier;
       const meta = TIER_META[s.tier];
-      html += '<h2 class="species-tier-heading ' + meta.className + '">' + meta.label + '</h2>';
+      html += '<h2 class="species-tier-heading ' + meta.className + '">' + meta.label +
+        '<button type="button" class="tier-help" data-info="risk" aria-label="What do the risk levels mean?" title="What do the risk levels mean?"></button>' +
+        '</h2>';
     }
     html += renderCard(s);
   });
@@ -984,7 +986,7 @@ function renderCard(s) {
       '<div class="species-body">' +
         '<div class="species-card-head">' +
           '<h3 class="species-name">' + s.common + '</h3>' +
-          '<span class="species-tier-badge ' + meta.className + '">' + meta.label + '</span>' +
+          '<button type="button" class="species-tier-badge ' + meta.className + '" data-info="risk" title="What does this risk level mean?">' + meta.label + '</button>' +
         '</div>' +
         '<p class="species-sci"><em>' + s.sci + '</em></p>' +
         '<div class="species-pills">' +

@@ -782,7 +782,7 @@ function buildObsLayer() {
           html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
             '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em></a></div>';
         }
-        html += '<div class="popup-badge" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</div>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + ' <span class="badge-help" aria-hidden="true">?</span></button>';
         html += '</div></div>';
         if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
           html += '<div class="popup-photo-attribution">Photo credit: ' +
@@ -1552,7 +1552,7 @@ function updateMapLegend() {
       '<div class="legend-mode-note">Uses the enabled iNaturalist and Sentinelle sources. This represents reporting patterns, not plant abundance.</div>';
   } else {
     html = '<div class="legend-title">Risk ' +
-        '<button type="button" class="legend-help" data-risk-info aria-label="What do the risk levels mean?" title="What do the risk levels mean?">?</button>' +
+        '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?" title="What do the risk levels mean?">?</button>' +
       '</div>' +
       '<div class="legend-risk-strip">' +
         '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
@@ -1568,7 +1568,7 @@ function updateMapLegend() {
   }
   html += '<div class="legend-divider"></div>' +
     '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives' +
-      '<button type="button" class="legend-help" data-projects-info aria-label="What are projects and initiatives?" title="What are projects and initiatives?">?</button>' +
+      '<button type="button" class="legend-help" data-info="projects" aria-label="What are projects and initiatives?" title="What are projects and initiatives?">?</button>' +
     '</div>';
   legendElement.innerHTML = html;
   positionTrendButton();
@@ -1579,10 +1579,6 @@ legend.onAdd = function () {
   // Let touch/wheel scrolling inside the legend scroll it instead of panning the map
   L.DomEvent.disableScrollPropagation(legendElement);
   L.DomEvent.disableClickPropagation(legendElement);
-  legendElement.addEventListener('click', function (e) {
-    if (e.target.closest('[data-risk-info]')) openRiskInfo();
-    if (e.target.closest('[data-projects-info]')) openProjectsInfo();
-  });
   updateMapLegend();
   return legendElement;
 };
@@ -1601,48 +1597,8 @@ function positionTrendButton() {
 positionTrendButton();
 window.addEventListener('resize', positionTrendButton);
 
-// ---- 15a. Risk info dialog (opened from the legend's "?") ----
-const RISK_INFO_OVERLAY = document.getElementById('risk-info-overlay');
-const RISK_INFO_CLOSE   = document.getElementById('risk-info-close');
-let riskInfoReturnFocus = null;
-function openRiskInfo() {
-  if (!RISK_INFO_OVERLAY) return;
-  riskInfoReturnFocus = document.activeElement;
-  RISK_INFO_OVERLAY.hidden = false;
-  if (RISK_INFO_CLOSE) RISK_INFO_CLOSE.focus();
-}
-function closeRiskInfo() {
-  if (!RISK_INFO_OVERLAY || RISK_INFO_OVERLAY.hidden) return;
-  RISK_INFO_OVERLAY.hidden = true;
-  if (riskInfoReturnFocus && riskInfoReturnFocus.focus) riskInfoReturnFocus.focus();
-}
-if (RISK_INFO_CLOSE) RISK_INFO_CLOSE.addEventListener('click', closeRiskInfo);
-if (RISK_INFO_OVERLAY) RISK_INFO_OVERLAY.addEventListener('click', function (e) {
-  if (e.target === RISK_INFO_OVERLAY) closeRiskInfo();
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') { closeRiskInfo(); closeProjectsInfo(); }
-});
-
-// ---- 15b. Projects info dialog (same design, opened from the legend's second "?") ----
-const PROJECTS_INFO_OVERLAY = document.getElementById('projects-info-overlay');
-const PROJECTS_INFO_CLOSE = PROJECTS_INFO_OVERLAY ? PROJECTS_INFO_OVERLAY.querySelector('.info-close') : null;
-let projectsInfoReturnFocus = null;
-function openProjectsInfo() {
-  if (!PROJECTS_INFO_OVERLAY) return;
-  projectsInfoReturnFocus = document.activeElement;
-  PROJECTS_INFO_OVERLAY.hidden = false;
-  if (PROJECTS_INFO_CLOSE) PROJECTS_INFO_CLOSE.focus();
-}
-function closeProjectsInfo() {
-  if (!PROJECTS_INFO_OVERLAY || PROJECTS_INFO_OVERLAY.hidden) return;
-  PROJECTS_INFO_OVERLAY.hidden = true;
-  if (projectsInfoReturnFocus && projectsInfoReturnFocus.focus) projectsInfoReturnFocus.focus();
-}
-if (PROJECTS_INFO_CLOSE) PROJECTS_INFO_CLOSE.addEventListener('click', closeProjectsInfo);
-if (PROJECTS_INFO_OVERLAY) PROJECTS_INFO_OVERLAY.addEventListener('click', function (e) {
-  if (e.target === PROJECTS_INFO_OVERLAY) closeProjectsInfo();
-});
+// Info dialogs (risk levels, projects) live in site/info-dialogs.js and open
+// from any element with data-info="risk" / data-info="projects".
 
 
 // ============================================================
@@ -2237,7 +2193,7 @@ function buildSentinelLayer() {
         html += '<div class="popup-title">' + title + '</div>';
         if (latinLine) html += '<div class="popup-latin"><em>' + latinLine + '</em></div>';
         html += '<div class="popup-badge" style="background:#d8f3dc;color:#1b4332;border:1px solid #40916c;margin-right:4px;">Sentinelle</div>';
-        html += '<div class="popup-badge" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + '</div>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + ' <span class="badge-help" aria-hidden="true">?</span></button>';
         html += '</div></div>';
 
         html += '<div class="popup-grid">';
@@ -2334,6 +2290,7 @@ function buildProjectLayer() {
         (p.organization ? escapeHtml(p.organization) : 'Community project') +
         (p.year ? ' · ' + escapeHtml(p.year) : '') +
         '</div>';
+      html += '<button type="button" class="popup-info-link" data-info="projects">What is this?</button>';
       if (p.description) {
         html += '<p class="project-description">' + escapeHtml(p.description) + '</p>';
       }

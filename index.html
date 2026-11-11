@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=15" />
+  <link rel="stylesheet" href="site/style.css?v=16" />
 </head>
 <body class="map-page compact-filters">
 
@@ -62,6 +62,8 @@
             <label class="fp-check"><input type="checkbox" data-risk="low" checked><span>Low risk</span></label>
             <label class="fp-check"><input type="checkbox" data-risk="unknown" checked><span>Unclassified</span></label>
           </div>
+          <div class="fp-divider"></div>
+          <button type="button" class="fp-info-link" data-info="risk">What do these risk levels mean?</button>
         </div>
       </div>
 
@@ -219,63 +221,7 @@
     <div id="bp-body" class="bp-body"></div>
   </aside>
 
-  <!-- ============================================================
-       4c. PROJECTS INFO DIALOG — opened from the "?" next to
-           "Projects & initiatives" in the map legend
-       ============================================================ -->
-  <div id="projects-info-overlay" class="risk-info-overlay info-overlay" hidden>
-    <div class="risk-info" role="dialog" aria-modal="true" aria-labelledby="projects-info-title">
-      <div class="risk-info-head">
-        <h2 id="projects-info-title">What are projects &amp; initiatives?</h2>
-        <button class="risk-info-close info-close" type="button" aria-label="Close">×</button>
-      </div>
-      <p>
-        The blue markers show local efforts to control invasive plants in the Montréal area,
-        led by the Ville de Montréal, individual boroughs and cities, and community and
-        environmental organizations.
-      </p>
-      <ul class="info-list">
-        <li><strong>What they include:</strong> control work such as cutting invasive plants or
-          covering them with tarps to smother them, often followed by planting native species,
-          as well as pilot projects, monitoring, and volunteer activities.</li>
-        <li><strong>Click a marker</strong> to see who runs the project, when, its target species,
-          the sites and methods involved, and links to the original sources.</li>
-        <li><strong>Locations are approximate:</strong> a marker may show the park where work
-          happens or the organization's address, not the exact treatment site. Projects in the
-          same park or island are grouped together.</li>
-        <li><strong>Not a complete list:</strong> these are selected projects that were checked by hand
-          (last in October 2026). Areas without a marker may still have control work happening.</li>
-      </ul>
-      <p class="risk-info-note">
-        Turn this layer on or off under <strong>Map layers</strong>. In the species catalog, use
-        “View projects &amp; initiatives” to see projects for a specific species.
-      </p>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       4b. RISK INFO DIALOG — opened from the "?" in the map legend
-       ============================================================ -->
-  <div id="risk-info-overlay" class="risk-info-overlay" hidden>
-    <div class="risk-info" role="dialog" aria-modal="true" aria-labelledby="risk-info-title">
-      <div class="risk-info-head">
-        <h2 id="risk-info-title">What do the risk levels mean?</h2>
-        <button id="risk-info-close" class="risk-info-close" type="button" aria-label="Close">×</button>
-      </div>
-      <p>Québec classifies harmful invasive plant species by their known risk to biodiversity and the environment:</p>
-      <ul class="risk-info-list">
-        <li><span class="swatch" style="background:#e63946;border-color:#8b0000"></span><div><strong>High risk:</strong> a major threat to biodiversity and the proper functioning of ecosystems.</div></li>
-        <li><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span><div><strong>Moderate risk:</strong> may harm some native species or disrupt some ecosystems, but without causing severe impacts.</div></li>
-        <li><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span><div><strong>Low risk:</strong> impacts on biodiversity and ecosystems are limited.</div></li>
-        <li><span class="swatch" style="background:#adb5bd;border-color:#444"></span><div><strong>Undetermined — watch</strong> (shown as “Unclassified”): impacts and risk in Québec are not yet sufficiently understood.</div></li>
-      </ul>
-      <p class="risk-info-note">Priority for control is a separate classification: a species can be a priority even if its risk level is moderate or low.</p>
-      <p class="risk-info-note">
-        Source: Québec's
-        <a href="https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/E5E862_E86_2026.pdf" target="_blank" rel="noopener noreferrer">risk criteria and control guidance</a>.
-      </p>
-    </div>
-  </div>
+  <!-- Info dialogs (risk levels, projects) are built by site/info-dialogs.js -->
 
 
   <!-- ============================================================
@@ -475,6 +421,7 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="site/priority-species.js"></script>
-  <script src="site/app.js?v=15"></script>
+  <script src="site/info-dialogs.js?v=16"></script>
+  <script src="site/app.js?v=16"></script>
 </body>
 </html>

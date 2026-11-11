@@ -2813,3 +2813,68 @@ a.species-credit:hover { text-decoration: underline; }
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
+
+/* ============================================================
+   22. INFO DIALOG ENTRY POINTS — elements with data-info="..."
+   ============================================================ */
+/* Popup risk badge (a button that opens the risk explainer) */
+.popup-badge-info {
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.popup-badge-info:hover { filter: brightness(0.95); }
+.badge-help { margin-left: 2px; font-weight: 700; opacity: 0.7; }
+
+/* Text links: project popup "What is this?" and filter-menu link */
+.popup-info-link,
+.fp-info-link {
+  display: inline-block;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 11.5px;
+  color: #1D4E89;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.popup-info-link { margin: 0 0 6px; }
+.fp-info-link { color: #1B4332; padding: 4px 6px 2px; }
+.popup-info-link:hover,
+.fp-info-link:hover { text-decoration-style: solid; }
+
+/* Catalog tier heading "?" — circle in the tier's color */
+.tier-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: 2px;
+  cursor: pointer;
+  position: relative;
+}
+.tier-help::before {
+  content: "?";
+  color: #fff;
+  font: 700 11px/1 system-ui, sans-serif;
+}
+.tier-help::after { content: ""; position: absolute; inset: -8px; }  /* bigger tap target */
+
+/* Catalog card tier badge (a button that opens the risk explainer) */
+button.species-tier-badge {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+button.species-tier-badge:hover { filter: brightness(0.95); }

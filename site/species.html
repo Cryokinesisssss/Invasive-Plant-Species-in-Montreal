@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>Species Catalog — Invasive Species</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css?v=15" />
+  <link rel="stylesheet" href="style.css?v=16" />
 </head>
 <body class="species-page compact-filters">
 
@@ -67,6 +67,8 @@
             <label class="fp-check"><input type="checkbox" data-value="low" />      <span>Low risk</span></label>
             <label class="fp-check"><input type="checkbox" data-value="watch" />    <span>Undetermined — watch</span></label>
           </div>
+          <div class="fp-divider"></div>
+          <button type="button" class="fp-info-link" data-info="risk">What do these risk levels mean?</button>
         </div>
       </div>
 
@@ -177,6 +179,7 @@
        6. SCRIPT
        ============================================================ -->
   <script src="priority-species.js"></script>
-  <script src="species.js?v=15"></script>
+  <script src="info-dialogs.js?v=16"></script>
+  <script src="species.js?v=16"></script>
 </body>
 </html>

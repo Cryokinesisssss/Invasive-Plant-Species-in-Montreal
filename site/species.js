@@ -813,7 +813,7 @@ function renderPhoto(s) {
   return (
     '<div class="species-photo">' +
       '<img class="species-photo-zoom" src="' + s.photo + '" data-full="' + escapeAttr(s.photo) + '"' +
-        ' data-caption="' + escapeAttr(s.common + (credit ? ' — ' + credit.replace(/<[^>]*>/g, '') : '')) + '"' +
+        ' data-caption="' + escapeAttr(s.common + (credit ? ' — ' + credit.replace(/<br\s*\/?>/gi, ' · ').replace(/<[^>]*>/g, '') : '')) + '"' +
         ' alt="' + escapeAttr(s.common) + '" loading="lazy" tabindex="0" role="button"' +
         ' title="Click to enlarge" />' +
       creditEl +

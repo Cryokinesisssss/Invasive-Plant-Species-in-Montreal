@@ -716,7 +716,7 @@ function buildObsLayer() {
         if (latinName) {
           const catalogUrl = 'site/species.html?species=' + encodeURIComponent(latinName);
           html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
-            '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em> →</a></div>';
+            '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em></a></div>';
         }
         html += '<div class="popup-badge" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</div>';
         html += '</div></div>';

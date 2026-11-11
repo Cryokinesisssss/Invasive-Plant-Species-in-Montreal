@@ -33,7 +33,7 @@ const SPECIES = [
     presence: 'Established', ban: true,
     wiki: 'Alliaria_petiolata',
     desc: '<em>Alliaria petiolata</em> is a biennial flowering plant in the Mustard family, Brassicaceae. It is native to Europe, western and central Asia, and northwestern Africa, from Morocco, Iberia and the British Isles, north to northern Scandinavia, and east to northern Pakistan and western China (Xinjiang).',
-    photo: '', photoCredit: 'iNaturalist', photoCreditUrl: '',
+    photo: 'https://inaturalist-open-data.s3.amazonaws.com/photos/510499131/large.jpg', photoCredit: 'LaSalle, QC<br>iNaturalist / patrice_dupont', photoCreditUrl: 'https://www.inaturalist.org/observations/284080201',
     tax: { kingdom: 'Plantae', clade: 'Tracheophytes', clade2: 'Angiosperms',
            clade3: 'Eudicots', clade4: 'Rosids', order: 'Brassicales',
            family: 'Brassicaceae', genus: 'Alliaria', species: 'A. petiolata' } },

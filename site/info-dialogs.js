@@ -10,7 +10,42 @@
 
   const QC_LIST_URL = 'https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes-animales/liste-especes';
 
+  const REFEE_URL = 'https://www.publicationsduquebec.gouv.qc.ca/fileadmin/gazette/pdf_encrypte/lois_reglements/2026F/88027.pdf';
+
   const DIALOGS = {
+    priority: {
+      title: 'What is a Québec priority species?',
+      body:
+        '<p>To guide and focus control efforts, Québec identifies <strong>26 invasive plant species as priorities</strong> ' +
+          'in the fight against invasive species.</p>' +
+        '<ul class="info-list">' +
+          '<li><strong>Who is included:</strong> species at high risk to biodiversity and the environment, plus some ' +
+            'moderate- or low-risk species, because of their harm to human health, local concerns, or how much is known about them.</li>' +
+          '<li><strong>Priority is not the same as risk:</strong> a priority species can have a moderate or low risk level.</li>' +
+          '<li><strong>Possible requirements:</strong> these species can also be subject to requirements, for example in ' +
+            'projects regulated under Québec\'s Environment Quality Act.</li>' +
+        '</ul>' +
+        '<p class="risk-info-note">Source: <a href="' + QC_LIST_URL + '" target="_blank" rel="noopener noreferrer">' +
+          'Liste des principales espèces exotiques envahissantes</a>, Gouvernement du Québec (list updated September 29, 2026).</p>'
+    },
+    refee: {
+      title: 'What does “Cultivation & sale prohibited” mean?',
+      body:
+        '<p>This species is listed in Québec\'s <em>Règlement sur les espèces floristiques exotiques envahissantes</em> (REFEE), ' +
+          'the regulation on invasive exotic plants. It covers 31 plant species, including their subspecies, varieties, cultivars and hybrids.</p>' +
+        '<ul class="info-list">' +
+          '<li><strong>Growing it to multiply it is prohibited.</strong> Growing includes sowing seeds, transplanting, taking cuttings and tending plants.</li>' +
+          '<li><strong>Selling it is prohibited:</strong> whole plants or any part that can spread the species, such as roots, rhizomes, stems, fruit or seeds.</li>' +
+          '<li><strong>In force since June 4, 2026.</strong> For six species (Carolina fanwort, ground elder, Brazilian waterweed, ' +
+            'Japanese barberry, parrot feather and glossy buckthorn) the sale ban starts June 4, 2027.</li>' +
+          '<li><strong>Limited exceptions:</strong> supervised scientific research, and common reed grown for wastewater-treatment wetlands. ' +
+            'For Japanese barberry, only the Emerald Carousel and Jade Carousel cultivars are covered.</li>' +
+        '</ul>' +
+        '<p class="risk-info-note">Violations can lead to monetary penalties and fines. This is a summary, not legal advice; ' +
+          'see the regulation for the exact rules.</p>' +
+        '<p class="risk-info-note">Source: <a href="' + REFEE_URL + '" target="_blank" rel="noopener noreferrer">' +
+          'Décret 675-2026</a>, <em>Gazette officielle du Québec</em>, May 20, 2026.</p>'
+    },
     presence: {
       title: 'What does the Québec status mean?',
       body:

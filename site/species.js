@@ -996,7 +996,7 @@ function renderCard(s) {
     s.presence;
 
   const banPill = s.ban
-    ? '<span class="pill pill-ban">Cultivation &amp; sale prohibited (REFEE)</span>'
+    ? '<button type="button" class="pill pill-ban" data-info="refee" title="What does this mean?">Cultivation &amp; sale prohibited (REFEE)</button>'
     : '';
 
   const descHtml = s.desc
@@ -1031,7 +1031,7 @@ function renderCard(s) {
         '<div class="species-pills">' +
           '<button type="button" class="pill pill-status" data-info="presence" title="What does the Québec status mean?">Québec: ' + presenceLabel + '</button>' +
           (s.priority
-            ? '<span class="pill pill-priority" title="One of Québec’s 26 priority plant species for control">Québec priority</span>'
+            ? '<button type="button" class="pill pill-priority" data-info="priority" title="One of Québec’s 26 priority plant species for control">Québec priority</button>'
             : '') +
           banPill +
         '</div>' +

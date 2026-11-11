@@ -800,8 +800,12 @@ function buildObsLayer() {
           const statusLabel = p.presence === 'Single observation' ? 'Occasional observation' : p.presence;
           html += '<div class="popup-grid-wide"><span class="lbl">Québec status</span>' +
             '<button type="button" class="popup-status-link" data-info="presence" title="What does the Québec status mean?">' +
-            escapeHtml(statusLabel) + '</button>' +
-            (p.banned ? ' · REFEE' : '') + '</div>';
+            escapeHtml(statusLabel) + '</button></div>';
+        }
+        if (p.banned) {
+          html += '<div class="popup-grid-wide"><span class="lbl">Regulation</span>' +
+            '<button type="button" class="popup-status-link" data-info="refee" title="What does this mean?">' +
+            'Cultivation &amp; sale prohibited</button></div>';
         }
         html += '</div>';
 

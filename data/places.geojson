@@ -9367,43 +9367,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.7780187783,
-          45.4921352354
-        ]
-      },
-      "properties": {
-        "id": "44813956",
-        "observed_on": "2020-05-03",
-        "time_observed_at": "2020-05-03 23:27:26 UTC",
-        "user_login": "tammytwoshoes",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) tammytwoshoes, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/44813956",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/71042145/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "garlic mustard",
-        "scientific_name": "Alliaria petiolata",
-        "common_name": "garlic mustard",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "56061",
-        "positional_accuracy": "20",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.57209581,
           45.52543285
         ]
@@ -14843,80 +14806,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.6121209758,
-          45.442704201
-        ]
-      },
-      "properties": {
-        "id": "48943081",
-        "observed_on": "2020-06-08",
-        "time_observed_at": "2020-06-08 19:27:43 UTC",
-        "user_login": "evachanda",
-        "license": "",
-        "photo_license": "",
-        "photo_attribution": "(c) Eva Chanda, all rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/48943081",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common buckthorn",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "20",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.7409784738,
-          45.4260406532
-        ]
-      },
-      "properties": {
-        "id": "48944975",
-        "observed_on": "2020-06-08",
-        "time_observed_at": "2020-06-08 19:43:49 UTC",
-        "user_login": "evachanda",
-        "license": "",
-        "photo_license": "",
-        "photo_attribution": "(c) Eva Chanda, all rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/48944975",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Norway maple",
-        "scientific_name": "Acer platanoides",
-        "common_name": "Norway maple",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54763",
-        "positional_accuracy": "9",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.5664324822,
           45.4508194848
         ]
@@ -16423,80 +16312,6 @@
         "positional_accuracy": "10",
         "public_positional_accuracy": "10",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6732927407,
-          45.4693918658
-        ]
-      },
-      "properties": {
-        "id": "49650245",
-        "observed_on": "2020-06-14",
-        "time_observed_at": "2020-06-14 22:19:13 UTC",
-        "user_login": "evachanda",
-        "license": "",
-        "photo_license": "",
-        "photo_attribution": "(c) Eva Chanda, all rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/49650245",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Variegated Yellow Archangel",
-        "scientific_name": "Lamium galeobdolon argentatum",
-        "common_name": "Variegated Yellow Archangel",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "707386",
-        "positional_accuracy": "8",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6924068789,
-          45.5383389778
-        ]
-      },
-      "properties": {
-        "id": "49650286",
-        "observed_on": "2020-06-14",
-        "time_observed_at": "2020-06-14 22:22:37 UTC",
-        "user_login": "evachanda",
-        "license": "",
-        "photo_license": "",
-        "photo_attribution": "(c) Eva Chanda, all rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/49650286",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Variegated Yellow Archangel",
-        "scientific_name": "Lamium galeobdolon argentatum",
-        "common_name": "Variegated Yellow Archangel",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "707386",
-        "positional_accuracy": "10",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "",
         "risk": "low",
         "presence": "Established",
@@ -33121,43 +32936,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.7811629336,
-          45.4860388552
-        ]
-      },
-      "properties": {
-        "id": "79328122",
-        "observed_on": "2021-05-18",
-        "time_observed_at": "2021-05-18 10:45:27 UTC",
-        "user_login": "camelliasinensis",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) camelliasinensis, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/79328122",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/129925404/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Variegated Yellow Archangel",
-        "scientific_name": "Lamium galeobdolon argentatum",
-        "common_name": "Variegated Yellow Archangel",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "707386",
-        "positional_accuracy": "23",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.6554861111,
           45.5806055556
         ]
@@ -33999,43 +33777,6 @@
         "public_positional_accuracy": "5",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.9542754879,
-          45.4137414611
-        ]
-      },
-      "properties": {
-        "id": "80244396",
-        "observed_on": "2021-05-24",
-        "time_observed_at": "2021-05-24 13:15:00 UTC",
-        "user_login": "sornebird",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) sornebird, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/80244396",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/131504949/medium.jpeg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Petite pervenche",
-        "scientific_name": "Vinca minor",
-        "common_name": "lesser periwinkle",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "55844",
-        "positional_accuracy": "15",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
         "risk": "low",
         "presence": "Established",
         "banned": false
@@ -47884,80 +47625,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.647893794,
-          45.5298516309
-        ]
-      },
-      "properties": {
-        "id": "91763709",
-        "observed_on": "2021-08-13",
-        "time_observed_at": "2021-08-13 16:00:19 UTC",
-        "user_login": "secondistefano",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC-ND",
-        "photo_attribution": "(c) Stefano, some rights reserved (CC BY-NC-ND)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/91763709",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "nerprun purgatif",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "48",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.7900815686,
-          45.4332653303
-        ]
-      },
-      "properties": {
-        "id": "91764578",
-        "observed_on": "2021-08-13",
-        "time_observed_at": "2021-08-13 15:56:47 UTC",
-        "user_login": "secondistefano",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC-ND",
-        "photo_attribution": "(c) Stefano, some rights reserved (CC BY-NC-ND)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/91764578",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "purple loosestrife",
-        "scientific_name": "Lythrum salicaria",
-        "common_name": "purple loosestrife",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "61321",
-        "positional_accuracy": "25",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.895652771,
           45.4439125061
         ]
@@ -56054,43 +55721,6 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6238771583,
-          45.5113109019
-        ]
-      },
-      "properties": {
-        "id": "98320909",
-        "observed_on": "2021-10-15",
-        "time_observed_at": "2021-10-15 21:56:41 UTC",
-        "user_login": "camelliasinensis",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) camelliasinensis, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/98320909",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/163668914/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "reed canary grass",
-        "scientific_name": "Phalaris arundinacea",
-        "common_name": "reed canary grass",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "63337",
-        "positional_accuracy": "65",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "moderate",
-        "presence": "Established",
-        "banned": false
       }
     },
     {
@@ -72119,43 +71749,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.7412331738,
-          45.4345515279
-        ]
-      },
-      "properties": {
-        "id": "121083846",
-        "observed_on": "2022-06-10",
-        "time_observed_at": "2022-06-10 13:13:16 UTC",
-        "user_login": "camelliasinensis",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) camelliasinensis, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/121083846",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/204863647/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Cow Parsley",
-        "scientific_name": "Anthriscus sylvestris",
-        "common_name": "Cow Parsley",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "124544",
-        "positional_accuracy": "4",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.84179706,
           45.44484695
         ]
@@ -72630,43 +72223,6 @@
         "risk": "moderate",
         "presence": "Established",
         "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.5614694245,
-          45.5638248866
-        ]
-      },
-      "properties": {
-        "id": "121429165",
-        "observed_on": "2022-06-01",
-        "time_observed_at": "2022-06-01 13:35:20 UTC",
-        "user_login": "josiequigley",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) josiequigley, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/121429165",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/205477999/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Cow Parsley",
-        "scientific_name": "Anthriscus sylvestris",
-        "common_name": "Cow Parsley",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "124544",
-        "positional_accuracy": "20",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
       }
     },
     {
@@ -84355,43 +83911,6 @@
         "positional_accuracy": "34",
         "public_positional_accuracy": "34",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6746292573,
-          45.5297547787
-        ]
-      },
-      "properties": {
-        "id": "133997237",
-        "observed_on": "2022-08-26",
-        "time_observed_at": "2022-08-26 16:43:05 UTC",
-        "user_login": "wapiza",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) wapiza, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/133997237",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/229799096/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Siberian elm",
-        "scientific_name": "Ulmus pumila",
-        "common_name": "Siberian elm",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "79463",
-        "positional_accuracy": "5",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "open",
         "risk": "low",
         "presence": "Established",
@@ -102718,43 +102237,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.6661165106,
-          45.4996811406
-        ]
-      },
-      "properties": {
-        "id": "158961735",
-        "observed_on": "2023-05-01",
-        "time_observed_at": "2023-05-01 22:58:00 UTC",
-        "user_login": "kevinverreault",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) Kevin Verreault, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/158961735",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/274642720/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common valerian",
-        "scientific_name": "Valeriana officinalis",
-        "common_name": "common valerian",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "56160",
-        "positional_accuracy": "23",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.5895736151,
           45.4892807187
         ]
@@ -106333,43 +105815,6 @@
         "positional_accuracy": "10",
         "public_positional_accuracy": "10",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.7364132789,
-          45.4824476433
-        ]
-      },
-      "properties": {
-        "id": "162872211",
-        "observed_on": "2023-05-21",
-        "time_observed_at": "2023-05-21 12:56:56 UTC",
-        "user_login": "wapiza",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) wapiza, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/162872211",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/281652934/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "alliaire officinale",
-        "scientific_name": "Alliaria petiolata",
-        "common_name": "garlic mustard",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "56061",
-        "positional_accuracy": "8",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "",
         "risk": "high",
         "presence": "Established",
@@ -111291,43 +110736,6 @@
         "positional_accuracy": "4",
         "public_positional_accuracy": "4",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6674323986,
-          45.4940328827
-        ]
-      },
-      "properties": {
-        "id": "167031116",
-        "observed_on": "2023-06-12",
-        "time_observed_at": "2023-06-12 15:59:23 UTC",
-        "user_login": "lorip17",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) Lori Pearson, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/167031116",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/289303546/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Rosier multiflore",
-        "scientific_name": "Rosa multiflora",
-        "common_name": "multiflora rose",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "78882",
-        "positional_accuracy": "9",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "",
         "risk": "low",
         "presence": "Established",
@@ -119664,80 +119072,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.8370862581,
-          45.4440480859
-        ]
-      },
-      "properties": {
-        "id": "176773767",
-        "observed_on": "2023-08-05",
-        "time_observed_at": "2023-08-05 14:39:10 UTC",
-        "user_login": "bea3355",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) bea3355, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/176773767",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/307373097/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Norway maple",
-        "scientific_name": "Acer platanoides",
-        "common_name": "Norway maple",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54763",
-        "positional_accuracy": "24",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.8679703622,
-          45.4878421523
-        ]
-      },
-      "properties": {
-        "id": "176773913",
-        "observed_on": "2023-08-05",
-        "time_observed_at": "2023-08-05 14:39:59 UTC",
-        "user_login": "bea3355",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) bea3355, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/176773913",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/307373492/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "lesser periwinkle",
-        "scientific_name": "Vinca minor",
-        "common_name": "lesser periwinkle",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "55844",
-        "positional_accuracy": "24",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.6572344229,
           45.5794506474
         ]
@@ -119768,43 +119102,6 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.8552958606,
-          45.4592975254
-        ]
-      },
-      "properties": {
-        "id": "176774787",
-        "observed_on": "2023-08-05",
-        "time_observed_at": "2023-08-05 14:44:52 UTC",
-        "user_login": "bea3355",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) bea3355, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/176774787",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/307374798/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Goutweed",
-        "scientific_name": "Aegopodium podagraria",
-        "common_name": "Goutweed",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "51741",
-        "positional_accuracy": "40",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "",
-        "risk": "moderate",
-        "presence": "Established",
-        "banned": true
       }
     },
     {
@@ -138497,43 +137794,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.5970254952,
-          45.4333537346
-        ]
-      },
-      "properties": {
-        "id": "190466159",
-        "observed_on": "2023-11-08",
-        "time_observed_at": "2023-11-08 20:38:58 UTC",
-        "user_login": "macintasha",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) macintasha, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/190466159",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/333899164/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "black locust",
-        "scientific_name": "Robinia pseudoacacia",
-        "common_name": "black locust",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "56088",
-        "positional_accuracy": "32",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.4997720348,
           45.6908400895
         ]
@@ -142086,43 +141346,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.6535464119,
-          45.4765756778
-        ]
-      },
-      "properties": {
-        "id": "202456062",
-        "observed_on": "2024-03-14",
-        "time_observed_at": "2024-03-14 21:52:15 UTC",
-        "user_login": "evarani",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) Eva, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/202456062",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/357562151/medium.jpeg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common buckthorn",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "8",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.5725377044,
           45.6283674368
         ]
@@ -142260,43 +141483,6 @@
         "positional_accuracy": "4",
         "public_positional_accuracy": "4",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.6625681996,
-          45.5245660222
-        ]
-      },
-      "properties": {
-        "id": "204066894",
-        "observed_on": "2024-03-26",
-        "time_observed_at": "2024-03-26 21:35:43 UTC",
-        "user_login": "evarani",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) Eva, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/204066894",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/360643418/medium.jpeg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common buckthorn",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "8",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "open",
         "risk": "high",
         "presence": "Established",
@@ -170502,43 +169688,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.6564158189,
-          45.580592731
-        ]
-      },
-      "properties": {
-        "id": "239651473",
-        "observed_on": "2024-09-03",
-        "time_observed_at": "2024-09-03 17:59:20 UTC",
-        "user_login": "lorip17",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) Lori Pearson, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/239651473",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/427125880/medium.jpeg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common buckthorn",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "7",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.5855402,
           45.5002506
         ]
@@ -173895,43 +173044,6 @@
         "positional_accuracy": "4",
         "public_positional_accuracy": "4",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.5560005276,
-          45.4615284963
-        ]
-      },
-      "properties": {
-        "id": "241329278",
-        "observed_on": "2024-09-09",
-        "time_observed_at": "2024-09-09 20:23:58 UTC",
-        "user_login": "cinderruins",
-        "license": "CC0",
-        "photo_license": "CC0",
-        "photo_attribution": "no rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/241329278",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/430087415/medium.jpeg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "purple loosestrife",
-        "scientific_name": "Lythrum salicaria",
-        "common_name": "purple loosestrife",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "61321",
-        "positional_accuracy": "18",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "open",
         "risk": "low",
         "presence": "Established",
@@ -181336,43 +180448,6 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.8145242508,
-          45.4164908013
-        ]
-      },
-      "properties": {
-        "id": "247774060",
-        "observed_on": "2024-10-17",
-        "time_observed_at": "2024-10-17 15:14:26 UTC",
-        "user_login": "matt2306",
-        "license": "",
-        "photo_license": "",
-        "photo_attribution": "(c) Matt Cameron, all rights reserved",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/247774060",
-        "image_url": "",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common buckthorn",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "85",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
       }
     },
     {
@@ -212523,43 +211598,6 @@
         "positional_accuracy": "11",
         "public_positional_accuracy": "11",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.8495361913,
-          45.4324189918
-        ]
-      },
-      "properties": {
-        "id": "306824329",
-        "observed_on": "2025-08-16",
-        "time_observed_at": "2025-08-16 20:22:18 UTC",
-        "user_login": "bea3355",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) bea3355, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/306824329",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/553352561/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "purple loosestrife",
-        "scientific_name": "Lythrum salicaria",
-        "common_name": "purple loosestrife",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "61321",
-        "positional_accuracy": "5",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "open",
         "risk": "low",
         "presence": "Established",
@@ -248979,43 +248017,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.5889616144,
-          45.5724053438
-        ]
-      },
-      "properties": {
-        "id": "367535223",
-        "observed_on": "2026-06-01",
-        "time_observed_at": "2026-06-01 20:42:23 UTC",
-        "user_login": "shinysybel",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) shinysybel, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/367535223",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/671200838/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "érable ginnala",
-        "scientific_name": "Acer ginnala",
-        "common_name": "Amur Maple",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "123638",
-        "positional_accuracy": "5",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.6579696834,
           45.4882481207
         ]
@@ -249192,43 +248193,6 @@
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.5449148197,
-          45.5551684596
-        ]
-      },
-      "properties": {
-        "id": "367880563",
-        "observed_on": "2026-06-02",
-        "time_observed_at": "2026-06-02 22:53:36 UTC",
-        "user_login": "shinysybel",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) shinysybel, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/367880563",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/671862611/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Érable plane",
-        "scientific_name": "Acer platanoides",
-        "common_name": "Norway maple",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54763",
-        "positional_accuracy": "22",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
         "presence": "Established",
         "banned": false
       }
@@ -251114,43 +250078,6 @@
         "positional_accuracy": "7",
         "public_positional_accuracy": "7",
         "coordinates_obscured": false,
-        "taxon_geoprivacy": "open",
-        "risk": "low",
-        "presence": "Established",
-        "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.8842070786,
-          45.5157880426
-        ]
-      },
-      "properties": {
-        "id": "370155808",
-        "observed_on": "2026-06-09",
-        "time_observed_at": "2026-06-09 21:49:09 UTC",
-        "user_login": "muscariafly",
-        "license": "CC-BY-NC",
-        "photo_license": "CC-BY-NC",
-        "photo_attribution": "(c) muscariafly, some rights reserved (CC BY-NC)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/370155808",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/676196491/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "common comfrey",
-        "scientific_name": "Symphytum officinale",
-        "common_name": "common comfrey",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "55724",
-        "positional_accuracy": "25",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
         "taxon_geoprivacy": "open",
         "risk": "low",
         "presence": "Established",
@@ -264371,43 +263298,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.5910124622,
-          45.4875169134
-        ]
-      },
-      "properties": {
-        "id": "389772960",
-        "observed_on": "2026-08-09",
-        "time_observed_at": "2026-08-09 19:56:35 UTC",
-        "user_login": "marcolivierbeausoleil",
-        "license": "CC-BY",
-        "photo_license": "CC-BY",
-        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/389772960",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/713993719/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Nerprun cathartique",
-        "scientific_name": "Rhamnus cathartica",
-        "common_name": "common buckthorn",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "54811",
-        "positional_accuracy": "2",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "high",
-        "presence": "Established",
-        "banned": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -73.5680833333,
           45.564645
         ]
@@ -267509,43 +266399,6 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -73.5297305852,
-          45.4998237505
-        ]
-      },
-      "properties": {
-        "id": "394960052",
-        "observed_on": "2026-08-27",
-        "time_observed_at": "2026-08-27 15:06:20 UTC",
-        "user_login": "marcolivierbeausoleil",
-        "license": "CC-BY",
-        "photo_license": "CC-BY",
-        "photo_attribution": "(c) Marc-Olivier Beausoleil, some rights reserved (CC BY)",
-        "photo_present": true,
-        "photo_license_verified": true,
-        "url": "https://www.inaturalist.org/observations/394960052",
-        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/724138384/medium.jpg",
-        "place_guess": "Québec, CA",
-        "place_town_name": "",
-        "species_guess": "Égopode podagraire",
-        "scientific_name": "Aegopodium podagraria",
-        "common_name": "Goutweed",
-        "iconic_taxon_name": "Plantae",
-        "taxon_id": "51741",
-        "positional_accuracy": "4",
-        "public_positional_accuracy": "27158",
-        "coordinates_obscured": true,
-        "taxon_geoprivacy": "open",
-        "risk": "moderate",
-        "presence": "Established",
-        "banned": true
       }
     },
     {
@@ -296154,6 +295007,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6210716667,
+          45.4606166667
+        ]
+      },
+      "properties": {
+        "id": "413286989",
+        "observed_on": "2026-05-07",
+        "time_observed_at": "2026-05-07 21:12:46 UTC",
+        "user_login": "sohajo",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) joumana, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413286989",
+        "image_url": "",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "lesser periwinkle",
+        "scientific_name": "Vinca minor",
+        "common_name": "lesser periwinkle",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55844",
+        "positional_accuracy": "38",
+        "public_positional_accuracy": "38",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6099153876,
           45.44318135
         ]
@@ -296406,6 +295296,191 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8108385267,
+          45.4931873749
+        ]
+      },
+      "properties": {
+        "id": "414208561",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 19:42:01 UTC",
+        "user_login": "kayjei",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Kayjei, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414208561",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762480028/medium.jpg",
+        "place_guess": "Rue Blanche, Dollard-Des-Ormeaux, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "14",
+        "public_positional_accuracy": "14",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.56752,
+          45.44915
+        ]
+      },
+      "properties": {
+        "id": "414234078",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 20:00:18 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414234078",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762531949/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "valériane officinale",
+        "scientific_name": "Valeriana officinalis",
+        "common_name": "common valerian",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56160",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5682966667,
+          45.4490133333
+        ]
+      },
+      "properties": {
+        "id": "414235256",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 20:07:33 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414235256",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762534284/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "35",
+        "public_positional_accuracy": "35",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5693666667,
+          45.4471083333
+        ]
+      },
+      "properties": {
+        "id": "414255559",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 20:58:48 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414255559",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762576600/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.569245,
+          45.44718
+        ]
+      },
+      "properties": {
+        "id": "414257450",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 20:48:33 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414257450",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762580491/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Robinier faux-acacia",
+        "scientific_name": "Robinia pseudoacacia",
+        "common_name": "black locust",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56088",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
       }
     }
   ]

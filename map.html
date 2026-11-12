@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=47" />
+  <link rel="stylesheet" href="site/style.css?v=48" />
 </head>
 <body class="map-page compact-filters">
 
@@ -117,21 +117,17 @@
           <span class="hide-phone">Observation filters</span><span class="show-phone">Filters</span> <span id="fp-observation-options-summary" class="fp-summary">All</span>
         </button>
         <div class="fp-panel" hidden>
-          <label class="fp-check">
-            <input id="f-approximate-location" type="checkbox">
-            <span>Approximate location only (10–100 m)</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-exact-location" type="checkbox">
-            <span>Precise location only (≤10 m)</span>
-          </label>
+          <div class="fp-group-label">Location accuracy</div>
+          <div id="f-accuracy-list">
+            <label class="fp-check"><input type="checkbox" data-accuracy="precise" checked><span>Precise (≤10 m)</span></label>
+            <label class="fp-check"><input type="checkbox" data-accuracy="approximate" checked><span>Approximate (10–100 m)</span></label>
+            <label class="fp-check"><input type="checkbox" data-accuracy="unknown"><span>Unknown (not recorded)</span></label>
+          </div>
+          <div class="fp-note">Applies to iNaturalist records. Unknown-accuracy records are hidden by default.</div>
+          <div class="fp-divider"></div>
           <label class="fp-check">
             <input id="f-photo" type="checkbox">
             <span>With photo only</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-unknown-accuracy" type="checkbox">
-            <span>Include records with unknown accuracy</span>
           </label>
           <div class="fp-divider"></div>
           <div class="fp-group-label">Québec status
@@ -261,6 +257,6 @@
   <script src="site/priority-species.js"></script>
   <script src="site/info-dialogs.js?v=25"></script>
   <script src="site/tooltips.js?v=1"></script>
-  <script src="site/app.js?v=44"></script>
+  <script src="site/app.js?v=45"></script>
 </body>
 </html>

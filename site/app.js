@@ -176,9 +176,9 @@ const filterState = {
   boroughs: new Set(),
   species: new Set(),
   years: new Set(),        // empty = all years
-  approximateLocation: false,
-  preciseLocation: false,
-  unknownAccuracy: false,  // include records with no positional accuracy (off by default)
+  // Location accuracy classes to show (any combination). 'unknown' = no accuracy
+  // recorded by the observer; off by default.
+  accuracy: new Set(['precise', 'approximate']),
   photo: false,
   presence: new Set(),
   priorityOnly: false
@@ -258,7 +258,7 @@ function updateStatusSummary(filtered) {
   statusFeatures = filtered;
 
   // Unknown-accuracy records only count toward the total once they're switched on
-  const total = filterState.unknownAccuracy
+  const total = filterState.accuracy.has('unknown')
     ? allFeatures.length
     : allFeatures.filter(function (f) { return !isUnknownAccuracy(f.properties); }).length;
   const shown = filtered.length;
@@ -399,9 +399,8 @@ function applyRequestedSpecies() {
   filterState.species.clear();
   matches.forEach(function (s) { filterState.species.add(s.key); });
   if (new URLSearchParams(window.location.search).get('accuracy') === 'all') {
-    filterState.unknownAccuracy = true;
-    const box = document.getElementById('f-unknown-accuracy');
-    if (box) box.checked = true;
+    filterState.accuracy.add('unknown');
+    syncAccuracyCheckboxes();
     updateMapLegend();
   }
   requestedSpeciesApplied = true;
@@ -452,11 +451,8 @@ function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   }
 
   const approximateLocation = isApproximateLocation(p);
-  if (filterState.approximateLocation && !approximateLocation) return false;
-  if (filterState.preciseLocation && approximateLocation) return false;
-  const unknownAccuracy = isUnknownAccuracy(p);
-  if (unknownAccuracy && !filterState.unknownAccuracy) return false;
-  if (unknownAccuracy && (filterState.preciseLocation || filterState.approximateLocation)) return false;
+  const accuracyClass = isUnknownAccuracy(p) ? 'unknown' : (approximateLocation ? 'approximate' : 'precise');
+  if (!filterState.accuracy.has(accuracyClass)) return false;
 
   if (filterState.photo && !p.image_url) return false;
   if (filterState.presence.size > 0 && !filterState.presence.has(p.presence)) return false;
@@ -1256,9 +1252,7 @@ function updateSummaries() {
   }
 
   const observationOptions = [
-    filterState.approximateLocation,
-    filterState.preciseLocation,
-    filterState.unknownAccuracy,
+    !accuracyIsDefault(),
     filterState.photo,
     filterState.presence.size > 0,
     filterState.priorityOnly
@@ -1657,30 +1651,27 @@ document.getElementById('f-borough-metro').addEventListener('change', function (
 // ============================================================
 // 13. SIMPLE TOGGLES — location precision / photo / iNat / Sentinelle
 // ============================================================
-document.getElementById('f-approximate-location').addEventListener('change', function (e) {
-  filterState.approximateLocation = e.target.checked;
-  if (filterState.approximateLocation) {
-    filterState.preciseLocation = false;
-    document.getElementById('f-exact-location').checked = false;
-  }
-  updateSummaries();
-  buildObsLayer();
-});
-document.getElementById('f-exact-location').addEventListener('change', function (e) {
-  filterState.preciseLocation = e.target.checked;
-  if (filterState.preciseLocation) {
-    filterState.approximateLocation = false;
-    document.getElementById('f-approximate-location').checked = false;
-  }
-  updateSummaries();
-  buildObsLayer();
-});
-document.getElementById('f-unknown-accuracy').addEventListener('change', function (e) {
-  filterState.unknownAccuracy = e.target.checked;
+// Location accuracy: precise / approximate / unknown, any combination
+function accuracyIsDefault() {
+  return filterState.accuracy.size === 2 &&
+    filterState.accuracy.has('precise') && filterState.accuracy.has('approximate');
+}
+function syncAccuracyCheckboxes() {
+  document.querySelectorAll('#f-accuracy-list input[data-accuracy]').forEach(function (cb) {
+    cb.checked = filterState.accuracy.has(cb.getAttribute('data-accuracy'));
+  });
   updateMapLegend();
-  updateSummaries();
-  buildObsLayer();
-  buildSentinelLayer();
+}
+document.querySelectorAll('#f-accuracy-list input[data-accuracy]').forEach(function (cb) {
+  cb.addEventListener('change', function () {
+    const value = cb.getAttribute('data-accuracy');
+    if (cb.checked) filterState.accuracy.add(value);
+    else filterState.accuracy.delete(value);
+    updateMapLegend();
+    updateSummaries();
+    buildObsLayer();
+    buildSentinelLayer();
+  });
 });
 document.getElementById('f-photo').addEventListener('change', function (e) {
   filterState.photo = e.target.checked;
@@ -1751,9 +1742,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
   filterState.boroughs.clear();
   filterState.species.clear();
   filterState.years.clear();
-  filterState.approximateLocation = false;
-  filterState.preciseLocation = false;
-  filterState.unknownAccuracy = false;
+  filterState.accuracy = new Set(['precise', 'approximate']);
   filterState.photo = false;
   filterState.presence.clear();
   filterState.priorityOnly = false;
@@ -1778,9 +1767,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
   const yearAllElReset = document.getElementById('f-year-all');
   if (yearAllElReset) yearAllElReset.checked = true;
 
-  document.getElementById('f-approximate-location').checked = false;
-  document.getElementById('f-exact-location').checked = false;
-  document.getElementById('f-unknown-accuracy').checked = false;
+  syncAccuracyCheckboxes();
   document.getElementById('f-photo').checked = false;
   document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (cb) { cb.checked = false; });
   document.getElementById('f-priority').checked = false;
@@ -1854,7 +1841,7 @@ function updateMapLegend() {
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
       '<div class="legend-row"><span class="swatch swatch-dashed"></span>Approx. <small>(10–100 m)</small></div>' +
-      (filterState.unknownAccuracy
+      (filterState.accuracy.has('unknown')
         ? '<div class="legend-row"><span class="swatch swatch-unknown"></span>Accuracy unknown</div>'
         : '') +
       '<div class="legend-divider"></div>' +

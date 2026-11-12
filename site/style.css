@@ -1942,16 +1942,17 @@ a.species-credit:hover { text-decoration: underline; }
   flex-shrink: 0;
 }
 
+/* Same source colours as the Observation trends chart: green = iNaturalist, yellow = Sentinelle */
 .sc-dot-inat {
-  background: #e9ecef;
-  border: 1.5px solid #666;
+  background: #1B4332;
+  border: none;
   border-radius: 50%;
 }
 
 .sc-dot-sentinel {
-  background: #40916c;
-  border: 1.5px solid #1B4332;
-  border-radius: 2px;
+  background: #DCBD23;
+  border: none;
+  border-radius: 1.5px;
 }
 
 /* ---- 15f. Body text + tier badge + pills ---- */

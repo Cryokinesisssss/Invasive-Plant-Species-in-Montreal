@@ -2,429 +2,207 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Invasive species observations — Montréal</title>
+  <title>Invasive Plant Species in Montréal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=25" />
+  <meta name="description" content="An interactive map of invasive plant observations in Montréal, with Québec risk levels, local control projects and a species catalog." />
+  <script>
+    // Old links went straight to the map (e.g. ./?species=...). Send them there.
+    if (/[?&]species=/.test(location.search)) location.replace('map.html' + location.search + location.hash);
+  </script>
+  <link rel="stylesheet" href="site/style.css?v=41" />
 </head>
-<body class="map-page compact-filters">
+<body class="home-page">
 
   <!-- ============================================================
-       1. TOP NAVIGATION — brand + Map / Species Catalog links
+       1. TOP NAVIGATION
        ============================================================ -->
   <nav class="topnav">
-    <span class="topnav-brand">Invasive Plant Species in Montreal</span>
-    <a href="./" class="topnav-link active">Map</a>
+    <a href="./" class="topnav-brand">Invasive Plant Species in Montreal</a>
+    <a href="./" class="topnav-link active">Home</a>
+    <a href="map.html" class="topnav-link">Map</a>
     <a href="site/species.html" class="topnav-link">Species Catalog</a>
+    <a href="#about" class="topnav-link">About</a>
   </nav>
 
+  <main class="home-main">
+
+    <!-- ============================================================
+         2. HERO — title, one line, map preview
+         ============================================================ -->
+    <header class="home-hero">
+      <h1>Invasive plants in Montréal</h1>
+      <p class="home-tagline">
+        Where invasive plant species have been recorded on the island, and how Québec rates their risk.
+      </p>
+    </header>
+
+    <a class="home-preview" href="map.html" aria-label="Open the map">
+      <img src="site/img/map-preview.jpg" alt="" width="1600" height="900" />
+      <span class="home-preview-cta">
+        <span class="home-preview-btn">Open the map</span>
+      </span>
+    </a>
+  </main>
 
   <!-- ============================================================
-       2. FILTER BAR — everything the reader can turn on/off
+       3. ABOUT
        ============================================================ -->
-  <section class="filters" aria-label="Filter observations">
-    <div class="filter-row">
-      <!-- Chips row: becomes one compact scrollable row on phones -->
-      <div class="filter-chips">
-
-      <!-- ---- 2a. SPECIES filter (search + checkboxes) ---- -->
-      <div class="fp">
-        <button class="fp-btn" type="button" aria-expanded="false">
-          Species <span class="fp-summary" id="fp-species-summary">All</span>
-        </button>
-        <div class="fp-panel fp-panel-wide" hidden>
-          <input type="search" id="f-species-search" class="fp-search"
-                 placeholder="Search by common or Latin name…" autocomplete="off">
-          <div class="species-suggest" id="f-species-suggest" hidden></div>
-          <label class="fp-check fp-check-all">
-            <input type="checkbox" id="f-species-all"> <span>All species</span>
-          </label>
-          <div class="fp-divider"></div>
-          <div class="fp-list" id="f-species-list"></div>
-        </div>
+  <section id="about" class="home-section">
+    <div class="home-wrap home-intro">
+      <div>
+        <h2>About</h2>
+        <p>
+          Invasive plants are spreading through Montréal's green spaces. Some are established across
+          the island, while others are only starting to appear. This map shows where each species has
+          been recorded, using iNaturalist and Québec Sentinelle observations, along with the risk level
+          assigned by Québec's Ministère de l'Environnement.
+        </p>
       </div>
-
-      <!-- ---- 2b. RISK filter (high / moderate / low / unknown) ---- -->
-      <div class="fp" data-fp="risk">
-        <button id="fp-risk-btn" class="fp-btn" type="button" aria-expanded="false">
-          Risk <span id="fp-risk-summary" class="fp-summary">All</span>
-        </button>
-        <div id="fp-risk-panel" class="fp-panel" hidden>
-          <label class="fp-check fp-check-all">
-            <input id="f-risk-all" type="checkbox" checked />
-            <span>All risk levels</span>
-          </label>
-          <div class="fp-list">
-            <label class="fp-check"><input type="checkbox" data-risk="high" checked><span>High risk</span></label>
-            <label class="fp-check"><input type="checkbox" data-risk="moderate" checked><span>Moderate risk</span></label>
-            <label class="fp-check"><input type="checkbox" data-risk="low" checked><span>Low risk</span></label>
-            <label class="fp-check"><input type="checkbox" data-risk="unknown" checked><span>Unclassified</span></label>
-          </div>
-          <div class="fp-divider"></div>
-          <button type="button" class="fp-info-link" data-info="risk">What do these risk levels mean?</button>
-        </div>
-      </div>
-
-      <!-- ---- 2c. BOROUGH / CITY filter ---- -->
-      <div class="fp" data-fp="borough">
-        <button id="fp-borough-btn" class="fp-btn" type="button" aria-expanded="false">
-          Borough<span class="hide-phone"> / City</span> <span id="fp-borough-summary" class="fp-summary">All</span>
-        </button>
-        <div id="fp-borough-panel" class="fp-panel fp-panel-wide" hidden>
-          <label class="fp-check fp-check-all">
-            <input id="f-borough-all" type="checkbox" checked />
-            <span>All</span>
-          </label>
-          <label class="fp-check fp-check-special">
-            <input id="f-borough-metro" type="checkbox" />
-            <span>Boroughs of Montreal</span>
-          </label>
-          <div class="fp-divider"></div>
-          <div id="f-borough-list" class="fp-list"></div>
-        </div>
-      </div>
-
-      <!-- ---- 2d. YEAR filter ---- -->
-      <div class="fp" id="fp-year">
-        <button class="fp-btn" aria-expanded="false">
-          Year <span class="fp-summary" id="fp-year-summary">All</span>
-        </button>
-        <div class="fp-panel" hidden>
-          <label class="fp-check">
-            <input type="checkbox" id="f-year-all" checked>
-            <span>All years</span>
-          </label>
-          <div id="f-year-list"></div>
-        </div>
-      </div>
-
-      <!-- ---- 2e. Compact filter and layer dropdowns ---- -->
-      <label class="map-mode-control" for="f-map-mode">
-        <span class="hide-phone">Map view</span>
-        <select id="f-map-mode">
-          <option value="risk">Risk-colored points</option>
-          <option value="density">Observation density</option>
-        </select>
-      </label>
-
-      <div class="fp" data-fp="observation-options">
-        <button class="fp-btn" type="button" aria-expanded="false">
-          <span class="hide-phone">Observation filters</span><span class="show-phone">Filters</span> <span id="fp-observation-options-summary" class="fp-summary">All</span>
-        </button>
-        <div class="fp-panel" hidden>
-          <label class="fp-check">
-            <input id="f-approximate-location" type="checkbox">
-            <span>Approximate location only (10–100 m)</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-exact-location" type="checkbox">
-            <span>Precise location only (≤10 m)</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-photo" type="checkbox">
-            <span>With photo only</span>
-          </label>
-          <div class="fp-divider"></div>
-          <div class="fp-group-label">Québec status
-            <button type="button" class="fp-info-link fp-info-inline" data-info="presence">What's this?</button>
-          </div>
-          <div id="f-presence-list">
-            <label class="fp-check"><input type="checkbox" data-presence="Established"><span>Established</span></label>
-            <label class="fp-check"><input type="checkbox" data-presence="Absent"><span>Absent</span></label>
-            <label class="fp-check"><input type="checkbox" data-presence="Single observation"><span>Occasional observation</span></label>
-          </div>
-          <div class="fp-note">Sentinelle records do not include a Québec status and are hidden while this filter is active.</div>
-          <div class="fp-divider"></div>
-          <label class="fp-check">
-            <input id="f-priority" type="checkbox">
-            <span>Québec priority species only</span>
-          </label>
-          <button type="button" class="fp-info-link" data-info="priority">What is a priority species?</button>
-        </div>
-      </div>
-
-      <div class="fp" data-fp="map-layers">
-        <button class="fp-btn" type="button" aria-expanded="false">
-          <span class="hide-phone">Map layers</span><span class="show-phone">Layers</span> <span id="fp-map-layers-summary" class="fp-summary">2 on</span>
-        </button>
-        <div class="fp-panel" hidden>
-          <label class="fp-check">
-            <input type="checkbox" id="f-inat" checked>
-            <span>iNaturalist observations</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-sentinel" type="checkbox">
-            <span>Sentinelle records</span>
-          </label>
-          <label class="fp-check">
-            <input id="f-projects" type="checkbox" checked>
-            <span>Projects &amp; initiatives</span>
-          </label>
-        </div>
-      </div>
-
-      <label class="filter filter-check">
-        <input id="f-clusters" type="checkbox">
-        <span>Group<span class="hide-phone"> nearby observations</span></span>
-      </label>
-
-      <!-- ---- 2f. Reset + live count ---- -->
-      <button id="f-reset" type="button" class="filter-reset">Reset</button>
-      </div>
-      <span id="f-count" class="filter-count"></span>
+      <aside class="home-audience">
+        <h3>Who it's for</h3>
+        <p>
+          People in Montréal who spend time in parks and want to know what's growing there,
+          and students or researchers looking at species records and risk levels.
+        </p>
+      </aside>
     </div>
   </section>
 
-
   <!-- ============================================================
-       3. MAP CONTAINER — Leaflet draws into this div
+       4. FEATURES
        ============================================================ -->
-  <main>
-    <div id="map"></div>
-  </main>
-
-  <button id="trend-open" class="trend-open" type="button" aria-expanded="false"
-          aria-controls="trend-panel">Observation trends</button>
-  <aside id="trend-panel" class="trend-panel" aria-label="Observation records by year" hidden>
-    <div class="trend-head">
-      <div>
-        <h2>Observation records by year</h2>
-        <p>Click a year to filter the map.</p>
-      </div>
-      <button id="trend-close" class="trend-close" type="button" aria-label="Close chart">×</button>
-    </div>
-    <div class="trend-legend" aria-label="Chart sources">
-      <span><i class="trend-swatch trend-swatch-inat"></i>iNaturalist</span>
-      <span><i class="trend-swatch trend-swatch-sentinel"></i>Sentinelle</span>
-    </div>
-    <p class="trend-context">
-      Counts include both sources and follow other filters; the selected year filter is excluded.
-    </p>
-    <div id="trend-chart" class="trend-chart" aria-live="polite"></div>
-    <p class="trend-caveat">
-      These are reported records, not a measure of plant abundance. Changes may reflect reporting
-      effort as well as changes in where plants are found.
-    </p>
-  </aside>
-
-
-  <!-- ============================================================
-       4. BOROUGH STATS PANEL — filled by renderSelectionPanel()
-       ============================================================ -->
-  <aside id="borough-panel" class="borough-panel" hidden>
-    <div class="bp-head">
-      <span class="bp-title" id="bp-title"></span>
-      <div class="bp-actions">
-        <button id="bp-toggle" class="bp-toggle" type="button" aria-label="Minimize panel" aria-expanded="true">▾</button>
-        <button id="bp-close" class="bp-close" type="button" aria-label="Close">×</button>
+  <section class="home-section home-section-alt">
+    <div class="home-wrap">
+      <h2>What's on the map</h2>
+      <div class="home-features">
+        <article class="home-feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+          <h3>Filters</h3>
+          <p>Species, risk level, borough or city, year, location precision and photos.</p>
+        </article>
+        <article class="home-feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="8" r="2.5"/><circle cx="16" cy="6" r="2.5"/><circle cx="12" cy="15" r="2.5"/><circle cx="18" cy="17" r="2.5"/></svg>
+          <h3>Map views</h3>
+          <p>Points colored by risk, or a density view. Nearby points can be grouped into clusters.</p>
+        </article>
+        <article class="home-feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6l5-2 6 2 5-2v14l-5 2-6-2-5 2z"/><path d="M9 4v14M15 6v14"/></svg>
+          <h3>Borough summaries</h3>
+          <p>Click a borough or city to see its observation and project counts and species by risk level.</p>
+        </article>
+        <article class="home-feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+          <h3>Observation trends</h3>
+          <p>A chart of records per year. Click a year to filter the map.</p>
+        </article>
+        <article class="home-feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <h3>Local projects</h3>
+          <p>Control projects run by the city, boroughs and local organizations, with links to their sources.</p>
+        </article>
+        <a class="home-feature home-feature-link" href="site/species.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21c0-9 5-15 15-17-1 10-7 15-15 17z"/><path d="M5 21l8-8"/></svg>
+          <h3>Species catalog</h3>
+          <p>Photos, Québec status and taxonomy for each species.</p>
+        </a>
       </div>
     </div>
-    <div id="bp-body" class="bp-body"></div>
-  </aside>
-
-  <!-- Info dialogs (risk levels, projects) are built by site/info-dialogs.js -->
-
+  </section>
 
   <!-- ============================================================
-       5. MAP STATUS BADGE — top-right count block
+       5. RISK LEVELS
        ============================================================ -->
-  <div id="status" class="map-status">Loading observations…</div>
-
-
-  <!-- ============================================================
-       6. STORY TRIGGER BUTTON — "About this map"
-       ============================================================ -->
-  <button id="story-open" class="story-open" type="button">About this map</button>
-
-
-  <!-- ============================================================
-       7. STORY OVERLAY — the "About this map" modal
-       ============================================================ -->
-  <div id="story-overlay" class="story-overlay" hidden>
-    <div class="story-content">
-      <button id="story-close" class="story-close" aria-label="Close">×</button>
-
-      <!-- ---- 7a. Title ---- -->
-      <h1>Where invasive species have been recorded in Montréal</h1>
-
-      <!-- ---- 7b. Lede — what this map is ---- -->
-      <p class="lede">
-        Invasive plants are affecting Montréal's green spaces, and their spread is uneven as
-        some are established across the island, while others are only starting to appear.
-        This map shows where each species has been recorded by iNaturalist contributors,
-        limited to research-grade observations with a positional accuracy of at most 100 m
-        (records whose location iNaturalist hides are left out), alongside the risk tier assigned by Québec's Ministère de l'Environnement.
-        The data is a snapshot from October 2026 and will be updated periodically.
+  <section class="home-section">
+    <div class="home-wrap">
+      <h2>Risk levels</h2>
+      <p class="home-section-lede">Québec classifies invasive plants by their known risk to biodiversity and the environment.</p>
+      <div class="home-risks">
+        <div class="home-risk" style="--risk:#e63946"><span class="home-risk-dot"></span><h3>High</h3><p>A major threat to biodiversity and to how ecosystems function.</p></div>
+        <div class="home-risk" style="--risk:#f4a261"><span class="home-risk-dot"></span><h3>Moderate</h3><p>May harm some native species or ecosystems, without severe impacts.</p></div>
+        <div class="home-risk" style="--risk:#ffd166"><span class="home-risk-dot"></span><h3>Low</h3><p>Limited impact on biodiversity and ecosystems.</p></div>
+        <div class="home-risk" style="--risk:#adb5bd"><span class="home-risk-dot"></span><h3>Unclassified</h3><p>Impacts in Québec are not yet well enough understood to rate.</p></div>
+      </div>
+      <p class="home-note">
+        Québec also lists 26 priority species for control. Priority considers other factors, such as
+        human health, so a priority species can still be moderate or low risk. See Québec's
+        <a href="https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/E5E862_E86_2026.pdf" target="_blank" rel="noopener noreferrer">risk criteria</a>
+        and <a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes/lutter-especes" target="_blank" rel="noopener noreferrer">priority species</a>.
       </p>
-
-      <!-- ---- 7c. Audience ---- -->
-      <p>
-        <strong>This map is for</strong> nature enthusiasts in Montréal, the
-        people who walk in parks and want to know what's growing there.
-        Researchers and students will also find it useful for exploring species
-        records, risk tiers, etc.
-      </p>
-
-      <!-- ---- 7d. What the reader can do ---- -->
-      <p>
-        <strong>What you can do here:</strong> filter observations by risk tier,
-        species, borough or city, year, location precision, and photo
-        availability. Choose a map view to see risk-colored records, reported
-        observation density. Open “Observation trends” to compare dated records by year from iNaturalist
-        and Sentinelle, and click a year to filter the map.
-        Record counts reflect reporting activity and are not a measure of plant
-        abundance. Density shows reported records, not plant abundance.
-        Observations appear as individual points by default. Turn
-        on “Group nearby observations” to show numbered clusters for iNaturalist
-        and Sentinelle records at wider map views; click a cluster to zoom in.
-        Click an observation to view its details and source, or select a borough
-        or city to see observation and project counts and species totals by risk
-        tier. Turn the project layer on or off, then click a project point to
-        read about the initiative, view its source links, and follow associated
-        species to their catalog entries. Projects sharing a park or island
-        are clustered; projects at different sites remain separate even when
-        they are close together.
-      </p>
-      <p class="story-caveat">
-        <strong>Important:</strong> iNaturalist sightings are not a complete
-        survey. Reporting effort is uneven, so a place with no mapped
-        observations should not be interpreted as a place where the species is
-        absent. Project markers may show an organization or an approximate
-        project area, not an exact treatment site.
-      </p>
-
-      <!-- ---- 7e. Explain Québec's risk levels ---- -->
-      <section class="story-section">
-        <h2>What do the risk levels mean?</h2>
-        <p>
-          Québec classifies harmful invasive plant species by their known risk
-          to biodiversity and the environment:
-        </p>
-        <ul>
-          <li><strong>High risk:</strong> a major threat to biodiversity and the proper functioning of ecosystems.</li>
-          <li><strong>Moderate risk:</strong> may harm some native species or disrupt some ecosystems, but without causing severe impacts.</li>
-          <li><strong>Low risk:</strong> impacts on biodiversity and ecosystems are limited.</li>
-          <li><strong>Undetermined — watch:</strong> impacts and risk in Québec are not yet sufficiently understood.</li>
-        </ul>
-        <p>
-          Québec also identifies 26 priority plant species for control. Priority
-          is based on risk as well as factors such as human-health concerns,
-          local concerns, and how much is known about a species. A species may
-          be a priority even if its risk level is moderate or low; priority and
-          risk are not the same classification.
-        </p>
-        <p>
-          Read Québec's
-          <a href="https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/E5E862_E86_2026.pdf" target="_blank" rel="noopener noreferrer">risk criteria and control guidance</a>
-          and its
-          <a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes/lutter-especes" target="_blank" rel="noopener noreferrer">priority species information</a>.
-        </p>
-      </section>
-
-      <!-- ---- 7f. Boundary: "Not in this iteration" ---- -->
-      <section class="story-section">
-        <h2>Not in this iteration</h2>
-        <p>
-          Green spaces (parks, cemeteries, golf courses) aren't shown as their
-          own layer, because they would clutter the map at this zoom and compete
-          with the observation dots. Selected local projects are shown as
-          separate points. Where a source names a park but not an exact work
-          site, the point marks an approximate location inside that park.
-        </p>
-      </section>
-
-      <!-- ---- 7g. Sources with links + licences ---- -->
-      <section class="story-section">
-        <h2>Sources</h2>
-        <ul>
-          <li>
-            <a href="https://www.inaturalist.org/" target="_blank" rel="noopener">iNaturalist observations</a>,
-            iNaturalist contributors; observation and photo licenses are
-            checked separately and shown in popups. The upper-right map badge
-            shows the date of the latest successful automated data refresh.
-          </li>
-          <li>
-            <a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes-animales/liste-especes#note3" target="_blank" rel="noopener">Liste
-            des espèces exotiques envahissantes</a>, Ministère de l'Environnement,
-            de la Lutte contre les changements climatiques, de la Faune et des
-            Parcs (Québec), accessed October 2026.
-          </li>
-          <li>
-            <a href="https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes" target="_blank" rel="noopener">Sentinelle
-            — Espèces exotiques envahissantes</a>, Ministère de l'Environnement, de la Lutte
-            contre les changements climatiques, de la Faune et des Parcs (Québec), CC-BY 4.0,
-            accessed October 2026. Filtered to the administrative region of Montréal.
-          </li>
-          <li>
-            <a href="https://www.app.geo.ca/en-ca/map-browser/record/9797a946-9da8-41ec-8815-f6b276dec7e9" target="_blank" rel="noopener">Limites
-            administratives de l'agglomération de Montréal</a>, Ville de Montréal,
-            CC-BY 4.0, accessed October 2026.
-          </li>
-          <li>
-            <a href="https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413" target="_blank" rel="noopener">Controlling invasive alien plant species to protect native plants</a>,
-            Ville de Montréal, updated March 20, 2026. Used for project descriptions,
-            target species, and work methods.
-          </li>
-          <li>
-            <a href="https://donnees.montreal.ca/dataset/0f5cc045-9eb1-4e66-b63c-6c783bc7ac44" target="_blank" rel="noopener">Milieu naturel intérieur protégé ou en voie de protection</a>,
-            Ville de Montréal, CC-BY 4.0. Natural-area boundaries were used to
-            derive approximate project point locations, not exact intervention
-            coordinates.
-          </li>
-          <li>
-            <a href="https://donnees.montreal.ca/dataset/2e9e4d2f-173a-4c3d-a5e3-565d79baa27d" target="_blank" rel="noopener">Grands parcs, parcs d'arrondissements et espaces publics</a>,
-            Ville de Montréal, CC-BY 4.0. Used to derive the approximate
-            Frédéric-Back park point.
-          </li>
-          <li>
-            Organization project details link to the original municipal and
-            organization sources in each project popup. These project sources
-            were last checked in October 2026; unlike the iNaturalist data,
-            they are reviewed and updated manually.
-          </li>
-        </ul>
-        <p>
-          Observation records are used for factual metadata, including species
-          identification, observation date, observer username, and location.
-          Observation and photograph licences are checked separately.
-          Photographs are included only when the individual photo's licence
-          permits reuse and its attribution is shown; observation descriptions
-          are not reproduced.
-        </p>
-      </section>
     </div>
-  </div>
-
+  </section>
 
   <!-- ============================================================
-       8. FOOTER
+       6. LIMITATIONS
        ============================================================ -->
+  <section class="home-section home-section-alt">
+    <div class="home-wrap">
+      <h2>Limitations</h2>
+      <ul class="home-caveats">
+        <li><strong>Not a complete survey.</strong> An area with no observations doesn't mean the species isn't there.</li>
+        <li><strong>Counts reflect reporting.</strong> Number of records and density depend on how much people report, not how abundant a plant is.</li>
+        <li><strong>Location accuracy.</strong> All observations are within 100 m: solid outlines are within 10 m, dashed ones 10–100 m. Records with hidden locations are excluded.</li>
+        <li><strong>Project locations are approximate.</strong> A marker may show a park or an organization's address, not the exact work site.</li>
+        <li><strong>Green spaces</strong> (parks, cemeteries, golf courses) aren't shown as a separate layer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       7. SOURCES
+       ============================================================ -->
+  <section class="home-section">
+    <div class="home-wrap">
+      <h2>Sources</h2>
+      <div class="home-sources">
+        <div class="home-source">
+          <h3><a href="https://www.inaturalist.org/" target="_blank" rel="noopener">iNaturalist</a></h3>
+          <p>Research-grade observations by iNaturalist contributors, updated daily<span id="home-updated"></span>. Usernames, photo credits and licenses are shown in each popup.</p>
+        </div>
+        <div class="home-source">
+          <h3><a href="https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes" target="_blank" rel="noopener">Sentinelle</a></h3>
+          <p>Invasive species records from the MELCCFP (Québec), filtered to the Montréal region. CC-BY 4.0.</p>
+        </div>
+        <div class="home-source">
+          <h3><a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/faune/gestion-faune-habitats-fauniques/gestion-especes-exotiques-envahissantes-animales/liste-especes#note3" target="_blank" rel="noopener">Liste des espèces exotiques envahissantes</a></h3>
+          <p>MELCCFP (Québec). Used for risk levels, Québec status and priority species.</p>
+        </div>
+        <div class="home-source">
+          <h3>Ville de Montréal</h3>
+          <p>
+            <a href="https://www.app.geo.ca/en-ca/map-browser/record/9797a946-9da8-41ec-8815-f6b276dec7e9" target="_blank" rel="noopener">Administrative boundaries</a>,
+            <a href="https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413" target="_blank" rel="noopener">invasive plant control projects</a>,
+            <a href="https://donnees.montreal.ca/dataset/0f5cc045-9eb1-4e66-b63c-6c783bc7ac44" target="_blank" rel="noopener">protected natural areas</a> and
+            <a href="https://donnees.montreal.ca/dataset/2e9e4d2f-173a-4c3d-a5e3-565d79baa27d" target="_blank" rel="noopener">parks</a>. CC-BY 4.0.
+          </p>
+        </div>
+      </div>
+      <p class="home-fineprint">
+        Sentinelle, the Québec list, the Montréal datasets and project sources were last checked in October 2026.
+        Photos are only shown when their license allows reuse; observation descriptions are not reproduced.
+      </p>
+    </div>
+  </section>
+
+  <section class="home-cta">
+    <a href="map.html" class="home-preview-btn">Open the map</a>
+    <a href="site/species.html" class="home-btn-secondary">Species catalog</a>
+  </section>
+
   <footer>
-    Records include research-grade
-    <a href="https://www.inaturalist.org/" target="_blank" rel="noopener noreferrer">iNaturalist observations</a>
-    with positional accuracy of 100 m or less (solid outline: within 10 m; dashed: 10–100 m;
-    records with hidden or obscured locations are excluded) and
-    <a href="https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes"
-       target="_blank" rel="noopener noreferrer">Québec Sentinelle records</a>
-    filtered to Montréal's administrative region. iNaturalist usernames, photo credits, and applicable 
-    licenses appear in popups. Québec invasive-species references inform species risk and status. 
-    Sightings are not a complete survey, and no mapped observation does not mean a species is absent. 
-    Project details link to their sources; markers may represent an organization or approximate area 
-    rather than an exact work site.
+    Data: iNaturalist contributors · Gouvernement du Québec (MELCCFP) · Ville de Montréal
   </footer>
 
-
-  <!-- ============================================================
-       9. SCRIPTS — load order matters: turf → Leaflet plugins → app.js
-       ============================================================ -->
-  <script src="https://unpkg.com/@turf/turf@7/turf.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-  <script src="site/priority-species.js"></script>
-  <script src="site/info-dialogs.js?v=25"></script>
-  <script src="site/app.js?v=26"></script>
+  <script>
+    // Date of the last automated iNaturalist refresh (same file as the map's status badge)
+    fetch('data/refresh_metadata.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (m) {
+        if (!m || !m.last_updated || isNaN(Date.parse(m.last_updated))) return;
+        document.getElementById('home-updated').textContent = ' (last on ' +
+          new Date(m.last_updated).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) + ')';
+      })
+      .catch(function () {});
+  </script>
+  <script src="site/tooltips.js?v=1"></script>
 </body>
 </html>

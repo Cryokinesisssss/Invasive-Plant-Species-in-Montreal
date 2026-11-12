@@ -127,6 +127,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+// Data credits (the map page has no footer; full sources are on the home page)
+map.attributionControl.addAttribution(
+  'Data: <a href="https://www.inaturalist.org/" target="_blank" rel="noopener">iNaturalist</a> contributors · ' +
+  '<a href="https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes" target="_blank" rel="noopener">MELCCFP</a> (CC-BY 4.0) · ' +
+  '<a href="https://donnees.montreal.ca/" target="_blank" rel="noopener">Ville de Montréal</a> (CC-BY 4.0) · ' +
+  '<a href="./#about">About</a>'
+);
+
 // ============================================================
 // 2. RISK → STYLE MAPPING — dot colours and labels
 //    Change a colour here to recolour every dot of that tier.
@@ -137,6 +145,22 @@ const RISK_STYLE = {
   low:      { color: '#7a6000', fillColor: '#ffd166', label: 'Low risk' },
   unknown:  { color: '#444',    fillColor: '#adb5bd', label: 'Unclassified' }
 };
+
+// ---- Hovered iNaturalist dot (one at a time) ----
+let hoveredDot = null;
+function clearHoveredDot() {
+  if (!hoveredDot) return;
+  hoveredDot.layer.setStyle(hoveredDot.base);
+  hoveredDot = null;
+}
+function setHoveredDot(layer, base) {
+  if (hoveredDot && hoveredDot.layer === layer) return;
+  clearHoveredDot();
+  hoveredDot = { layer: layer, base: base };
+  layer.setStyle({ radius: base.radius + 2.5, weight: base.weight + 1, color: '#111' });
+  layer.bringToFront();
+}
+map.on('mouseout movestart zoomstart popupopen', clearHoveredDot);
 
 function styleFor(props) {
   return RISK_STYLE[props.risk] || RISK_STYLE.unknown;
@@ -636,17 +660,33 @@ const trendOpen = document.getElementById('trend-open');
 const trendClose = document.getElementById('trend-close');
 const trendPanel = document.getElementById('trend-panel');
 
+const mapSidebar = document.getElementById('map-sidebar');
+const summaryTab = document.getElementById('sb-tab-summary');
+
+// Desktop: "Summary" and "Observation trends" are tabs in the sidebar.
+// Phone: the trends button still opens its own sheet.
+function setTrendOpen(open) {
+  trendPanel.hidden = !open;
+  trendOpen.setAttribute('aria-expanded', String(open));
+  trendOpen.setAttribute('aria-selected', String(open));
+  trendOpen.classList.toggle('is-active', open);
+  if (summaryTab) {
+    summaryTab.classList.toggle('is-active', !open);
+    summaryTab.setAttribute('aria-selected', String(!open));
+  }
+  if (mapSidebar) mapSidebar.dataset.tab = open ? 'trends' : 'summary';
+  if (open) renderObservationTrendChart();
+}
+
 if (trendOpen && trendClose && trendPanel) {
   trendOpen.addEventListener('click', function () {
-    trendPanel.hidden = false;
-    trendOpen.setAttribute('aria-expanded', 'true');
-    renderObservationTrendChart();
-    trendClose.focus();
+    setTrendOpen(true);
+    if (window.matchMedia('(max-width: 700px)').matches) trendClose.focus();
   });
+  if (summaryTab) summaryTab.addEventListener('click', function () { setTrendOpen(false); });
 
   function closeTrendPanel() {
-    trendPanel.hidden = true;
-    trendOpen.setAttribute('aria-expanded', 'false');
+    setTrendOpen(false);
     trendOpen.focus();
   }
 
@@ -822,6 +862,18 @@ function buildObsLayer() {
         html += '<div class="popup-license"><span class="popup-license-label">Observation license:</span> ' + escapeHtml(license) + '</div>';
 
         layer.bindPopup(html, popupOptions({ maxWidth: 300, minWidth: 260 }));
+
+        // Hover: keep the risk colour, just grow the dot and darken its outline.
+        // (In "group nearby" mode the dots are HTML markers; style.css handles those.)
+        if (layer instanceof L.CircleMarker) {
+          const base = {
+            radius: layer.options.radius,
+            weight: layer.options.weight,
+            color: layer.options.color
+          };
+          layer.on('mouseover', function () { setHoveredDot(layer, base); });
+          layer.on('mouseout', function () { if (hoveredDot && hoveredDot.layer === layer) clearHoveredDot(); });
+        }
       }
     }
   );
@@ -1343,6 +1395,7 @@ function buildBoroughList() {
       if (cb.checked) filterState.boroughs.add(name);
       else filterState.boroughs.delete(name);
       syncBoroughMeta();
+      clearClickedBorough();
       updateSummaries();
       buildObsLayer();
       buildSentinelLayer();
@@ -1350,6 +1403,14 @@ function buildBoroughList() {
       renderSelectionPanel();
     });
   });
+}
+
+// A borough clicked on the map takes priority in the summary panel. When the
+// Borough / City filter changes, drop that click so the summary follows the filter.
+function clearClickedBorough() {
+  selectedBorough = null;
+  selectedBoroughName = null;
+  selectedIsUnion = false;
 }
 
 function syncBoroughMeta() {
@@ -1373,6 +1434,7 @@ document.getElementById('f-borough-all').addEventListener('change', function (e)
   });
   const metro = document.getElementById('f-borough-metro');
   if (metro) metro.checked = false;
+  clearClickedBorough();
   updateSummaries();
   buildObsLayer();
   buildSentinelLayer();
@@ -1387,6 +1449,7 @@ document.getElementById('f-borough-metro').addEventListener('change', function (
   } else {
     filterState.boroughs.delete('__boroughs__');
   }
+  clearClickedBorough();
   updateSummaries();
   buildObsLayer();
   buildSentinelLayer();
@@ -1543,9 +1606,15 @@ document.getElementById('f-reset').addEventListener('click', function () {
 
 
 // ============================================================
-// 15. LEGEND — bottom-right risk legend
+// 15. LEGEND — bottom-left on desktop (the sidebar is on the right),
+//     bottom-right on phones (beside the minimized summary bar)
 // ============================================================
-const legend = L.control({ position: 'bottomright' });
+const LEGEND_PHONE_QUERY = window.matchMedia('(max-width: 700px)');
+const legend = L.control({ position: LEGEND_PHONE_QUERY.matches ? 'bottomright' : 'bottomleft' });
+LEGEND_PHONE_QUERY.addEventListener('change', function (e) {
+  legend.setPosition(e.matches ? 'bottomright' : 'bottomleft');
+  positionTrendButton();
+});
 let legendElement = null;
 function updateMapLegend() {
   if (!legendElement) return;
@@ -1703,13 +1772,62 @@ PHONE_QUERY.addEventListener('change', function (e) { setBoroughPanelCollapsed(e
 
 if (BP_HEAD) BP_HEAD.addEventListener('click', function (e) {
   if (BP_CLOSE && BP_CLOSE.contains(e.target)) return;
+  if (!PHONE_QUERY.matches) return;   // desktop: docked column, nothing to minimize
   setBoroughPanelCollapsed(!BOROUGH_PANEL.classList.contains('is-collapsed'));
 });
 if (BP_CLOSE) BP_CLOSE.addEventListener('click', closeBoroughPanel);
+// After a clicked borough is deselected, go back to what the filter shows.
+function afterBoroughDeselect() {
+  applyBoroughHighlightFromFilter();
+  openTiers.clear();
+  projectOrganizationsOpen = false;
+  if (PHONE_QUERY.matches) closeBoroughPanel();
+  else renderSelectionPanel();
+}
+
 function closeBoroughPanel() {
   if (BOROUGH_PANEL) BOROUGH_PANEL.hidden = true;
   openTiers.clear();
   projectOrganizationsOpen = false;
+  syncPanelReopen();
+}
+
+// "Show sidebar" button on the map. Desktop: shown while the sidebar is
+// hidden with «. Phone: shown while the summary sheet is closed with ×.
+const BP_REOPEN   = document.getElementById('bp-reopen');
+const MAP_SIDEBAR = document.getElementById('map-sidebar');
+const SB_COLLAPSE = document.getElementById('sb-collapse');
+function syncPanelReopen() {
+  if (!BP_REOPEN || !BOROUGH_PANEL) return;
+  BP_REOPEN.hidden = PHONE_QUERY.matches
+    ? !BOROUGH_PANEL.hidden
+    : !(MAP_SIDEBAR && MAP_SIDEBAR.classList.contains('is-closed'));
+}
+if (SB_COLLAPSE && MAP_SIDEBAR) SB_COLLAPSE.addEventListener('click', function () {
+  MAP_SIDEBAR.classList.add('is-closed');
+  syncPanelReopen();
+});
+if (BP_REOPEN) {
+  L.DomEvent.disableClickPropagation(BP_REOPEN);
+  BP_REOPEN.addEventListener('click', function () {
+    if (PHONE_QUERY.matches) {
+      renderSelectionPanel();
+      setBoroughPanelCollapsed(false);
+    } else if (MAP_SIDEBAR) {
+      MAP_SIDEBAR.classList.remove('is-closed');
+    }
+    syncPanelReopen();
+  });
+}
+PHONE_QUERY.addEventListener('change', syncPanelReopen);
+
+// The docked panel changes the map's width when it opens or closes;
+// tell Leaflet so tiles and clicks line up.
+if (window.ResizeObserver) {
+  new ResizeObserver(function () {
+    map.invalidateSize({ pan: false });
+    positionTrendButton();
+  }).observe(document.getElementById('map'));
 }
 
 const TIER_INFO = {
@@ -1802,6 +1920,29 @@ function statsFor(obsList) {
   return { byTier: byTier, speciesByTier: speciesByTier };
 }
 
+// ---- Projects follow the Borough / City and Species filters ----
+// Species: a project is kept if any of its target species is selected
+// (matched on genus + species, so subspecies still match).
+function projectMatchesSpeciesFilter(feature) {
+  if (filterState.species.size === 0) return true;
+  const wanted = new Set();
+  filterState.species.forEach(function (key) {
+    const sci = key.split('|')[1] || key.split('|')[0];
+    const b = latinBinomial(sci);
+    if (b) wanted.add(b);
+  });
+  const species = (feature.properties && feature.properties.species) || [];
+  return species.some(function (s) {
+    return s && wanted.has(latinBinomial(s.scientific));
+  });
+}
+
+function projectPassesFilters(feature) {
+  const g = feature.geometry;
+  if (!g || g.type !== 'Point' || !Array.isArray(g.coordinates)) return false;
+  return inSelectedBoroughs(feature) && projectMatchesSpeciesFilter(feature);
+}
+
 function projectsInSelection() {
   if (!projectsLoaded) return null;
 
@@ -1819,10 +1960,11 @@ function projectsInSelection() {
     }
   }
 
-  if (!polygons.length) return projectFeatures;
+  const candidates = projectFeatures.filter(projectMatchesSpeciesFilter);
+  if (!polygons.length) return candidates;
   if (!window.turf) return [];
 
-  return projectFeatures.filter(function (feature) {
+  return candidates.filter(function (feature) {
     const geometry = feature.geometry;
     if (!geometry || geometry.type !== 'Point' || !Array.isArray(geometry.coordinates)) return false;
     const point = turf.point(geometry.coordinates);
@@ -1879,7 +2021,9 @@ function renderSelectionPanel() {
 
   BP_TITLE.textContent = label;
 
-  if (full.length > 3) {
+  // 2+ places selected: hover the title to see the full list
+  BP_TITLE.removeAttribute('data-tip');   // set by site/tooltips.js on hover
+  if (full.length >= 2) {
     BP_TITLE.title = full.join('\n');
     BP_TITLE.classList.add('has-overflow');
   } else {
@@ -1920,6 +2064,7 @@ function renderSelectionPanel() {
 
   BP_BODY.innerHTML = html;
   BOROUGH_PANEL.hidden = false;
+  syncPanelReopen();
 
   BP_BODY.querySelectorAll('.bp-tier').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -1991,11 +2136,8 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
           L.DomEvent.stopPropagation(e);
           const same = selectedBorough === feature;
           if (same) {
-            selectedBorough = null;
-            selectedBoroughName = null;
-            selectedIsUnion = false;
-            clearHighlight();
-            closeBoroughPanel();
+            clearClickedBorough();
+            afterBoroughDeselect();
             return;
           }
           selectedBorough = feature;
@@ -2013,11 +2155,10 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
 
     // ---- 18d. Click empty map → clear selection ----
     map.on('click', function () {
-      selectedBorough = null;
-      selectedBoroughName = null;
-      selectedIsUnion = false;
-      clearHighlight();
-      closeBoroughPanel();
+      // Desktop: with nothing selected, leave the sidebar summary alone
+      if (!selectedBorough && !selectedIsUnion && !PHONE_QUERY.matches) return;
+      clearClickedBorough();
+      afterBoroughDeselect();
     });
 
     applyBoroughHighlightFromFilter();
@@ -2093,6 +2234,7 @@ function buildSentinelLayer() {
     sentinelLayer = null;
   }
   renderObservationTrendChart();
+  buildProjectLayer();   // projects follow the same borough / species filters
   if (mapMode !== 'risk' || !sentinelVisible || sentinelFeatures.length === 0) {
     scheduleThematicMapLayerUpdate();
     return;
@@ -2105,19 +2247,15 @@ function buildSentinelLayer() {
     {
       // ---- 21a. Square marker instead of a circle ----
       pointToLayer: function (feature, latlng) {
-        const p = feature.properties;
-        const fill = ({
-          high:     '#e63946',
-          moderate: '#f4a261',
-          low:      '#ffd166',
-          unknown:  '#adb5bd'
-        })[p.risk] || '#adb5bd';
-
+        // Same risk colours and dark outline as the iNaturalist circles,
+        // just square (see .sentinel-marker in style.css)
+        const s = styleFor(feature.properties);
         const sq = L.divIcon({
           className: 'sentinel-square',
-          html: '<div style="width:11px;height:11px;background:' + fill + ';border:2px solid #fbf8f8;box-sizing:border-box;"></div>',
-          iconSize: [13, 13],
-          iconAnchor: [5, 5]
+          html: '<span class="sentinel-marker" style="--marker-stroke:' + s.color +
+            ';--marker-fill:' + s.fillColor + ';"></span>',
+          iconSize: [11, 11],
+          iconAnchor: [5.5, 5.5]
         });
         return L.marker(latlng, { icon: sq, pane: 'sentinelPane' });
       },
@@ -2269,6 +2407,8 @@ fetch('data/sentinel_wgs84.geojson')
 map.createPane('projectPane');
 map.getPane('projectPane').style.zIndex = 660;
 
+const PROJECT_PIN_SVG = '<svg viewBox="0 0 24 32" width="24" height="32" aria-hidden="true"><path class="pin-body" d="M12 1.2C6.1 1.2 1.6 5.6 1.6 11.4c0 7.5 10.4 19.4 10.4 19.4s10.4-11.9 10.4-19.4C22.4 5.6 17.9 1.2 12 1.2z"/><path class="pin-sprout" d="M12 17.2v-5.6M12 11.6c0-2.6-1.9-4.3-4.6-4.3 0 2.6 1.9 4.3 4.6 4.3zM12 13c0-2.4 1.8-4 4.3-4 0 2.4-1.8 4-4.3 4z"/></svg>';
+
 function buildProjectLayer() {
   if (projectLayer) {
     map.removeLayer(projectLayer);
@@ -2280,11 +2420,15 @@ function buildProjectLayer() {
     pointToLayer: function (feature, latlng) {
       return L.marker(latlng, {
         pane: 'projectPane',
+        // Map pin with a sprout: projects are places where work happens,
+        // so they look different from the observation dots and squares
         icon: L.divIcon({
           className: 'project-marker-icon',
-          html: '<span></span>',
-          iconSize: [20, 20],
-          iconAnchor: [10, 10]
+          html: PROJECT_PIN_SVG,
+          iconSize: [24, 32],
+          iconAnchor: [12, 31],      // tip of the pin sits on the location
+          popupAnchor: [0, -28],
+          tooltipAnchor: [0, -24]
         })
       });
     },
@@ -2366,7 +2510,7 @@ function buildProjectLayer() {
   };
 
   const projectSiteGroups = new Map();
-  projectFeatures.forEach(function (feature, index) {
+  projectFeatures.filter(projectPassesFilters).forEach(function (feature, index) {
     const properties = feature.properties || {};
     const siteGroup = typeof properties.cluster_group === 'string'
       ? properties.cluster_group.trim()
@@ -2389,27 +2533,27 @@ function buildProjectLayer() {
       return;
     }
 
+    // Several projects at one site: one pin with a count badge.
+    // Clicking fans the pins out on the spot (no zooming in).
     const siteCluster = L.markerClusterGroup({
       clusterPane: 'projectPane',
       maxClusterRadius: 50,
-      maxClusterZoom: 20,
       showCoverageOnHover: false,
-      spiderfyOnMaxZoom: true,
-      zoomToBoundsOnClick: true,
+      zoomToBoundsOnClick: false,
+      spiderfyOnMaxZoom: false,
+      spiderLegPolylineOptions: { weight: 1.5, color: '#1D4E89', opacity: 0.6 },
       iconCreateFunction: function (cluster) {
         const count = cluster.getChildCount();
-        const sizeClass = count < 10 ? 'small' : 'large';
-        const size = count < 10 ? 32 : 40;
         return L.divIcon({
-          html: '<div class="project-cluster project-cluster-' + sizeClass +
-            '" title="Click to zoom in or separate projects at this site">' +
-            count.toLocaleString() + '</div>',
-          className: '',
-          iconSize: [size, size],
-          iconAnchor: [size / 2, size / 2]
+          html: '<span class="project-pin-wrap" title="' + count + ' projects at this site. Click to show them.">' +
+            PROJECT_PIN_SVG + '<span class="project-pin-count">' + count + '</span></span>',
+          className: 'project-marker-icon project-cluster-pin',
+          iconSize: [24, 32],
+          iconAnchor: [12, 31]
         });
       }
     });
+    siteCluster.on('clusterclick', function (e) { e.layer.spiderfy(); });
     siteCluster.addLayer(siteLayer);
     projectLayer.addLayer(siteCluster);
   });

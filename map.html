@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Map — Invasive Plant Species in Montréal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="site/style.css?v=41" />
+</head>
+<body class="map-page compact-filters">
+
+  <!-- ============================================================
+       1. TOP NAVIGATION — brand + Map / Species Catalog links
+       ============================================================ -->
+  <nav class="topnav">
+    <a href="./" class="topnav-brand">Invasive Plant Species in Montreal</a>
+    <a href="./" class="topnav-link">Home</a>
+    <a href="map.html" class="topnav-link active">Map</a>
+    <a href="site/species.html" class="topnav-link">Species Catalog</a>
+    <a href="./#about" class="topnav-link">About</a>
+  </nav>
+
+
+  <!-- ============================================================
+       2. FILTER BAR — everything the reader can turn on/off
+       ============================================================ -->
+  <section class="filters" aria-label="Filter observations">
+    <div class="filter-row">
+      <!-- Chips row: becomes one compact scrollable row on phones -->
+      <div class="filter-chips">
+
+      <!-- ---- 2a. SPECIES filter (search + checkboxes) ---- -->
+      <div class="fp">
+        <button class="fp-btn" type="button" aria-expanded="false">
+          Species <span class="fp-summary" id="fp-species-summary">All</span>
+        </button>
+        <div class="fp-panel fp-panel-wide" hidden>
+          <input type="search" id="f-species-search" class="fp-search"
+                 placeholder="Search by common or Latin name…" autocomplete="off">
+          <div class="species-suggest" id="f-species-suggest" hidden></div>
+          <label class="fp-check fp-check-all">
+            <input type="checkbox" id="f-species-all"> <span>All species</span>
+          </label>
+          <div class="fp-divider"></div>
+          <div class="fp-list" id="f-species-list"></div>
+        </div>
+      </div>
+
+      <!-- ---- 2b. RISK filter (high / moderate / low / unknown) ---- -->
+      <div class="fp" data-fp="risk">
+        <button id="fp-risk-btn" class="fp-btn" type="button" aria-expanded="false">
+          Risk <span id="fp-risk-summary" class="fp-summary">All</span>
+        </button>
+        <div id="fp-risk-panel" class="fp-panel" hidden>
+          <label class="fp-check fp-check-all">
+            <input id="f-risk-all" type="checkbox" checked />
+            <span>All risk levels</span>
+          </label>
+          <div class="fp-list">
+            <label class="fp-check"><input type="checkbox" data-risk="high" checked><span>High risk</span></label>
+            <label class="fp-check"><input type="checkbox" data-risk="moderate" checked><span>Moderate risk</span></label>
+            <label class="fp-check"><input type="checkbox" data-risk="low" checked><span>Low risk</span></label>
+            <label class="fp-check"><input type="checkbox" data-risk="unknown" checked><span>Unclassified</span></label>
+          </div>
+          <div class="fp-divider"></div>
+          <button type="button" class="fp-info-link" data-info="risk">What do these risk levels mean?</button>
+        </div>
+      </div>
+
+      <!-- ---- 2c. BOROUGH / CITY filter ---- -->
+      <div class="fp" data-fp="borough">
+        <button id="fp-borough-btn" class="fp-btn" type="button" aria-expanded="false">
+          Borough<span class="hide-phone"> / City</span> <span id="fp-borough-summary" class="fp-summary">All</span>
+        </button>
+        <div id="fp-borough-panel" class="fp-panel fp-panel-wide" hidden>
+          <label class="fp-check fp-check-all">
+            <input id="f-borough-all" type="checkbox" checked />
+            <span>All</span>
+          </label>
+          <label class="fp-check fp-check-special">
+            <input id="f-borough-metro" type="checkbox" />
+            <span>Boroughs of Montreal</span>
+          </label>
+          <div class="fp-divider"></div>
+          <div id="f-borough-list" class="fp-list"></div>
+        </div>
+      </div>
+
+      <!-- ---- 2d. YEAR filter ---- -->
+      <div class="fp" id="fp-year">
+        <button class="fp-btn" aria-expanded="false">
+          Year <span class="fp-summary" id="fp-year-summary">All</span>
+        </button>
+        <div class="fp-panel" hidden>
+          <label class="fp-check">
+            <input type="checkbox" id="f-year-all" checked>
+            <span>All years</span>
+          </label>
+          <div id="f-year-list"></div>
+        </div>
+      </div>
+
+      <!-- ---- 2e. Compact filter and layer dropdowns ---- -->
+      <label class="map-mode-control" for="f-map-mode">
+        <span class="hide-phone">Map view</span>
+        <select id="f-map-mode">
+          <option value="risk">Risk-colored points</option>
+          <option value="density">Observation density</option>
+        </select>
+      </label>
+
+      <div class="fp" data-fp="observation-options">
+        <button class="fp-btn" type="button" aria-expanded="false">
+          <span class="hide-phone">Observation filters</span><span class="show-phone">Filters</span> <span id="fp-observation-options-summary" class="fp-summary">All</span>
+        </button>
+        <div class="fp-panel" hidden>
+          <label class="fp-check">
+            <input id="f-approximate-location" type="checkbox">
+            <span>Approximate location only (10–100 m)</span>
+          </label>
+          <label class="fp-check">
+            <input id="f-exact-location" type="checkbox">
+            <span>Precise location only (≤10 m)</span>
+          </label>
+          <label class="fp-check">
+            <input id="f-photo" type="checkbox">
+            <span>With photo only</span>
+          </label>
+          <div class="fp-divider"></div>
+          <div class="fp-group-label">Québec status
+            <button type="button" class="fp-info-link fp-info-inline" data-info="presence">What's this?</button>
+          </div>
+          <div id="f-presence-list">
+            <label class="fp-check"><input type="checkbox" data-presence="Established"><span>Established</span></label>
+            <label class="fp-check"><input type="checkbox" data-presence="Absent"><span>Absent</span></label>
+            <label class="fp-check"><input type="checkbox" data-presence="Single observation"><span>Occasional observation</span></label>
+          </div>
+          <div class="fp-note">Sentinelle records do not include a Québec status and are hidden while this filter is active.</div>
+          <div class="fp-divider"></div>
+          <label class="fp-check">
+            <input id="f-priority" type="checkbox">
+            <span>Québec priority species only</span>
+          </label>
+          <button type="button" class="fp-info-link" data-info="priority">What is a priority species?</button>
+        </div>
+      </div>
+
+      <div class="fp" data-fp="map-layers">
+        <button class="fp-btn" type="button" aria-expanded="false">
+          <span class="hide-phone">Map layers</span><span class="show-phone">Layers</span> <span id="fp-map-layers-summary" class="fp-summary">2 on</span>
+        </button>
+        <div class="fp-panel" hidden>
+          <label class="fp-check">
+            <input type="checkbox" id="f-inat" checked>
+            <span>iNaturalist observations</span>
+          </label>
+          <label class="fp-check">
+            <input id="f-sentinel" type="checkbox">
+            <span>Sentinelle records</span>
+          </label>
+          <label class="fp-check">
+            <input id="f-projects" type="checkbox" checked>
+            <span>Projects &amp; initiatives</span>
+          </label>
+        </div>
+      </div>
+
+      <label class="filter filter-check">
+        <input id="f-clusters" type="checkbox">
+        <span>Group<span class="hide-phone"> nearby observations</span></span>
+      </label>
+
+      <!-- ---- 2f. Reset + live count ---- -->
+      <button id="f-reset" type="button" class="filter-reset">Reset</button>
+      </div>
+      <span id="f-count" class="filter-count"></span>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       3. MAP CONTAINER — Leaflet draws into this div
+       ============================================================ -->
+  <main>
+    <div id="map">
+      <button id="bp-reopen" class="bp-reopen" type="button" hidden>Show sidebar</button>
+    </div>
+
+    <!-- ============================================================
+         4. SIDEBAR — counts, Summary / Trends tabs.
+            Desktop: a column docked right of the map, so nothing floats on it.
+            Phone: display:contents — each part keeps its own phone layout.
+         ============================================================ -->
+    <div id="map-sidebar" class="map-sidebar" data-tab="summary">
+      <div id="status" class="map-status">Loading observations…</div>
+
+      <div class="sb-tabs" role="tablist">
+        <button id="sb-tab-summary" class="sb-tab is-active" type="button" role="tab" aria-selected="true">Summary</button>
+        <button id="trend-open" class="trend-open sb-tab" type="button" aria-expanded="false" role="tab" aria-selected="false"
+                aria-controls="trend-panel">Observation trends</button>
+        <button id="sb-collapse" class="sb-collapse" type="button" aria-label="Hide sidebar" title="Hide sidebar">»</button>
+      </div>
+
+      <aside id="borough-panel" class="borough-panel" hidden>
+        <div class="bp-head">
+          <span class="bp-title" id="bp-title"></span>
+          <div class="bp-actions">
+            <button id="bp-toggle" class="bp-toggle" type="button" aria-label="Minimize panel" aria-expanded="true">▾</button>
+            <button id="bp-close" class="bp-close" type="button" aria-label="Close">×</button>
+          </div>
+        </div>
+        <div id="bp-body" class="bp-body"></div>
+      </aside>
+
+      <aside id="trend-panel" class="trend-panel" aria-label="Observation records by year" hidden>
+        <div class="trend-head">
+          <div>
+            <h2>Observation records by year</h2>
+            <p>Click a year to filter the map.</p>
+          </div>
+          <button id="trend-close" class="trend-close" type="button" aria-label="Close chart">×</button>
+        </div>
+        <div class="trend-legend" aria-label="Chart sources">
+          <span><i class="trend-swatch trend-swatch-inat"></i>iNaturalist</span>
+          <span><i class="trend-swatch trend-swatch-sentinel"></i>Sentinelle</span>
+        </div>
+        <p class="trend-context">
+          Counts include both sources and follow other filters; the selected year filter is excluded.
+        </p>
+        <div id="trend-chart" class="trend-chart" aria-live="polite"></div>
+        <p class="trend-caveat">
+          These are reported records, not a measure of plant abundance. Changes may reflect reporting
+          effort as well as changes in where plants are found.
+        </p>
+      </aside>
+    </div>
+  </main>
+
+
+  <!-- Info dialogs (risk levels, projects) are built by site/info-dialogs.js -->
+
+
+  <!-- ============================================================
+       9. SCRIPTS — load order matters: turf → Leaflet plugins → app.js
+       ============================================================ -->
+  <script src="https://unpkg.com/@turf/turf@7/turf.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="site/priority-species.js"></script>
+  <script src="site/info-dialogs.js?v=25"></script>
+  <script src="site/tooltips.js?v=1"></script>
+  <script src="site/app.js?v=39"></script>
+</body>
+</html>

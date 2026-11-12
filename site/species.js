@@ -1006,7 +1006,7 @@ function renderCard(s) {
   const counts = OBS_COUNTS[s.sci];
   const hasObs = counts && (counts.inat > 0 || counts.sentinel > 0);
   const mapBtn = hasObs
-    ? '<a class="species-map-btn" href="../?species=' + encodeURIComponent(s.sci) + '">View in map</a>'
+    ? '<a class="species-map-btn" href="../map.html?species=' + encodeURIComponent(s.sci) + '">View in map</a>'
     : '<span class="species-map-btn is-empty" title="No mapped observations in Montréal">Not on map</span>';
 
   const projectBtn = hasProj

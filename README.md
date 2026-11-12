@@ -38,8 +38,9 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 
 ## How to run
 1. Open the project folder in VS Code.
-2. Right-click `site/index.html`, Open with Live Server
-   (**rooted at the project folder**, so `../data/` resolves).
+2. Right-click `index.html` (the home page), Open with Live Server
+   (**rooted at the project folder**, so `data/` resolves). The map itself
+   is `map.html`; the species catalog is `site/species.html`.
 3. Run `notebooks/ChecksPassed.ipynb` top-to-bottom to regenerate
    `data/places.geojson`; observations outside the Montréal borough/city
    boundaries are excluded, and the final check cell verifies the result.

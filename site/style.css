@@ -124,7 +124,9 @@ body {
   border-bottom: 1px solid #e3e3e3;
   padding: 8px 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  z-index: 600;
+  /* Must sit above every map overlay (legend/zoom 1000, borough panel 1000-1200,
+     trends 1100): the dropdowns live inside this bar and can't rise above it. */
+  z-index: 1500;
   flex-shrink: 0;
   position: relative;   /* stacking context so popovers can float above Leaflet */
 }
@@ -507,16 +509,26 @@ footer a {
   background: transparent;
 }
 
-.project-marker-icon span {
+.project-marker-icon svg {
   display: block;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: #1D4E89;
-  box-shadow: 0 0 0 1px #1D4E89;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  transform-origin: 50% 100%;      /* grow from the tip on hover */
+  transition: transform 0.1s;
 }
+.project-marker-icon .pin-body {
+  fill: #1D4E89;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+.project-marker-icon .pin-sprout {
+  fill: #fff;
+  stroke: #fff;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.project-marker-icon:hover svg { transform: scale(1.15); }
 
 .project-cluster {
   display: flex;
@@ -946,15 +958,18 @@ footer a {
 }
 
 .legend .swatch-sentinel {
-  background: #40916c;
-  border: 1.5px solid #444;
+  background: #e9ecef;
+  border: 1.5px solid #666;
   border-radius: 2px;
 }
 
 .legend .swatch-project {
-  background: #1D4E89;
-  border: 1.5px solid #fff;
-  box-shadow: 0 0 0 1px #1D4E89;
+  width: 12px;
+  height: 16px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M12 1.2C6.1 1.2 1.6 5.6 1.6 11.4c0 7.5 10.4 19.4 10.4 19.4s10.4-11.9 10.4-19.4C22.4 5.6 17.9 1.2 12 1.2z' fill='%231D4E89' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M12 17.2v-5.6M12 11.6c0-2.6-1.9-4.3-4.6-4.3 0 2.6 1.9 4.3 4.6 4.3zM12 13c0-2.4 1.8-4 4.3-4 0 2.4-1.8 4-4.3 4z' fill='%23fff' stroke='%23fff' stroke-width='1.3' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .legend .swatch-dashed {
@@ -1600,7 +1615,7 @@ footer a {
 }
 
 .bp-title.has-overflow {
-  cursor: help;
+  cursor: default;
   text-decoration: underline dotted rgba(255, 255, 255, 0.45);
   text-underline-offset: 3px;
 }
@@ -1912,7 +1927,7 @@ a.species-credit:hover { text-decoration: underline; }
   border: 1px solid #e3e3e3;
   border-radius: 9px;
   line-height: 1.4;
-  cursor: help;
+  cursor: default;
 }
 
 .sc-dot {
@@ -2434,9 +2449,24 @@ a.species-credit:hover { text-decoration: underline; }
   background: transparent;
   border: none;
 }
-.sentinel-square:hover > div {
-  background: #52b788 !important;
-  border-color: #121212 !important;
+.sentinel-marker {
+  display: block;
+  width: 11px;
+  height: 11px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--marker-stroke);
+  border-radius: 2px;
+  background: var(--marker-fill);
+  opacity: 0.9;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.75);   /* thin halo so it reads on any basemap */
+  transition: transform 0.08s;
+}
+/* Hover: keep the risk colour, just grow the square and darken its outline */
+.sentinel-square:hover { z-index: 10000 !important; }
+.sentinel-square:hover > .sentinel-marker {
+  transform: scale(1.4);
+  border-color: #111;
+  opacity: 1;
 }
 
 @media (max-width: 700px) {
@@ -2948,3 +2978,534 @@ button.pill-priority:hover { filter: brightness(0.95); }
 @media (max-width: 999px) {
   .compact-filters .filter-help { margin-left: -2px; }
 }
+
+
+/* ============================================================
+   23. HOME PAGE — landing page: hero, blurred map preview, About sections
+   ============================================================ */
+a.topnav-brand { text-decoration: none; }
+a.story-open { text-decoration: none; }
+
+body.home-page {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  overflow: auto;
+  background: #fff;
+}
+html:has(body.home-page) { scroll-behavior: smooth; }
+
+/* ---- Hero ---- */
+.home-main {
+  display: block;          /* the map page makes <main> a flex row; stack here */
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 20px 28px;
+}
+.home-hero {
+  max-width: 760px;
+  margin: 0 auto 18px;
+  text-align: center;
+}
+.home-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.15;
+  color: var(--brand-dark);
+  letter-spacing: -0.02em;
+}
+.home-tagline {
+  margin: 0 auto;
+  max-width: 620px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #3a3f47;
+}
+
+/* ---- Blurred map preview: the whole rectangle opens the map ---- */
+.home-preview {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  max-height: 52vh;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #cfe3ea;
+  box-shadow: 0 10px 34px rgba(15, 42, 29, 0.2);
+  text-decoration: none;
+}
+.home-preview img {
+  position: absolute;
+  inset: -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 24px);
+  max-width: none;
+  object-fit: cover;
+  filter: blur(3px) saturate(0.95);
+  transform: scale(1.02);
+  transition: filter 0.25s, transform 0.4s;
+}
+.home-preview-cta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.25s;
+}
+.home-preview-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--brand-dark);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+  transition: background 0.15s, transform 0.15s;
+}
+.home-preview:hover img,
+.home-preview:focus-visible img { filter: blur(1.5px); transform: scale(1.05); }
+.home-preview:hover .home-preview-cta { background: rgba(255, 255, 255, 0); }
+.home-preview:hover .home-preview-btn,
+.home-preview-btn:hover { background: #2D6A4F; transform: translateY(-1px); }
+.home-preview:focus-visible { outline: 3px solid var(--brand-accent); outline-offset: 3px; }
+
+
+/* ---- Shared section layout ---- */
+.home-section { padding: 56px 20px; }
+.home-section-alt { background: #f3f6f2; }
+.home-wrap { max-width: 1040px; margin: 0 auto; }
+.home-section h2 {
+  margin: 0 0 18px;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.2;
+  color: var(--brand-dark);
+  letter-spacing: -0.01em;
+}
+.home-section p { line-height: 1.6; color: #333; }
+.home-section a { color: var(--brand-dark); text-underline-offset: 2px; }
+.home-section-lede { margin: -8px 0 22px; font-size: 15.5px; }
+
+/* ---- Intro + audience ---- */
+.home-intro {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.home-intro p { font-size: 16.5px; margin: 0; }
+.home-audience {
+  padding: 22px 24px;
+  border-radius: 12px;
+  background: #f3f6f2;
+  border-left: 4px solid var(--brand-accent);
+}
+.home-audience h3 { margin: 0 0 10px; font-size: 15px; color: var(--brand-dark); }
+.home-audience p { margin: 0; font-size: 14.5px; }
+
+/* ---- Feature cards ---- */
+.home-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.home-feature {
+  display: block;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e1e8e2;
+  color: inherit;
+  text-decoration: none;
+}
+.home-section a.home-feature { color: inherit; text-decoration: none; }
+.home-feature svg {
+  width: 34px;
+  height: 34px;
+  padding: 6px;
+  border-radius: 8px;
+  background: #e8f1ea;
+  fill: none;
+  stroke: var(--brand-dark);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.home-feature h3 { margin: 12px 0 6px; font-size: 16px; color: #1b1f2a; }
+.home-feature p { margin: 0; font-size: 14px; }
+.home-feature-link { transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+.home-feature-link:hover { border-color: #9fbfa8; box-shadow: 0 4px 16px rgba(15, 42, 29, 0.1); transform: translateY(-2px); }
+
+/* ---- Risk tiles ---- */
+.home-risks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.home-risk {
+  padding: 18px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-top: 5px solid var(--risk);
+}
+.home-risk-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--risk);
+  border: 1.5px solid rgba(0, 0, 0, 0.45);
+  vertical-align: -2px;
+  margin-right: 6px;
+}
+.home-risk h3 { display: inline; font-size: 16px; color: #1b1f2a; }
+.home-risk p { margin: 8px 0 0; font-size: 14px; }
+.home-note {
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #f7f4e3;
+  font-size: 14.5px;
+}
+
+/* ---- Caveats ---- */
+.home-caveats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 28px;
+}
+.home-caveats li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #333;
+}
+.home-caveats li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--brand-accent);
+}
+.home-caveats strong { color: #1b1f2a; }
+
+/* ---- Sources ---- */
+.home-sources {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.home-source {
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+}
+.home-source h3 { margin: 0 0 6px; font-size: 15px; }
+.home-source h3 a { text-decoration: none; }
+.home-source h3 a:hover { text-decoration: underline; }
+.home-source p { margin: 0; font-size: 13.5px; }
+.home-section .home-fineprint { margin: 16px 0 0; font-size: 12.5px; color: var(--text-muted); }
+
+/* ---- Closing CTA ---- */
+.home-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 36px 20px;
+  background: var(--brand-dark);
+  color: #fff;
+}
+.home-cta .home-preview-btn { background: var(--brand-accent); color: #1b1f2a; }
+.home-cta .home-preview-btn:hover { background: #ecd04a; }
+.home-btn-secondary {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.home-btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+.home-page footer { text-align: center; }
+
+/* ---- Responsive ---- */
+@media (max-width: 860px) {
+  .home-intro { grid-template-columns: 1fr; gap: 22px; }
+  .home-features { grid-template-columns: repeat(2, 1fr); }
+  .home-risks { grid-template-columns: repeat(2, 1fr); }
+  .home-caveats, .home-sources { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  body.home-page { height: auto; overflow: auto; }
+  .home-main { padding: 18px 14px 20px; }
+  .home-preview { max-height: 46vh; }
+  .home-tagline { font-size: 15px; }
+  .home-preview { aspect-ratio: 4 / 3; }
+  .home-preview-btn, .home-btn-secondary { font-size: 15px; padding: 10px 20px; }
+  .home-section { padding: 38px 16px; }
+  .home-intro p { font-size: 15.5px; }
+}
+@media (max-width: 520px) {
+  .home-features, .home-risks { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   24. MAP SIDEBAR (desktop) — counts + Summary / Trends tabs live in a
+       column left of the map, so nothing floats over the map itself
+   ============================================================ */
+.bp-reopen {
+  position: absolute;
+  top: 10px;
+  left: 54px;               /* just right of Leaflet's zoom buttons */
+  z-index: 1000;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #1B4332;
+  color: #fff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.bp-reopen:hover { background: #2D6A4F; }
+.bp-reopen[hidden] { display: none; }
+
+/* The About page link is in the top nav now */
+.story-open { display: none !important; }
+
+/* Phone: the sidebar wrapper disappears; its parts keep their phone layout */
+.map-sidebar { display: contents; }
+.sb-tab#sb-tab-summary,
+.sb-collapse { display: none; }
+
+@media (min-width: 701px) {
+  .map-sidebar {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 clamp(300px, 26vw, 400px);
+    width: clamp(300px, 26vw, 400px);
+    min-height: 0;
+    overflow-y: auto;
+    background: #fff;
+    border-left: 1px solid #dfe5df;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.06);
+    z-index: 900;
+  }
+  .map-sidebar.is-closed { display: none; }
+
+  /* Counts block becomes the sidebar's header */
+  .map-sidebar .map-status {
+    position: static;
+    flex: 0 0 auto;
+    max-width: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: left;
+    white-space: normal;
+    padding: 12px 14px;
+  }
+  .map-sidebar .map-status::before { margin: 0 0 8px 0; }
+  .map-sidebar .map-status .status-line-updated { max-width: none; }
+
+  /* Tabs */
+  .sb-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    background: #fff;
+    border-bottom: 1px solid #dfe5df;
+  }
+  .sb-tab#sb-tab-summary,
+  .sb-collapse { display: block; }
+  .map-sidebar .sb-tab {
+    position: static;
+    flex: 1 1 0;
+    padding: 10px 6px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: #555;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .map-sidebar .sb-tab:hover { background: #f3f6f2; color: #1B4332; }
+  .map-sidebar .sb-tab.is-active { color: #1B4332; border-bottom-color: #1B4332; }
+  .sb-collapse {
+    flex: 0 0 34px;
+    border: none;
+    border-left: 1px solid #eef1ee;
+    order: -1;                /* sits at the left edge, next to the map */
+    border-right: 1px solid #eef1ee;
+    background: none;
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .sb-collapse:hover { background: #f3f6f2; color: #1B4332; }
+
+  /* Summary tab content */
+  .map-sidebar .borough-panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    z-index: auto;
+    border-radius: 0;
+    border-left: none;
+    box-shadow: none;
+  }
+  .map-sidebar .borough-panel .bp-head { position: static; border-radius: 0; cursor: default; }
+  .map-sidebar .borough-panel .bp-toggle,
+  .map-sidebar .borough-panel .bp-close { display: none; }
+  .map-sidebar .borough-panel.is-collapsed .bp-body { display: block; }
+  .map-sidebar[data-tab="trends"] .borough-panel { display: none; }
+
+  /* Trends tab content */
+  .map-sidebar .trend-panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    z-index: auto;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .map-sidebar .trend-close { display: none; }
+}
+@media (min-width: 701px) and (max-width: 999px) {
+  .map-sidebar { flex-basis: 290px; width: 290px; }
+}
+@media (min-width: 701px) {
+  /* Sidebar is on the right, so its reopen button goes top-right */
+  .bp-reopen { left: auto; right: 10px; }
+}
+
+
+/* ============================================================
+   25. ONE-LINE FILTER BAR on laptop-size screens (1000px and up)
+       The bar never wraps to a second line; text, padding and gaps
+       shrink with the window, and long labels switch to their short
+       versions below 1350px. (Under 1000px the chips scroll instead.)
+   ============================================================ */
+@media (min-width: 1000px) {
+  .compact-filters .filters { padding: 6px clamp(8px, 1.1vw, 16px); }
+  .compact-filters .filter-row {
+    flex-wrap: nowrap;
+    gap: 6px clamp(4px, 0.9vw, 16px);
+    font-size: clamp(11px, 0.95vw, 13px);
+  }
+  .compact-filters .filter-row > *,
+  .compact-filters .filter-chips > * { flex-shrink: 0; }
+
+  .compact-filters .fp-btn {
+    font-size: clamp(11px, 0.95vw, 13px);
+    padding: 5px clamp(6px, 0.7vw, 10px);
+    gap: clamp(4px, 0.5vw, 8px);
+  }
+  .compact-filters .fp-summary {
+    font-size: clamp(10.5px, 0.85vw, 12px);
+    max-width: clamp(40px, 7vw, 180px);
+  }
+  .compact-filters .map-mode-control,
+  .compact-filters .filter-check,
+  .compact-filters .filter-reset,
+  .compact-filters .species-sort,
+  .compact-filters .species-priority-filter { font-size: clamp(11px, 0.9vw, 12px); }
+  .compact-filters .map-mode-control select { max-width: clamp(120px, 12vw, 190px); }
+  .compact-filters .species-sort select { max-width: clamp(120px, 13vw, 230px); }
+  .compact-filters .filter-row .species-search-wrap { flex: 0 1 clamp(150px, 17vw, 240px); }
+
+  /* Count shrinks last and truncates rather than pushing to a new line */
+  .compact-filters .filter-count {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(10.5px, 0.85vw, 12px);
+  }
+}
+@media (min-width: 1000px) and (max-width: 1349px) {
+  .compact-filters .hide-phone { display: none; }
+  .compact-filters .show-phone { display: inline; }
+}
+
+/* Map page has no footer; keep the home page's one-line footer on phones too */
+@media (max-width: 700px) {
+  .home-page footer { display: block; }
+}
+
+/* Instant tooltip (site/tooltips.js) — replaces the browser's delayed title tooltip */
+.site-tip {
+  position: fixed;
+  z-index: 20000;
+  max-width: 280px;
+  padding: 5px 9px;
+  border-radius: 5px;
+  background: #1b1f2a;
+  color: #fff;
+  font: 500 12px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  white-space: pre-line;
+  pointer-events: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+.site-tip[hidden] { display: none; }
+
+/* iNaturalist dots in "group nearby" mode (HTML markers): same hover as the plain dots */
+.inat-observation-marker { transition: transform 0.08s; }
+.leaflet-marker-icon:hover .inat-observation-marker {
+  transform: scale(1.35);
+  border-color: #111;
+  border-width: 2.5px;
+}
+.leaflet-marker-icon:hover:has(.inat-observation-marker) { z-index: 10000 !important; }
+
+/* Several projects at one site: pin + count badge (click fans them out) */
+.project-cluster-pin { cursor: pointer; }
+.project-pin-count {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border: 1.5px solid #1D4E89;   /* project blue, not a risk colour */
+  border-radius: 8px;
+  background: #fff;
+  color: #1D4E89;
+  font: 700 10px/13px system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+.project-pin-wrap { display: block; }

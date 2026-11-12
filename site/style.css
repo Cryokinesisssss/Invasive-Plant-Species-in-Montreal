@@ -1000,6 +1000,15 @@ footer a {
   background: linear-gradient(to right, #2c7bb6, #abd9e9, #ffffbf, #fdae61, #d7191c);
 }
 
+.legend-gradient {
+  width: 100%;
+  min-width: 150px;
+  height: 10px;
+  margin: 6px 0 3px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
 .legend-gradient-labels {
   display: flex;
   justify-content: space-between;
@@ -3559,4 +3568,12 @@ html:has(body.home-page) { scroll-behavior: smooth; }
 .legend .swatch-unknown {
   background: transparent;
   border: 2px solid #868e96;
+}
+
+/* Summary: which species it is showing (when the species filter is set) */
+.bp-species-filter {
+  margin-bottom: 2px;
+  color: #1B4332;
+  font-size: 13px;
+  font-weight: 600;
 }

@@ -436,6 +436,15 @@ function isUnknownAccuracy(properties) {
   return blank(properties.positional_accuracy) && blank(properties.public_positional_accuracy);
 }
 
+// Location accuracy filter (precise / approximate / unknown), shared by the
+// map dots and the summary panel
+function passesAccuracyFilter(properties) {
+  const accuracyClass = isUnknownAccuracy(properties)
+    ? 'unknown'
+    : (isApproximateLocation(properties) ? 'approximate' : 'precise');
+  return filterState.accuracy.has(accuracyClass);
+}
+
 function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (f.geometry === null) return false;
   const p = f.properties;
@@ -451,8 +460,7 @@ function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   }
 
   const approximateLocation = isApproximateLocation(p);
-  const accuracyClass = isUnknownAccuracy(p) ? 'unknown' : (approximateLocation ? 'approximate' : 'precise');
-  if (!filterState.accuracy.has(accuracyClass)) return false;
+  if (!passesAccuracyFilter(p)) return false;
 
   if (filterState.photo && !p.image_url) return false;
   if (filterState.presence.size > 0 && !filterState.presence.has(p.presence)) return false;
@@ -1322,6 +1330,7 @@ function renderSpeciesList(query) {
       updateSummaries();
       buildObsLayer();
       buildSentinelLayer();
+      refreshSelectionPanel();
     });
   });
 }
@@ -1376,6 +1385,7 @@ function showSpSuggest(query) {
       updateSummaries();
       buildObsLayer();
       buildSentinelLayer();
+      refreshSelectionPanel();
       renderSpeciesList(spSearchInput ? spSearchInput.value : '');
       showSpSuggest(spSearchInput ? spSearchInput.value : '');
     });
@@ -1429,6 +1439,7 @@ document.getElementById('f-species-all').addEventListener('change', function (e)
   updateSummaries();
   buildObsLayer();
   buildSentinelLayer();
+  refreshSelectionPanel();
 });
 
 function syncSpeciesAllCheckbox() {
@@ -1671,6 +1682,7 @@ document.querySelectorAll('#f-accuracy-list input[data-accuracy]').forEach(funct
     updateSummaries();
     buildObsLayer();
     buildSentinelLayer();
+    renderSelectionPanel();
   });
 });
 document.getElementById('f-photo').addEventListener('change', function (e) {
@@ -1828,7 +1840,7 @@ function updateMapLegend() {
     html = '<div class="legend-title">Reported observation density</div>' +
       '<div class="legend-gradient density-gradient"></div>' +
       '<div class="legend-gradient-labels"><span>Fewer records</span><span>More records</span></div>' +
-      '<div class="legend-mode-note">Uses the enabled iNaturalist and Sentinelle sources. This represents reporting patterns, not plant abundance.</div>';
+      '<div class="legend-mode-note">Shows where records are reported (iNaturalist and Sentinelle, as enabled), not how abundant plants are.</div>';
   } else {
     html = '<div class="legend-title">Risk ' +
         '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?" title="What do the risk levels mean?">?</button>' +
@@ -2045,13 +2057,29 @@ const TIER_INFO = {
   unknown:  { label: 'Unclassified',  fill: '#adb5bd', border: '#444'    }
 };
 
+// Refresh the summary if it is showing (don't reopen it if the user closed it)
+function refreshSelectionPanel() {
+  if (BOROUGH_PANEL && !BOROUGH_PANEL.hidden) renderSelectionPanel();
+}
+
 // ---- 17a. Which observations are in the current selection? ----
 function observationsInSelection() {
   if (!window.turf || !allFeatures.length) return [];
 
+  // Only records whose location accuracy is switched on (unknown is off by default)
+  // and, when species are picked, only those species
+  const pool = allFeatures.filter(function (f) {
+    if (!passesAccuracyFilter(f.properties)) return false;
+    if (filterState.species.size > 0) {
+      const p = f.properties;
+      if (!filterState.species.has((p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || ''))) return false;
+    }
+    return true;
+  });
+
   // --- 1. A borough was clicked: show only that polygon's observations ---
   if (selectedBorough) {
-    return allFeatures.filter(function (f) {
+    return pool.filter(function (f) {
       if (f.geometry === null) return false;
       const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
       return turf.booleanPointInPolygon(pt, selectedBorough);
@@ -2059,8 +2087,8 @@ function observationsInSelection() {
   }
 
   // --- 2. No click; fall back to the borough filter ---
-  if (!boroughData) return allFeatures;
-  if (filterState.boroughs.size === 0) return allFeatures;
+  if (!boroughData) return pool;
+  if (filterState.boroughs.size === 0) return pool;
 
   const wantUnion = filterState.boroughs.has('__boroughs__');
   const named = new Set();
@@ -2073,9 +2101,9 @@ function observationsInSelection() {
   boroughData.features.forEach(function (b) {
     if (named.has(nameEn(b))) polys.push(b);
   });
-  if (!polys.length) return allFeatures;
+  if (!polys.length) return pool;
 
-  return allFeatures.filter(function (f) {
+  return pool.filter(function (f) {
     if (f.geometry === null) return false;
     const pt = turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
     return polys.some(function (p) {
@@ -2239,7 +2267,14 @@ function renderSelectionPanel() {
     BP_TITLE.classList.remove('has-overflow');
   }
 
-  let html = '<div class="bp-total">' + obs.length + ' observation' + (obs.length === 1 ? '' : 's') + '</div>';
+  let html = '';
+  const spKeys = Array.from(filterState.species);
+  if (spKeys.length === 1) {
+    html += '<div class="bp-species-filter">' + escapeHtml(spKeys[0].split('|')[0] || spKeys[0].split('|')[1]) + '</div>';
+  } else if (spKeys.length > 1) {
+    html += '<div class="bp-species-filter">' + spKeys.length + ' species selected</div>';
+  }
+  html += '<div class="bp-total">' + obs.length + ' observation' + (obs.length === 1 ? '' : 's') + '</div>';
 
   ['high', 'moderate', 'low', 'unknown'].forEach(function (tier) {
     const info = TIER_INFO[tier];

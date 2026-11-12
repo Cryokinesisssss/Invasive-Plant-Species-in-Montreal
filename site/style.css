@@ -622,10 +622,10 @@ footer a {
 
 .popup-latin-link {
   color: #1B4332;
-  text-decoration: underline dotted rgba(27, 67, 50, 0.5);
+  text-decoration: none;
   text-underline-offset: 2px;
 }
-.popup-latin-link:hover { text-decoration-style: solid; color: #2D6A4F; }
+.popup-latin-link:hover { text-decoration: underline; color: #2D6A4F; }
 
 .popup-badge {
   display: inline-block;
@@ -769,6 +769,10 @@ footer a {
 }
 
 .popup-btn:hover { background: #2D6A4F; }
+/* Leaflet colours every link inside the map blue (.leaflet-container a);
+   keep the popup buttons' text white */
+.leaflet-container a.popup-btn,
+.leaflet-container a.popup-btn:hover { color: #fff; }
 
 .popup-license {
   margin-top: 6px;
@@ -2939,8 +2943,6 @@ button.pill-status {
   border: none;
   font-family: inherit;
   cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.35);
-  text-underline-offset: 2px;
 }
 button.pill-status:hover { background: #e2e9e3; }
 .popup-status-link {
@@ -2950,10 +2952,10 @@ button.pill-status:hover { background: #e2e9e3; }
   font: inherit;
   color: inherit;
   cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.4);
+  text-decoration: none;
   text-underline-offset: 2px;
 }
-.popup-status-link:hover { color: #1B4332; text-decoration-style: solid; }
+.popup-status-link:hover { color: #1B4332; text-decoration: underline; }
 .fp-info-inline { padding: 0 0 0 6px; font-size: 10.5px; text-transform: none; letter-spacing: 0; font-weight: 400; }
 
 
@@ -2963,8 +2965,6 @@ button.pill-priority {
   border: none;
   font-family: inherit;
   cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
-  text-underline-offset: 2px;
 }
 button.pill-ban:hover,
 button.pill-priority:hover { filter: brightness(0.95); }
@@ -3307,6 +3307,7 @@ html:has(body.home-page) { scroll-behavior: smooth; }
     width: clamp(300px, 26vw, 400px);
     min-height: 0;
     overflow-y: auto;
+    overflow-x: hidden;      /* never a sideways scrollbar */
     background: #fff;
     border-left: 1px solid #dfe5df;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.06);
@@ -3393,6 +3394,7 @@ html:has(body.home-page) { scroll-behavior: smooth; }
   .map-sidebar .trend-panel {
     position: static;
     width: auto;
+    min-width: 0;
     max-height: none;
     overflow: visible;
     z-index: auto;
@@ -3509,3 +3511,51 @@ html:has(body.home-page) { scroll-behavior: smooth; }
   pointer-events: none;
 }
 .project-pin-wrap { display: block; }
+
+/* Observation trends: By year / By month switch */
+.trend-view {
+  display: inline-flex;
+  margin: 10px 0 2px;
+  padding: 2px;
+  border-radius: 7px;
+  background: #eef2ef;
+}
+.trend-view-btn {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: #555;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.trend-view-btn:hover { color: #1B4332; }
+.trend-view-btn.is-active {
+  background: #fff;
+  color: #1B4332;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.trend-row-static { cursor: default; }
+.trend-row-static:hover { background: none; }
+
+/* "Species per borough" legend swatches */
+.legend .swatch-choro {
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid #7a857c;
+}
+
+/* Records with unknown positional accuracy: hollow ring in the risk colour */
+.inat-observation-marker.is-unknown-accuracy {
+  background: transparent;
+  border-width: 2.5px;
+  border-color: var(--marker-fill);
+  opacity: 1;
+}
+.legend .swatch-unknown {
+  background: transparent;
+  border: 2px solid #868e96;
+}

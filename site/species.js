@@ -251,7 +251,8 @@ const SPECIES = [
     presence: 'Established', ban: false,
     wiki: 'Nitellopsis_obtusa',
     desc: '<em>Nitellopsis obtusa</em> is a large freshwater alga. It is also known by the common name starry stonewort.',
-    photo: '', photoCredit: 'iNaturalist', photoCreditUrl: '',
+    photo: 'https://inaturalist-open-data.s3.amazonaws.com/photos/148164691/large.jpeg', photoCredit: 'Verdun, QC<br>iNaturalist / vincauc', photoCreditUrl: 'https://www.inaturalist.org/observations/89705805',
+    photoLicense: 'CC-BY-NC',   // observation isn't on the map, so its license isn't in photo_licenses.json
     tax: { kingdom: 'Plantae', clade: 'Charophytes', class: 'Charophyceae',
            order: 'Charales', family: 'Characeae',
            genus: 'Nitellopsis', species: 'N. obtusa' } },
@@ -665,8 +666,10 @@ function photoLicenseFor(s) {
   const photo = /\/photos\/(\d+)\//.exec(s.photo || '');
   if (!obs || !photo) return null;
   const lic = PHOTO_LICENSES[obs[1]];
-  if (!lic || lic.photoId !== photo[1]) return null;
-  const code = String(lic.code).toUpperCase();
+  let code;
+  if (lic && lic.photoId === photo[1]) code = String(lic.code).toUpperCase();
+  else if (s.photoLicense) code = String(s.photoLicense).toUpperCase();   // set by hand for photos not on the map
+  else return null;
   return {
     label: code === 'CC0' ? 'CC0' : code.replace(/^CC-/, 'CC '),   // "CC-BY-NC" -> "CC BY-NC"
     url: LICENSE_URLS[code] || ''
@@ -682,7 +685,7 @@ function normLatin(s) {
 
 function bumpCount(sci, key) {
   if (!sci) return;
-  if (!OBS_COUNTS[sci]) OBS_COUNTS[sci] = { inat: 0, sentinel: 0 };
+  if (!OBS_COUNTS[sci]) OBS_COUNTS[sci] = { inat: 0, sentinel: 0, unknownAcc: 0 };
   OBS_COUNTS[sci][key]++;
 }
 
@@ -722,7 +725,12 @@ Promise.all([
     var obscured = f.properties.coordinates_obscured;
     if (obscured === true || obscured === 'true' || obscured === 'True') return;
     var raw = (f.properties.scientific_name || '').trim();
-    bumpCount(catalogSci(raw) || raw, 'inat');
+    // Records without a recorded accuracy are hidden on the map by default,
+    // so count them separately from the normal iNaturalist count
+    var pa = f.properties.positional_accuracy, ppa = f.properties.public_positional_accuracy;
+    var unknownAcc = (pa === null || pa === undefined || pa === '') &&
+                     (ppa === null || ppa === undefined || ppa === '');
+    bumpCount(catalogSci(raw) || raw, unknownAcc ? 'unknownAcc' : 'inat');
   });
 
   (sent.features || []).forEach(function (f) {
@@ -955,7 +963,6 @@ function render() {
       currentTier = s.tier;
       const meta = TIER_META[s.tier];
       html += '<h2 class="species-tier-heading ' + meta.className + '">' + meta.label +
-        '<button type="button" class="tier-help" data-info="risk" aria-label="What do the risk levels mean?" title="What do the risk levels mean?"></button>' +
         '</h2>';
     }
     html += renderCard(s);
@@ -1004,9 +1011,13 @@ function renderCard(s) {
     : '<p class="species-desc species-desc-empty">Description coming soon.</p>';
 
   const counts = OBS_COUNTS[s.sci];
-  const hasObs = counts && (counts.inat > 0 || counts.sentinel > 0);
+  const hasObs = counts && (counts.inat > 0 || counts.sentinel > 0 || counts.unknownAcc > 0);
+  // Only unknown-accuracy records: open the map with that option already on
+  const onlyUnknown = hasObs && counts.inat === 0 && counts.sentinel === 0;
   const mapBtn = hasObs
-    ? '<a class="species-map-btn" href="../map.html?species=' + encodeURIComponent(s.sci) + '">View in map</a>'
+    ? '<a class="species-map-btn" href="../map.html?species=' + encodeURIComponent(s.sci) +
+        (onlyUnknown ? '&accuracy=all' : '') + '"' +
+        (onlyUnknown ? ' title="Only records with unknown location accuracy"' : '') + '>View in map</a>'
     : '<span class="species-map-btn is-empty" title="No mapped observations in Montréal">Not on map</span>';
 
   const projectBtn = hasProj
@@ -1040,7 +1051,7 @@ function renderCard(s) {
           mapBtn +
           '<button class="species-tax-btn" data-idx="' + idx + '" type="button">View scientific classification</button>' +
           projectBtn +
-          '<a class="species-wiki" href="' + wikiUrl + '" target="_blank" rel="noopener noreferrer">Wikipedia →</a>' +
+          '<a class="species-wiki" href="' + wikiUrl + '" target="_blank" rel="noopener noreferrer">Wikipedia ↗</a>' +
         '</div>' +
       '</div>' +
     '</article>'
@@ -1118,11 +1129,11 @@ function showProjects(s) {
       let links = '';
       if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
         links += '<a class="pp-link" href="' + escapeAttr(p.project_url) +
-          '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
+          '" target="_blank" rel="noopener noreferrer">Original project details ↗</a>';
       }
       if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
         links += '<a class="pp-link" href="' + escapeAttr(p.source_url) +
-          '" target="_blank" rel="noopener noreferrer">Project update →</a>';
+          '" target="_blank" rel="noopener noreferrer">Project update ↗</a>';
       }
       const details = [];
       if (p.project_area) details.push('<div class="pp-detail"><strong>Sites:</strong> ' + escapeHtml(p.project_area) + '</div>');

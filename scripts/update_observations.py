@@ -71,12 +71,22 @@ def risk_taxon_ids():
     return sorted(taxon_ids, key=int)
 
 
-def fetch_page(taxon_ids, page):
+# Two separate queries, each kept under iNaturalist's 10,000-result paging limit:
+#   "known":   positional accuracy recorded and under 100 m (shown by default)
+#   "unknown": no positional accuracy recorded at all (hidden on the map unless
+#              the reader turns on "Include records with unknown accuracy")
+ACCURACY_QUERIES = {
+    "known": ("acc_below", "100"),
+    "unknown": ("acc", "false"),
+}
+
+
+def fetch_page(taxon_ids, page, accuracy="known"):
     query = urllib.parse.urlencode([
         ("place_id", str(PLACE_ID)),
         ("taxon_id", ",".join(taxon_ids)),
         ("quality_grade", "research"),
-        ("acc_below", "100"),
+        ACCURACY_QUERIES[accuracy],
         ("order_by", "id"),
         ("order", "asc"),
         ("per_page", str(PAGE_SIZE)),
@@ -169,6 +179,37 @@ def observation_row(observation, photo_licenses):
     }
 
 
+def fetch_all(taxon_ids, accuracy, label):
+    first_page = fetch_page(taxon_ids, 1, accuracy)
+    total_results = int(first_page.get("total_results", 0))
+    if total_results >= 10000:
+        raise RuntimeError(
+            f"iNaturalist returned {total_results} matches ({label}); the API result "
+            "limit may truncate this query, so refusing to write incomplete data."
+        )
+
+    observations = list(first_page.get("results", []))
+    total_pages = (total_results + PAGE_SIZE - 1) // PAGE_SIZE
+    print(
+        f"iNaturalist query: place {PLACE_ID}, {len(taxon_ids)} risk taxa, "
+        f"Research Grade, {label}; {total_results} records",
+        flush=True,
+    )
+
+    for page in range(2, total_pages + 1):
+        time.sleep(PAGE_DELAY_SECONDS)
+        payload = fetch_page(taxon_ids, page, accuracy)
+        observations.extend(payload.get("results", []))
+        print(f"Downloaded page {page}/{total_pages} ({label})", flush=True)
+
+    if len(observations) != total_results:
+        raise RuntimeError(
+            f"Expected {total_results} observations ({label}), received "
+            f"{len(observations)}; refusing to overwrite the current data."
+        )
+    return observations
+
+
 def main():
     previous_observation_ids = set()
     if CSV_PATH.exists():
@@ -178,33 +219,13 @@ def main():
             }
 
     taxon_ids = risk_taxon_ids()
-    first_page = fetch_page(taxon_ids, 1)
-    total_results = int(first_page.get("total_results", 0))
-    if total_results >= 10000:
-        raise RuntimeError(
-            f"iNaturalist returned {total_results} matches; the API result limit "
-            "may truncate this query, so refusing to write incomplete data."
-        )
-
-    observations = list(first_page.get("results", []))
-    total_pages = (total_results + PAGE_SIZE - 1) // PAGE_SIZE
-    print(
-        f"iNaturalist query: place {PLACE_ID}, {len(taxon_ids)} risk taxa, "
-        f"Research Grade, accuracy under 100 m; {total_results} records",
-        flush=True,
-    )
-
-    for page in range(2, total_pages + 1):
-        time.sleep(PAGE_DELAY_SECONDS)
-        payload = fetch_page(taxon_ids, page)
-        observations.extend(payload.get("results", []))
-        print(f"Downloaded page {page}/{total_pages}", flush=True)
-
-    if len(observations) != total_results:
-        raise RuntimeError(
-            f"Expected {total_results} observations, received {len(observations)}; "
-            "refusing to overwrite the current data."
-        )
+    observations = []
+    for accuracy, label in (
+        ("known", "accuracy under 100 m"),
+        ("unknown", "no accuracy recorded"),
+    ):
+        observations.extend(fetch_all(taxon_ids, accuracy, label))
+    total_results = len(observations)
 
     # acc_below filters on the observer's private GPS accuracy. Observations whose
     # coordinates iNaturalist obscures (observer or taxon geoprivacy) still pass it,

@@ -178,6 +178,7 @@ const filterState = {
   years: new Set(),        // empty = all years
   approximateLocation: false,
   preciseLocation: false,
+  unknownAccuracy: false,  // include records with no positional accuracy (off by default)
   photo: false,
   presence: new Set(),
   priorityOnly: false
@@ -217,6 +218,7 @@ let boroughData = null;
 let boroughsUnion = null;
 let speciesCatalog = [];
 let observationDensityLayer = null;
+let boroughPolygonLayer = null;     // the interactive borough / city outlines
 let mapMode = 'risk';
 let thematicUpdatePending = false;
 
@@ -255,7 +257,10 @@ function updateStatusSummary(filtered) {
   if (!el) return;
   statusFeatures = filtered;
 
-  const total = allFeatures.length;
+  // Unknown-accuracy records only count toward the total once they're switched on
+  const total = filterState.unknownAccuracy
+    ? allFeatures.length
+    : allFeatures.filter(function (f) { return !isUnknownAccuracy(f.properties); }).length;
   const shown = filtered.length;
 
   const speciesSet = new Set();
@@ -393,6 +398,12 @@ function applyRequestedSpecies() {
   if (!matches.length) return false;
   filterState.species.clear();
   matches.forEach(function (s) { filterState.species.add(s.key); });
+  if (new URLSearchParams(window.location.search).get('accuracy') === 'all') {
+    filterState.unknownAccuracy = true;
+    const box = document.getElementById('f-unknown-accuracy');
+    if (box) box.checked = true;
+    updateMapLegend();
+  }
   requestedSpeciesApplied = true;
   return true;
 }
@@ -419,6 +430,13 @@ function isApproximateLocation(properties) {
   return Number.isFinite(accuracy) && accuracy > PRECISE_ACCURACY_M;
 }
 
+// No accuracy recorded at all: could be off by a few metres or a few kilometres.
+// Hidden unless the reader turns on "Include records with unknown accuracy".
+function isUnknownAccuracy(properties) {
+  const blank = function (v) { return v === null || v === undefined || v === ''; };
+  return blank(properties.positional_accuracy) && blank(properties.public_positional_accuracy);
+}
+
 function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (f.geometry === null) return false;
   const p = f.properties;
@@ -436,6 +454,9 @@ function passesFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   const approximateLocation = isApproximateLocation(p);
   if (filterState.approximateLocation && !approximateLocation) return false;
   if (filterState.preciseLocation && approximateLocation) return false;
+  const unknownAccuracy = isUnknownAccuracy(p);
+  if (unknownAccuracy && !filterState.unknownAccuracy) return false;
+  if (unknownAccuracy && (filterState.preciseLocation || filterState.approximateLocation)) return false;
 
   if (filterState.photo && !p.image_url) return false;
   if (filterState.presence.size > 0 && !filterState.presence.has(p.presence)) return false;
@@ -557,9 +578,86 @@ function observationYear(feature, source) {
   return /^\d{4}$/.test(year) ? year : '';
 }
 
+// ---- Trend chart view: 'year' (click to filter) or 'month' (seasonality) ----
+let trendView = 'year';
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+  'August', 'September', 'October', 'November', 'December'];
+
+function observationMonth(feature, source) {
+  const props = feature.properties || {};
+  const raw = source === 'sentinel' ? props.Date_observation : props.observed_on;
+  const month = Number(String(raw || '').slice(5, 7));
+  return month >= 1 && month <= 12 ? month - 1 : -1;
+}
+
+const TREND_TEXT = {
+  year: {
+    title: 'Observation records by year',
+    subtitle: 'Click a year to filter the map.',
+    context: 'Counts include both sources and follow other filters; the selected year filter is excluded.'
+  },
+  month: {
+    title: 'Observation records by month',
+    subtitle: 'When in the year these plants get recorded.',
+    context: 'Counts include both sources and follow all filters, including the year filter.'
+  }
+};
+
+function setTrendView(view) {
+  trendView = view;
+  document.querySelectorAll('.trend-view-btn').forEach(function (btn) {
+    const on = btn.getAttribute('data-view') === view;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  const text = TREND_TEXT[view];
+  const title = document.getElementById('trend-title');
+  const subtitle = document.getElementById('trend-subtitle');
+  const context = document.getElementById('trend-context');
+  if (title) title.textContent = text.title;
+  if (subtitle) subtitle.textContent = text.subtitle;
+  if (context) context.textContent = text.context;
+  renderObservationTrendChart();
+}
+document.querySelectorAll('.trend-view-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () { setTrendView(btn.getAttribute('data-view')); });
+});
+
+// Month view: 12 rows, same bar style as the year view, not clickable
+function renderMonthTrendChart(chart) {
+  const counts = MONTH_NAMES.map(function () { return { inat: 0, sentinel: 0 }; });
+  allFeatures.forEach(function (feature) {
+    const month = observationMonth(feature, 'inat');
+    if (month >= 0 && passesFilters(feature)) counts[month].inat++;
+  });
+  sentinelFeatures.forEach(function (feature) {
+    const month = observationMonth(feature, 'sentinel');
+    if (month >= 0 && passesSentinelFilters(feature)) counts[month].sentinel++;
+  });
+  const maxCount = Math.max.apply(null, counts.map(function (c) { return c.inat + c.sentinel; }).concat([1]));
+  if (counts.every(function (c) { return c.inat + c.sentinel === 0; })) {
+    chart.innerHTML = '<p class="trend-empty">No dated records match the current filters.</p>';
+    return;
+  }
+  chart.innerHTML = counts.map(function (c, i) {
+    const total = c.inat + c.sentinel;
+    const label = MONTH_FULL[i] + ': ' + c.inat.toLocaleString() + ' iNaturalist and ' +
+      c.sentinel.toLocaleString() + ' Sentinelle records';
+    return '<div class="trend-row trend-row-static" role="img" aria-label="' + escapeAttr(label) +
+      '" title="' + escapeAttr(label) + '">' +
+      '<span class="trend-year">' + MONTH_NAMES[i] + '</span>' +
+      '<span class="trend-track" aria-hidden="true">' +
+      '<span class="trend-bar-inat" style="width:' + (c.inat / maxCount) * 100 + '%"></span>' +
+      '<span class="trend-bar-sentinel" style="width:' + (c.sentinel / maxCount) * 100 + '%"></span>' +
+      '</span><span class="trend-total">' + total.toLocaleString() + '</span></div>';
+  }).join('');
+}
+
 function renderObservationTrendChart() {
   const chart = document.getElementById('trend-chart');
   if (!chart || chart.closest('.trend-panel').hidden) return;
+  if (trendView === 'month') { renderMonthTrendChart(chart); return; }
 
   const years = new Set();
   const countsByYear = Object.create(null);
@@ -711,11 +809,95 @@ function observationsForMap(ignoreBoroughFilter) {
   return features;
 }
 
+// ---- "Species per borough" view ----
+// Which borough / city polygon each record falls in (computed once per record)
+const boroughIndexCache = new WeakMap();
+function boroughIndexOf(feature) {
+  if (boroughIndexCache.has(feature)) return boroughIndexCache.get(feature);
+  let index = -1;
+  const g = feature.geometry;
+  if (boroughData && window.turf && g && g.type === 'Point' && Array.isArray(g.coordinates)) {
+    const pt = turf.point(g.coordinates);
+    index = boroughData.features.findIndex(function (b) { return turf.booleanPointInPolygon(pt, b); });
+  }
+  boroughIndexCache.set(feature, index);
+  return index;
+}
+
+function recordSpeciesKey(feature) {
+  const p = feature.properties || {};
+  return latinBinomial(p.scientific_name || p.Nom_espece_latin || '');
+}
+
+// Light → dark green; kept apart from the red / orange / yellow risk colours
+const CHORO_COLORS = ['#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#31a354', '#006d2c'];
+let choroplethBreaks = null;   // upper bounds of each class, for the legend
+
+function boroughStats() {
+  const stats = boroughData.features.map(function () { return { species: new Set(), obs: 0 }; });
+  observationsForMap(false).forEach(function (feature) {
+    const i = boroughIndexOf(feature);
+    if (i < 0) return;
+    stats[i].obs++;
+    const key = recordSpeciesKey(feature);
+    if (key) stats[i].species.add(key);
+  });
+  return stats;
+}
+
+function choroplethClasses(maxValue) {
+  // Up to 6 equal steps with whole-number bounds, e.g. 1–5, 6–10, …
+  const classes = Math.min(CHORO_COLORS.length, Math.max(1, maxValue));
+  const step = Math.ceil(maxValue / classes);
+  const breaks = [];
+  for (let i = 1; i <= classes; i++) breaks.push(Math.min(maxValue, step * i));
+  return breaks.filter(function (b, i, arr) { return i === 0 || b > arr[i - 1]; });
+}
+
+function choroplethColor(value) {
+  if (!value || !choroplethBreaks) return null;
+  for (let i = 0; i < choroplethBreaks.length; i++) {
+    if (value <= choroplethBreaks[i]) return CHORO_COLORS[i + (CHORO_COLORS.length - choroplethBreaks.length)];
+  }
+  return CHORO_COLORS[CHORO_COLORS.length - 1];
+}
+
+const BOROUGH_BASE_STYLE = { color: '#666', weight: 1, opacity: 0.6, fillColor: '#1F2D5A', fillOpacity: 0.05 };
+
+function updateBoroughChoropleth() {
+  if (!boroughPolygonLayer || !boroughData) return;
+  if (mapMode !== 'boroughs') {
+    boroughPolygonLayer.eachLayer(function (layer) {
+      layer.setStyle(BOROUGH_BASE_STYLE);
+      layer.setTooltipContent(layer._baseTooltip);
+    });
+    return;
+  }
+  const stats = boroughStats();
+  const maxSpecies = Math.max.apply(null, stats.map(function (s) { return s.species.size; }).concat([0]));
+  choroplethBreaks = maxSpecies > 0 ? choroplethClasses(maxSpecies) : null;
+  boroughPolygonLayer.eachLayer(function (layer) {
+    const i = boroughData.features.indexOf(layer.feature);
+    const s = stats[i] || { species: new Set(), obs: 0 };
+    const n = s.species.size;
+    const fill = choroplethColor(n);
+    layer.setStyle({
+      color: '#4d5a50', weight: 1, opacity: 0.7,
+      fillColor: fill || '#ffffff',
+      fillOpacity: fill ? 0.78 : 0.35
+    });
+    layer.setTooltipContent(layer._baseTooltip + '<br><strong>' + n + ' species</strong> · ' +
+      s.obs.toLocaleString() + ' record' + (s.obs === 1 ? '' : 's'));
+  });
+  updateMapLegend();
+}
+
 function updateThematicMapLayers() {
   if (observationDensityLayer) {
     map.removeLayer(observationDensityLayer);
     observationDensityLayer = null;
   }
+  updateBoroughChoropleth();
   if (mapMode === 'density') {
     const heatPoints = observationsForMap(false).filter(function (feature) {
       return feature.geometry && feature.geometry.type === 'Point' &&
@@ -769,6 +951,17 @@ function buildObsLayer() {
         const p = feature.properties;
         const s = styleFor(p);
         const approximateLocation = isApproximateLocation(p);
+        const unknownAccuracy = isUnknownAccuracy(p);
+        if (!clustersEnabled && unknownAccuracy) {
+          // Hollow ring: same risk colour, no fill
+          return L.circleMarker(latlng, {
+            radius: 6,
+            weight: 2.5,
+            color: s.fillColor,
+            fillColor: s.fillColor,
+            fillOpacity: 0
+          });
+        }
         if (!clustersEnabled) {
           return L.circleMarker(latlng, {
             radius: approximateLocation ? 7 : 6,
@@ -784,6 +977,7 @@ function buildObsLayer() {
         const marker = L.divIcon({
           className: '',
           html: '<span class="inat-observation-marker' + (approximateLocation ? ' is-approximate' : '') +
+            (unknownAccuracy ? ' is-unknown-accuracy' : '') +
             '" style="--marker-stroke:' + s.color + ';--marker-fill:' + s.fillColor +
             ';--marker-opacity:' + (approximateLocation ? '0.55' : '0.9') + ';"></span>',
           iconSize: [markerSize, markerSize],
@@ -850,6 +1044,7 @@ function buildObsLayer() {
         html += '</div>';
 
         if (approximateLocation) html += '<div class="popup-approximate">Approximate location (10–100 m)</div>';
+        if (isUnknownAccuracy(p)) html += '<div class="popup-approximate">Location accuracy unknown (not recorded by the observer)</div>';
         if (p.photo_present && !p.image_url) {
           const photoLicense = p.photo_license || 'All rights reserved';
           const photoNote = !p.photo_license_verified
@@ -857,7 +1052,7 @@ function buildObsLayer() {
             : 'Photo omitted — photo license ' + photoLicense + ' does not permit reuse.';
           html += '<div class="popup-photo-note">' + escapeHtml(photoNote) + '</div>';
         }
-        if (p.url) html += '<a class="popup-btn" href="' + p.url + '" target="_blank" rel="noopener noreferrer">View on iNaturalist →</a>';
+        if (p.url) html += '<a class="popup-btn" href="' + p.url + '" target="_blank" rel="noopener noreferrer">View on iNaturalist ↗</a>';
         const license = p.license ? String(p.license).replace(/^CC-/, 'CC ') : 'All rights reserved';
         html += '<div class="popup-license"><span class="popup-license-label">Observation license:</span> ' + escapeHtml(license) + '</div>';
 
@@ -1063,6 +1258,7 @@ function updateSummaries() {
   const observationOptions = [
     filterState.approximateLocation,
     filterState.preciseLocation,
+    filterState.unknownAccuracy,
     filterState.photo,
     filterState.presence.size > 0,
     filterState.priorityOnly
@@ -1479,6 +1675,13 @@ document.getElementById('f-exact-location').addEventListener('change', function 
   updateSummaries();
   buildObsLayer();
 });
+document.getElementById('f-unknown-accuracy').addEventListener('change', function (e) {
+  filterState.unknownAccuracy = e.target.checked;
+  updateMapLegend();
+  updateSummaries();
+  buildObsLayer();
+  buildSentinelLayer();
+});
 document.getElementById('f-photo').addEventListener('change', function (e) {
   filterState.photo = e.target.checked;
   updateSummaries();
@@ -1550,6 +1753,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
   filterState.years.clear();
   filterState.approximateLocation = false;
   filterState.preciseLocation = false;
+  filterState.unknownAccuracy = false;
   filterState.photo = false;
   filterState.presence.clear();
   filterState.priorityOnly = false;
@@ -1576,6 +1780,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
 
   document.getElementById('f-approximate-location').checked = false;
   document.getElementById('f-exact-location').checked = false;
+  document.getElementById('f-unknown-accuracy').checked = false;
   document.getElementById('f-photo').checked = false;
   document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (cb) { cb.checked = false; });
   document.getElementById('f-priority').checked = false;
@@ -1619,7 +1824,20 @@ let legendElement = null;
 function updateMapLegend() {
   if (!legendElement) return;
   let html = '';
-  if (mapMode === 'density') {
+  if (mapMode === 'boroughs') {
+    html = '<div class="legend-title">Species recorded per borough</div>';
+    if (choroplethBreaks) {
+      const offset = CHORO_COLORS.length - choroplethBreaks.length;
+      let low = 1;
+      choroplethBreaks.forEach(function (high, i) {
+        html += '<div class="legend-row"><span class="swatch swatch-choro" style="background:' +
+          CHORO_COLORS[i + offset] + '"></span>' + (low === high ? low : low + '–' + high) + ' species</div>';
+        low = high + 1;
+      });
+    }
+    html += '<div class="legend-row"><span class="swatch swatch-choro" style="background:#fff"></span>None recorded</div>' +
+      '<div class="legend-mode-note">Follows the filters. Counts depend on how much people report in each area.</div>';
+  } else if (mapMode === 'density') {
     html = '<div class="legend-title">Reported observation density</div>' +
       '<div class="legend-gradient density-gradient"></div>' +
       '<div class="legend-gradient-labels"><span>Fewer records</span><span>More records</span></div>' +
@@ -1636,6 +1854,9 @@ function updateMapLegend() {
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
       '<div class="legend-row"><span class="swatch swatch-dashed"></span>Approx. <small>(10–100 m)</small></div>' +
+      (filterState.unknownAccuracy
+        ? '<div class="legend-row"><span class="swatch swatch-unknown"></span>Accuracy unknown</div>'
+        : '') +
       '<div class="legend-divider"></div>' +
       '<div class="legend-title">Observations</div>' +
       '<div class="legend-row"><span class="swatch swatch-inat"></span>iNaturalist <small>(circle)</small></div>' +
@@ -2123,14 +2344,13 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
     }
 
     // ---- 18c. Draw boroughs (interactive) + click handler ----
-    L.geoJSON(boundaryData, {
-      style: function () {
-        return { color: '#666', weight: 1, opacity: 0.6, fillColor: '#1F2D5A', fillOpacity: 0.05 };
-      },
+    boroughPolygonLayer = L.geoJSON(boundaryData, {
+      style: function () { return BOROUGH_BASE_STYLE; },
       onEachFeature: function (feature, layer) {
         const name = nameEn(feature);
         const type = typeEn(feature);
-        layer.bindTooltip(name + (type ? ' (' + type + ')' : ''), { sticky: true });
+        layer._baseTooltip = escapeHtml(name) + (type ? ' (' + escapeHtml(type) + ')' : '');
+        layer.bindTooltip(layer._baseTooltip, { sticky: true });
         layer.on('click', function (e) {
           // Prevent the map-level click handler from also firing and closing the panel.
           L.DomEvent.stopPropagation(e);
@@ -2152,6 +2372,7 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
         layer.on('mouseout', function () { layer.setStyle({ weight: 1, opacity: 0.6 }); });
       }
     }).addTo(map);
+    scheduleThematicMapLayerUpdate();   // colour boroughs if that view is already chosen
 
     // ---- 18d. Click empty map → clear selection ----
     map.on('click', function () {
@@ -2493,11 +2714,11 @@ function buildProjectLayer() {
       }
       let hasSourceLink = false;
       if (p.project_url && /^https?:\/\//i.test(p.project_url)) {
-        html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details →</a>';
+        html += '<a class="popup-btn" href="' + escapeAttr(p.project_url) + '" target="_blank" rel="noopener noreferrer">Original project details ↗</a>';
         hasSourceLink = true;
       }
       if (p.source_url && /^https?:\/\//i.test(p.source_url)) {
-        html += '<a class="popup-btn" href="' + escapeAttr(p.source_url) + '" target="_blank" rel="noopener noreferrer">Project update →</a>';
+        html += '<a class="popup-btn" href="' + escapeAttr(p.source_url) + '" target="_blank" rel="noopener noreferrer">Project update ↗</a>';
         hasSourceLink = true;
       }
       if (!hasSourceLink) {

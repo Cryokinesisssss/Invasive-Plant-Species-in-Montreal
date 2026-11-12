@@ -45,7 +45,11 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
    `data/places.geojson`; observations outside the Montréal borough/city
    boundaries are excluded, and the final check cell verifies the result.
    To refresh from iNaturalist first, run `python scripts/update_observations.py`,
-   then run `python scripts/run_data_pipeline.py`. Both commands need internet
+   then run `python scripts/run_data_pipeline.py`. The refresh makes two
+   iNaturalist queries: research-grade records with positional accuracy under
+   100 m, and records with no accuracy recorded. The second group is hidden on
+   the map unless "Include records with unknown accuracy" is turned on.
+   Records whose coordinates iNaturalist obscures are always excluded. Both commands need internet
    access; the full refresh may take a few minutes.
    The map excludes observations whose observation license is blank or
    All Rights Reserved; the source GeoJSON and CSV remain unchanged by that

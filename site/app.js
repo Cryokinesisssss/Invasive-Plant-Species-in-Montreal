@@ -2652,7 +2652,32 @@ map.getPane('projectPane').style.zIndex = 660;
 
 const PROJECT_PIN_SVG = '<svg viewBox="0 0 24 32" width="24" height="32" aria-hidden="true"><path class="pin-body" d="M12 1.2C6.1 1.2 1.6 5.6 1.6 11.4c0 7.5 10.4 19.4 10.4 19.4s10.4-11.9 10.4-19.4C22.4 5.6 17.9 1.2 12 1.2z"/><path class="pin-sprout" d="M12 17.2v-5.6M12 11.6c0-2.6-1.9-4.3-4.6-4.3 0 2.6 1.9 4.3 4.6 4.3zM12 13c0-2.4 1.8-4 4.3-4 0 2.4-1.8 4-4.3 4z"/></svg>';
 
+// ---- Fanned-out project pins fold back when the mouse moves away ----
+// "Away" = more than SPIDER_LEAVE_PX beyond the farthest fanned-out pin.
+// They stay open while one of their popups is showing.
+let openProjectSpider = null;
+const SPIDER_LEAVE_PX = 40;
+
+function closeProjectSpiderIfAway(mousePoint) {
+  if (!openProjectSpider) return;
+  const spider = openProjectSpider;
+  const popupSource = map._popup && map.hasLayer(map._popup) ? map._popup._source : null;
+  if (popupSource && spider.markers.indexOf(popupSource) !== -1) return;
+
+  const center = map.latLngToContainerPoint(spider.cluster.getLatLng());
+  let reach = 0;
+  spider.markers.forEach(function (m) {
+    reach = Math.max(reach, center.distanceTo(map.latLngToContainerPoint(m.getLatLng())));
+  });
+  if (!mousePoint || center.distanceTo(mousePoint) > reach + SPIDER_LEAVE_PX) {
+    spider.cluster.unspiderfy();
+  }
+}
+map.on('mousemove', function (e) { closeProjectSpiderIfAway(e.containerPoint); });
+map.getContainer().addEventListener('mouseleave', function () { closeProjectSpiderIfAway(null); });
+
 function buildProjectLayer() {
+  openProjectSpider = null;   // the old clusters are about to be removed
   if (projectLayer) {
     map.removeLayer(projectLayer);
     projectLayer = null;
@@ -2797,6 +2822,15 @@ function buildProjectLayer() {
       }
     });
     siteCluster.on('clusterclick', function (e) { e.layer.spiderfy(); });
+    siteCluster.on('spiderfied', function (e) {
+      if (openProjectSpider && openProjectSpider.cluster !== e.cluster) {
+        openProjectSpider.cluster.unspiderfy();
+      }
+      openProjectSpider = { cluster: e.cluster, markers: e.markers };
+    });
+    siteCluster.on('unspiderfied', function (e) {
+      if (openProjectSpider && openProjectSpider.cluster === e.cluster) openProjectSpider = null;
+    });
     siteCluster.addLayer(siteLayer);
     projectLayer.addLayer(siteCluster);
   });

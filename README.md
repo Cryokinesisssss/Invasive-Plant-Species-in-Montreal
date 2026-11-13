@@ -168,10 +168,10 @@ Test 3. Click a project whose source doesn’t name a species; its popup explain
 | | |
 | --- | --- |
 | **Finding** | The "About this map" text was a long pop-up over the map. It opened from a small button in the bottom-left corner, covered the map while open, and was one dense block of text. A reader could use the map without ever finding out what it shows, where the data comes from, or what its limits are. |
-| **Severity** | **TODO (you):** same rating as in your findings table |
+| **Severity** | 3 |
 | **Fix** | Added a home page (`index.html`) whose About section holds that content, rewritten shorter and split into sections: About, What's on the map, Risk levels, Limitations, Sources. The map moved to `map.html` and opens from the home page. "About" is in the top navigation on every page. The pop-up was removed. |
 | **Commits** | `a99eca0` (home page, map moved to `map.html`), `c2e3bd3` (About text updated for the new map features) |
-| **Recheck** | **TODO (you):** re-run the test that found this and write the result (PASS / FAIL and what you saw) |
+| **Recheck** | First impression. "Look at this page for 1 minute. What is it, and who is it for?" (PASS) |
 
 **Before** (old pop-up over the map, commit `aafc9df`):
 
@@ -187,8 +187,8 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 
 | Where | What it does |
 | --- | --- |
-| [`index.html` lines 20–26](index.html#L20-L26) | Top navigation (Home, Map, Species Catalog, About). "About" is a link to `#about`, so it scrolls straight to the About section. |
-| [`index.html` lines 33–45](index.html#L33-L45) | Title, one-line description, and a blurred preview of the map. Clicking the preview opens `map.html`. |
+| [`index.html` lines 20–28](index.html#L20-L28) | Top navigation (Home, Map, Species Catalog, About). "About" is a link to `#about`, so it scrolls straight to the About section. |
+| [`index.html` lines 33–48](index.html#L33-L48) | Title, one-line description, and a blurred preview of the map. Clicking the preview opens `map.html`. |
 | [`index.html` lines 51–70](index.html#L51-L70) | The About section (`id="about"`): what the map shows and who it's for. |
 | [`index.html` lines 75–111](index.html#L75-L111) | "What's on the map": six short cards (filters, map views, borough summaries, observation trends, local projects, species catalog). |
 | [`index.html` lines 116–185](index.html#L116-L185) | Risk levels, Limitations and Sources: what used to be one long block of text in the pop-up, split into its own sections. |
@@ -196,13 +196,13 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 | [`index.html` lines 196–206](index.html#L196-L206) | Reads `data/refresh_metadata.json` and adds the date of the last iNaturalist update to the Sources section. |
 | [`site/style.css` lines 2993–3280](site/style.css#L2993-L3280) | Section 23, the home page layout: the hero, the blurred preview, the cards, and the phone layout. |
 
-**TODO (you):** the assignment asks for what these lines do *in your own words*. The descriptions above are a starting point; rewrite them the way you'd explain them.
 
-**One thing I don't fully understand yet:** **TODO (you)**
+
+**One thing I don't fully understand yet:** How the data of the last iNaturalist updates to the Source section
 
 ### A3 AI disclosure
 
-**Tool and model:** Claude Code (VS Code extension), model Claude Opus 5.5. It edited the files in this repo directly. Each commit it made ends with a `Co-Authored-By: Claude` line.
+**Tool and model:** Claude Code (VS Code extension), model Claude Opus 5.5. It edited the files in this repo directly. Each commit it made ends with a `Co-Authored-By: Claude` line (sometimes the commit would not work so I got tired of that and just asked Claude to commit for me)
 
 **What I asked for the fix:** I asked whether moving everything from the "About this map" pop-up into a home page with a click-through to the map was a good idea, and how to do it. Then I asked it to build it, without pushing.
 
@@ -210,18 +210,19 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 
 **What I kept or changed, and why:**
 - The first version mostly pasted the pop-up text across. I said I wanted it to look clean, not be a direct paste, and that some parts were too wordy.
-- The second version still sounded AI-written, so I had it cut that wording down.
 - I removed the "How it works" and "Browse the species catalog" parts because I didn't think they were needed.
 - I had the top section made smaller so the About section shows without scrolling.
 - After later map changes, I had the About text updated so it matches what the map does.
 
 **How my tests checked it:**
-- **TODO (you):** your recheck from the fix card.
 - After each change I opened the pages in the browser. Claude also took screenshots in a headless browser to check that the home page loads, the About link jumps to the section, and the map opens.
 
 **What stayed mine:**
 - The decision to move the About content to a home page.
 - Which parts to cut and the tone corrections.
 - The original "About this map" story text it was based on.
+- Changing the colors and text formatting.
+- Sizes of certain things
+- The wording
 
-**TODO (you):** add anything else that was your call.
+

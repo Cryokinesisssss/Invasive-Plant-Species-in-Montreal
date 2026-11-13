@@ -346918,6 +346918,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5604215,
+          45.4592406
+        ]
+      },
+      "properties": {
+        "id": "414184827",
+        "observed_on": "2026-11-11",
+        "time_observed_at": "2026-11-11 17:20:12 UTC",
+        "user_login": "emmanita",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Emmanita, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414184827",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762432673/medium.jpg",
+        "place_guess": "LaSalle / Rielle, Montréal, QC H4G 2A9, Canada",
+        "place_town_name": "",
+        "species_guess": "common valerian",
+        "scientific_name": "Valeriana officinalis",
+        "common_name": "common valerian",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56160",
+        "positional_accuracy": "",
+        "public_positional_accuracy": "",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.8108385267,
           45.4931873749
         ]
@@ -347140,6 +347177,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6759031844,
+          45.5153577255
+        ]
+      },
+      "properties": {
+        "id": "414353964",
+        "observed_on": "2026-09-10",
+        "time_observed_at": "2026-09-10 14:53:10 UTC",
+        "user_login": "arisarvanitis",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) arisarvanitis, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414353964",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762776610/medium.jpg",
+        "place_guess": "Rue Decelles, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "27",
+        "public_positional_accuracy": "27",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5755328042,
           45.4419023781
         ]
@@ -347165,6 +347239,1375 @@
         "taxon_id": "55972",
         "positional_accuracy": "2",
         "public_positional_accuracy": "2",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.575472862,
+          45.4420674647
+        ]
+      },
+      "properties": {
+        "id": "414357607",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:43:22 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414357607",
+        "image_url": "",
+        "place_guess": "LaSalle / Bannantyne, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5753277835,
+          45.4421384988
+        ]
+      },
+      "properties": {
+        "id": "414357749",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:44:53 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414357749",
+        "image_url": "",
+        "place_guess": "LaSalle / Bannantyne, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5752579337,
+          45.4422275961
+        ]
+      },
+      "properties": {
+        "id": "414358459",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:48:29 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414358459",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762785077/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Bourdaine commune",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5750477427,
+          45.44241984
+        ]
+      },
+      "properties": {
+        "id": "414359127",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:53:10 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414359127",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762786225/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5751860493,
+          45.4424016449
+        ]
+      },
+      "properties": {
+        "id": "414359607",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:51:14 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414359607",
+        "image_url": "",
+        "place_guess": "LaSalle / Bannantyne, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5750758227,
+          45.4424610726
+        ]
+      },
+      "properties": {
+        "id": "414359982",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 15:57:18 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414359982",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762787597/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5746983654,
+          45.4427510139
+        ]
+      },
+      "properties": {
+        "id": "414360296",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:00:02 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414360296",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762788281/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5747838733,
+          45.4427572654
+        ]
+      },
+      "properties": {
+        "id": "414360297",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:00:16 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414360297",
+        "image_url": "",
+        "place_guess": "LaSalle / Bannantyne, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5747111686,
+          45.442758687
+        ]
+      },
+      "properties": {
+        "id": "414360572",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:01:34 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414360572",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762788717/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5744806813,
+          45.4428492244
+        ]
+      },
+      "properties": {
+        "id": "414360799",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:03:03 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414360799",
+        "image_url": "",
+        "place_guess": "LaSalle / Bannantyne, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5744381941,
+          45.442957863
+        ]
+      },
+      "properties": {
+        "id": "414361076",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:05:39 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414361076",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762789862/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Bourdaine commune",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5743497504,
+          45.442996242
+        ]
+      },
+      "properties": {
+        "id": "414361153",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:06:10 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414361153",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5742612698,
+          45.4430578621
+        ]
+      },
+      "properties": {
+        "id": "414361316",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:07:07 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414361316",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762790488/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5742720389,
+          45.4431363227
+        ]
+      },
+      "properties": {
+        "id": "414361367",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:07:52 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414361367",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5741257469,
+          45.4433013637
+        ]
+      },
+      "properties": {
+        "id": "414361788",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:09:51 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414361788",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5739963049,
+          45.4434080883
+        ]
+      },
+      "properties": {
+        "id": "414362168",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:11:27 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414362168",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762791735/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5738085955,
+          45.4434477187
+        ]
+      },
+      "properties": {
+        "id": "414362188",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:11:39 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414362188",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5729163686,
+          45.4439886715
+        ]
+      },
+      "properties": {
+        "id": "414365262",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:31:22 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414365262",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5730103528,
+          45.4441850315
+        ]
+      },
+      "properties": {
+        "id": "414365519",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:33:03 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414365519",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "2",
+        "public_positional_accuracy": "2",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5728754667,
+          45.4441180087
+        ]
+      },
+      "properties": {
+        "id": "414365905",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:35:50 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414365905",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5727602699,
+          45.4441946479
+        ]
+      },
+      "properties": {
+        "id": "414366143",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:37:35 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366143",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5728142896,
+          45.4443911624
+        ]
+      },
+      "properties": {
+        "id": "414366495",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:39:53 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366495",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762800654/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Bourdaine commune",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5726672786,
+          45.4441334398
+        ]
+      },
+      "properties": {
+        "id": "414366515",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:39:08 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366515",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5726800025,
+          45.4442103149
+        ]
+      },
+      "properties": {
+        "id": "414366614",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:40:04 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366614",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Roseau commun d'Eurasie",
+        "scientific_name": "Phragmites australis australis",
+        "common_name": "European common reed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "556361",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5728022648,
+          45.4443726369
+        ]
+      },
+      "properties": {
+        "id": "414366700",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:42:16 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366700",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762801205/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Bourdaine commune",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5725050209,
+          45.4444921451
+        ]
+      },
+      "properties": {
+        "id": "414366789",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:42:08 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366789",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5724574102,
+          45.4444866966
+        ]
+      },
+      "properties": {
+        "id": "414367145",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:44:35 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414367145",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5724839344,
+          45.444465683
+        ]
+      },
+      "properties": {
+        "id": "414367347",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:45:09 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414367347",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762802694/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5724626226,
+          45.4446220815
+        ]
+      },
+      "properties": {
+        "id": "414367561",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:47:17 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414367561",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5724708804,
+          45.4446420563
+        ]
+      },
+      "properties": {
+        "id": "414367650",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:48:19 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414367650",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5720215273,
+          45.4448804709
+        ]
+      },
+      "properties": {
+        "id": "414368385",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:52:51 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414368385",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762804361/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "9",
+        "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5721624384,
+          45.444809052
+        ]
+      },
+      "properties": {
+        "id": "414368515",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:51:50 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414368515",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5718667159,
+          45.444961663
+        ]
+      },
+      "properties": {
+        "id": "414368594",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:53:42 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414368594",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "1",
+        "public_positional_accuracy": "1",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5713408376,
+          45.4453897632
+        ]
+      },
+      "properties": {
+        "id": "414368973",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:56:53 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414368973",
+        "image_url": "",
+        "place_guess": "LaSalle / Godin, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5705948625,
+          45.4462317787
+        ]
+      },
+      "properties": {
+        "id": "414369916",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 17:03:00 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414369916",
+        "image_url": "",
+        "place_guess": "LaSalle / Godin, Montréal, QC H4H 1P8, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.57422,
+          45.5204883333
+        ]
+      },
+      "properties": {
+        "id": "414405723",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 18:42:14 UTC",
+        "user_login": "lucastaylor3",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) lucastaylor3, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414405723",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762881345/medium.jpg",
+        "place_guess": "Rue Saint-Denis, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Siberian elm",
+        "scientific_name": "Ulmus pumila",
+        "common_name": "Siberian elm",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "79463",
+        "positional_accuracy": "21",
+        "public_positional_accuracy": "21",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5656049107,
+          45.5424442047
+        ]
+      },
+      "properties": {
+        "id": "414435261",
+        "observed_on": "2026-11-09",
+        "time_observed_at": "2026-11-09 13:53:25 UTC",
+        "user_login": "dirtypickuptruck",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) dirtypickuptruck, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414435261",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762939904/medium.jpg",
+        "place_guess": "Rue Molson, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "garlic mustard",
+        "scientific_name": "Alliaria petiolata",
+        "common_name": "garlic mustard",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56061",
+        "positional_accuracy": "24",
+        "public_positional_accuracy": "24",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",

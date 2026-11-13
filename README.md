@@ -161,7 +161,7 @@ Test 3. Click a project whose source doesn’t name a species; its popup explain
 
 ## A3 Part 3
 
-> **TODO (you):** fill in or rewrite every line marked **TODO (you)** before submitting. Those parts have to come from your own test plan and your own words.
+> **Note:** the Finding and Fix text in the fix card and the descriptions in the feature table below were drafted by Claude (see the AI disclosure). I haven't rewritten them in my own words yet; I will.
 
 ### Fix card: About this map
 
@@ -187,8 +187,8 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 
 | Where | What it does |
 | --- | --- |
-| [`index.html` lines 20–28](index.html#L20-L28) | Top navigation (Home, Map, Species Catalog, About). "About" is a link to `#about`, so it scrolls straight to the About section. |
-| [`index.html` lines 33–48](index.html#L33-L48) | Title, one-line description, and a blurred preview of the map. Clicking the preview opens `map.html`. |
+| [`index.html` lines 20–26](index.html#L20-L26) | Top navigation (Home, Map, Species Catalog, About). "About" is a link to `#about`, so it scrolls straight to the About section. |
+| [`index.html` lines 33–45](index.html#L33-L45) | Title, one-line description, and a blurred preview of the map. Clicking the preview opens `map.html`. |
 | [`index.html` lines 51–70](index.html#L51-L70) | The About section (`id="about"`): what the map shows and who it's for. |
 | [`index.html` lines 75–111](index.html#L75-L111) | "What's on the map": six short cards (filters, map views, borough summaries, observation trends, local projects, species catalog). |
 | [`index.html` lines 116–185](index.html#L116-L185) | Risk levels, Limitations and Sources: what used to be one long block of text in the pop-up, split into its own sections. |

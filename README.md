@@ -161,7 +161,6 @@ Test 3. Click a project whose source doesn’t name a species; its popup explain
 
 ## A3 Part 3
 
-> **Note:** the Finding and Fix text in the fix card and the descriptions in the feature table below were drafted by Claude (see the AI disclosure). I haven't rewritten them in my own words yet; I will.
 
 ### Fix card: About this map
 

@@ -225,7 +225,7 @@ let thematicUpdatePending = false;
 // ---- 3b. Sentinelle layer state ----
 let sentinelLayer = null;
 let sentinelFeatures = [];
-let sentinelVisible = false;
+let sentinelVisible = new URLSearchParams(window.location.search).get('source') === 'sentinel';
 let clustersEnabled = false;
 
 // ---- 3c. Community projects layer ----
@@ -252,30 +252,46 @@ let selectedIsUnion = false;
 // 3e. SHARED "WHAT'S ON THE MAP" SUMMARY BLOCK
 //     Updates the badge in the top-right corner.
 // ============================================================
+// One key per species for both sources (genus + species, so subspecies and the
+// two datasets' different common names don't count twice)
+function speciesKeyAcrossSources(p) {
+  const sci = (p.scientific_name || p.Nom_espece_latin || '').trim();
+  const common = (p.common_name || p.common_name_en || p.Nom_espece_anglais || '').trim();
+  return latinBinomial(sci) || common.toLowerCase();
+}
+
 function updateStatusSummary(filtered) {
   const el = document.getElementById('status');
   if (!el) return;
   statusFeatures = filtered;
 
-  // Unknown-accuracy records only count toward the total once they're switched on
-  const total = filterState.accuracy.has('unknown')
+  // Count only the layers that are switched on.
+  // Unknown-accuracy records only count toward the total once they're switched on.
+  const inatTotal = !inatVisible ? 0 : (filterState.accuracy.has('unknown')
     ? allFeatures.length
-    : allFeatures.filter(function (f) { return !isUnknownAccuracy(f.properties); }).length;
-  const shown = filtered.length;
+    : allFeatures.filter(function (f) { return !isUnknownAccuracy(f.properties); }).length);
+  const inatShownList = inatVisible ? filtered : [];
+  const sentinelOn = sentinelVisible && sentinelFeatures.length > 0;
+  const sentinelShownList = sentinelOn
+    ? sentinelFeatures.filter(function (f) { return passesSentinelFilters(f); })
+    : [];
+  const sentinelTotal = sentinelOn
+    ? sentinelFeatures.filter(function (f) { return f.geometry !== null; }).length
+    : 0;
+  const shownList = inatShownList.concat(sentinelShownList);
+  const total = inatTotal + sentinelTotal;
+  const shown = shownList.length;
 
   const speciesSet = new Set();
-  filtered.forEach(function (f) {
-    const p = f.properties;
-    const common = (p.common_name || '').trim();
-    const sci = (p.scientific_name || '').trim();
-    if (!common && !sci) return;
-    speciesSet.add((common || sci) + '|' + sci);
+  shownList.forEach(function (f) {
+    const key = speciesKeyAcrossSources(f.properties || {});
+    if (key) speciesSet.add(key);
   });
 
   let boroughCount = 0;
   let cityCount = 0;
   if (boroughData && window.turf && shown > 0) {
-    const pts = filtered.map(function (f) {
+    const pts = shownList.map(function (f) {
       return turf.point([f.geometry.coordinates[0], f.geometry.coordinates[1]]);
     });
     boroughData.features.forEach(function (b) {
@@ -293,9 +309,16 @@ function updateStatusSummary(filtered) {
                shown.toLocaleString() + ' observation' + (shown === 1 ? '' : 's') +
                (shown !== total ? ' <span class="status-sub">of ' + total.toLocaleString() + '</span>' : '') +
              '</div>' +
-             '<div class="status-line">' +
-               speciesSet.size.toLocaleString() + ' species' +
              '</div>';
+  // Split by source, only when Sentinelle is on (otherwise it's all iNaturalist)
+  if (sentinelOn) {
+    html += '<div class="status-line status-line-split">' +
+      (inatVisible ? inatShownList.length.toLocaleString() + ' iNaturalist · ' : '') +
+      sentinelShownList.length.toLocaleString() + ' Sentinelle</div>';
+  }
+  html += '<div class="status-line">' +
+            speciesSet.size.toLocaleString() + ' species' +
+          '</div>';
   html += '<div class="status-line status-line-updated">iNaturalist data updated: ' +
     (observationDataUpdatedAt
       ? new Date(observationDataUpdatedAt).toLocaleString(undefined, {
@@ -385,6 +408,42 @@ function latinBinomial(name) {
 }
 
 let requestedSpeciesApplied = false;
+
+// ?source=sentinel — the species only has Sentinelle records (sent by the catalog)
+const requestedSentinelOnly = (function () {
+  const q = new URLSearchParams(window.location.search);
+  return q.get('source') === 'sentinel' && !!q.get('species');
+})();
+
+// Filter to the requested species using the Sentinelle records and zoom to them
+function applyRequestedSentinelSpecies() {
+  if (!requestedSentinelOnly) return;
+  const target = latinBinomial(new URLSearchParams(window.location.search).get('species'));
+  if (!target) return;
+  const genusOnly = target.indexOf(' ') === -1;
+  const matches = sentinelFeatures.filter(function (f) {
+    const p = f.properties || {};
+    const b = latinBinomial(p.scientific_name || p.Nom_espece_latin);
+    return genusOnly ? b.split(' ')[0] === target : b === target;
+  });
+  if (!matches.length) return;
+  filterState.species.clear();
+  matches.forEach(function (f) {
+    const p = f.properties;
+    const en = (p.common_name_en || '').trim();
+    const latin = (p.scientific_name || p.Nom_espece_latin || '').trim();
+    filterState.species.add((en || latin) + '|' + latin);
+  });
+  updateSummaries();
+  if (observationDataLoaded) buildObsLayer();
+  buildSentinelLayer();
+  if (typeof refreshSelectionPanel === 'function') refreshSelectionPanel();
+
+  const bounds = L.geoJSON({ type: 'FeatureCollection', features: matches },
+    { filter: function (f) { return f.geometry !== null; } }).getBounds();
+  if (bounds.isValid()) map.fitBounds(bounds.pad(0.1), { maxZoom: 14 });
+}
+
 function applyRequestedSpecies() {
   const requested = new URLSearchParams(window.location.search).get('species');
   if (!requested) return false;
@@ -525,6 +584,19 @@ function availableSpecies() {
 // ============================================================
 // 5b. SENTINELLE FILTER — same filters, Sentinelle column names
 // ============================================================
+function sentinelPassesSpeciesFilter(p) {
+  if (filterState.species.size === 0) return true;
+  const en    = (p.common_name_en || '').trim();
+  const latin = (p.scientific_name || p['Nom_espece_latin'] || '').trim();
+  return filterState.species.has((en || latin) + '|' + latin) ||
+    filterState.species.has(latin + '|' + latin);
+}
+
+function inatPassesSpeciesFilter(p) {
+  if (filterState.species.size === 0) return true;
+  return filterState.species.has((p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || ''));
+}
+
 function passesSentinelFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (f.geometry === null) return false;
   const p = f.properties;
@@ -545,15 +617,7 @@ function passesSentinelFilters(f, ignoreSelectedYears, ignoreSelectedBoroughs) {
   if (filterState.priorityOnly &&
       !isPrioritySpecies(p.scientific_name || p['Nom_espece_latin'])) return false;
 
-  if (filterState.species.size > 0) {
-    const en    = (p.common_name_en || '').trim();
-    const latin = (p.scientific_name || p['Nom_espece_latin'] || '').trim();
-    const keys = [
-      (en || latin) + '|' + latin,
-      latin + '|' + latin
-    ];
-    if (!keys.some(function (k) { return filterState.species.has(k); })) return false;
-  }
+  if (!sentinelPassesSpeciesFilter(p)) return false;
 
   // Borough filter: Sentinelle points should respect the same geographic filter
   if (!ignoreSelectedBoroughs && filterState.boroughs.size > 0 && boroughData && window.turf) {
@@ -942,7 +1006,7 @@ function buildObsLayer() {
   // Wrap the call: Array.filter would pass (index, array) into the "ignore" flags
   const filtered = allFeatures.filter(function (f) { return passesFilters(f); });
   if (mapMode !== 'risk' || !inatVisible) {
-    if (inatVisible) updateStatusSummary(filtered);
+    updateStatusSummary(filtered);
     scheduleThematicMapLayerUpdate();
     return;
   }
@@ -1153,7 +1217,7 @@ fetch('data/places.geojson')
     );
     const bounds = allLayer.getBounds();
     // maxZoom keeps a single observation from zooming in to street level
-    if (bounds.isValid()) map.fitBounds(bounds.pad(0.1), { maxZoom: requestedSpeciesApplied ? 14 : 18 });
+    if (bounds.isValid() && !(requestedSentinelOnly && !requestedSpeciesApplied)) map.fitBounds(bounds.pad(0.1), { maxZoom: requestedSpeciesApplied ? 14 : 18 });
   })
   .catch(function (err) {
     showDataLoadError('Could not load the observation data (places.geojson). The map is blank until the request succeeds.', err);
@@ -1709,18 +1773,15 @@ document.getElementById('f-priority').addEventListener('change', function (e) {
   buildSentinelLayer();
 });
 
-// Sentinelle toggle
+// Sentinelle toggle (already on when the catalog sent a Sentinelle-only species)
+if (sentinelVisible) document.getElementById('f-sentinel').checked = true;
 document.getElementById('f-sentinel').addEventListener('change', function (e) {
   sentinelVisible = e.target.checked;
   updateSummaries();
   buildSentinelLayer();
+  refreshSelectionPanel();
 });
 
-document.getElementById('f-clusters').addEventListener('change', function (e) {
-  clustersEnabled = e.target.checked;
-  buildObsLayer();
-  buildSentinelLayer();
-});
 
 document.getElementById('f-projects').addEventListener('change', function (e) {
   projectsVisible = e.target.checked;
@@ -1729,7 +1790,9 @@ document.getElementById('f-projects').addEventListener('change', function (e) {
 });
 
 document.getElementById('f-map-mode').addEventListener('change', function (e) {
-  mapMode = e.target.value;
+  // "Grouped points" is the risk-point view with nearby points clustered
+  clustersEnabled = e.target.value === 'clusters';
+  mapMode = clustersEnabled ? 'risk' : e.target.value;
   updateMapLegend();
   buildObsLayer();
   buildSentinelLayer();
@@ -1742,6 +1805,7 @@ if (inatToggleEl) {
     inatVisible = e.target.checked;
   updateSummaries();
   buildObsLayer();
+  refreshSelectionPanel();
 });
 }
 
@@ -1784,7 +1848,6 @@ document.getElementById('f-reset').addEventListener('click', function () {
   document.querySelectorAll('#f-presence-list input[data-presence]').forEach(function (cb) { cb.checked = false; });
   document.getElementById('f-priority').checked = false;
   clustersEnabled = false;
-  document.getElementById('f-clusters').checked = false;
   mapMode = 'risk';
   document.getElementById('f-map-mode').value = mapMode;
   updateMapLegend();
@@ -2066,16 +2129,15 @@ function refreshSelectionPanel() {
 function observationsInSelection() {
   if (!window.turf || !allFeatures.length) return [];
 
-  // Only records whose location accuracy is switched on (unknown is off by default)
-  // and, when species are picked, only those species
-  const pool = allFeatures.filter(function (f) {
-    if (!passesAccuracyFilter(f.properties)) return false;
-    if (filterState.species.size > 0) {
-      const p = f.properties;
-      if (!filterState.species.has((p.common_name || p.scientific_name || '') + '|' + (p.scientific_name || ''))) return false;
-    }
-    return true;
+  // Records from the layers that are on. iNaturalist: only the location
+  // accuracies switched on. Both: only the picked species, if any.
+  const inatPool = !inatVisible ? [] : allFeatures.filter(function (f) {
+    return passesAccuracyFilter(f.properties) && inatPassesSpeciesFilter(f.properties);
   });
+  const sentinelPool = !sentinelVisible ? [] : sentinelFeatures.filter(function (f) {
+    return f.geometry !== null && sentinelPassesSpeciesFilter(f.properties || {});
+  });
+  const pool = inatPool.concat(sentinelPool);
 
   // --- 1. A borough was clicked: show only that polygon's observations ---
   if (selectedBorough) {
@@ -2147,11 +2209,13 @@ function statsFor(obsList) {
     const p = f.properties;
     const tier = p.risk || 'unknown';
     byTier[tier] = (byTier[tier] || 0) + 1;
-    const name = p.common_name || p.scientific_name || p.species_guess || '(unnamed)';
-    const sci  = p.scientific_name && p.scientific_name !== name ? p.scientific_name : '';
-    const key  = name + '|' + sci;
-    if (!speciesByTier[tier][key]) speciesByTier[tier][key] = { name: name, sci: sci, count: 0 };
+    const latin = p.scientific_name || p.Nom_espece_latin || '';
+    const name = p.common_name || p.common_name_en || p.Nom_espece_anglais || latin || p.species_guess || '(unnamed)';
+    const sci  = latin && latin !== name ? latin : '';
+    const key  = speciesKeyAcrossSources(p) || name;
+    if (!speciesByTier[tier][key]) speciesByTier[tier][key] = { name: name, sci: sci, count: 0, sentinel: 0 };
     speciesByTier[tier][key].count += 1;
+    if ('Nom_espece_latin' in p) speciesByTier[tier][key].sentinel += 1;   // Sentinelle record
   });
   return { byTier: byTier, speciesByTier: speciesByTier };
 }
@@ -2233,13 +2297,23 @@ function renderProjectOrganizationRows(projects) {
   return html + '</div>';
 }
 
+// Hover a species count to see it by source (only when Sentinelle is on)
+function sourceSplitTip(r) {
+  if (!sentinelVisible) return '';
+  const inat = r.count - r.sentinel;
+  const parts = [];
+  if (inatVisible) parts.push(inat.toLocaleString() + ' iNaturalist');
+  parts.push(r.sentinel.toLocaleString() + ' Sentinelle');
+  return ' title="' + escapeAttr(parts.join(' · ')) + '"';
+}
+
 function renderSpeciesListRows(byKey) {
   const rows = Object.values(byKey).sort(function (a, b) { return b.count - a.count; });
   let html = '<div class="bp-species">';
   rows.forEach(function (r) {
     html += '<div class="bp-species-row">' +
               '<div class="sp-name">' + r.name + (r.sci ? '<span class="sci">' + r.sci + '</span>' : '') + '</div>' +
-              '<div class="sp-count">' + r.count + '</div>' +
+              '<div class="sp-count"' + sourceSplitTip(r) + '>' + r.count + '</div>' +
             '</div>';
   });
   html += '</div>';
@@ -2274,7 +2348,7 @@ function renderSelectionPanel() {
   } else if (spKeys.length > 1) {
     html += '<div class="bp-species-filter">' + spKeys.length + ' species selected</div>';
   }
-  html += '<div class="bp-total">' + obs.length + ' observation' + (obs.length === 1 ? '' : 's') + '</div>';
+  html += '<div class="bp-total">' + obs.length.toLocaleString() + ' observation' + (obs.length === 1 ? '' : 's') + '</div>';
 
   ['high', 'moderate', 'low', 'unknown'].forEach(function (tier) {
     const info = TIER_INFO[tier];
@@ -2478,6 +2552,7 @@ function buildSentinelLayer() {
   }
   renderObservationTrendChart();
   buildProjectLayer();   // projects follow the same borough / species filters
+  if (observationDataLoaded) updateStatusSummary(statusFeatures);   // Sentinelle count line
   if (mapMode !== 'risk' || !sentinelVisible || sentinelFeatures.length === 0) {
     scheduleThematicMapLayerUpdate();
     return;
@@ -2638,6 +2713,7 @@ fetch('data/sentinel_wgs84.geojson')
     console.log('Sentinelle features loaded:', sentinelFeatures.length);
     buildYearList();   // pick up years only present in Sentinelle data
     if (sentinelVisible) buildSentinelLayer();
+    applyRequestedSentinelSpecies();
   })
   .catch(function (err) {
     showDataLoadError('Could not load the Sentinelle data layer. The map stays available, but that layer is disabled.', err);

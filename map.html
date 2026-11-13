@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="site/style.css?v=50" />
+  <link rel="stylesheet" href="site/style.css?v=53" />
 </head>
 <body class="map-page compact-filters">
 
@@ -107,6 +107,7 @@
         <span class="hide-phone">Map view</span>
         <select id="f-map-mode">
           <option value="risk">Risk-colored points</option>
+          <option value="clusters">Grouped points</option>
           <option value="density">Observation density</option>
           <option value="boroughs">Species per borough</option>
         </select>
@@ -168,10 +169,6 @@
         </div>
       </div>
 
-      <label class="filter filter-check">
-        <input id="f-clusters" type="checkbox">
-        <span>Group<span class="hide-phone"> nearby observations</span></span>
-      </label>
 
       <!-- ---- 2f. Reset + live count ---- -->
       <button id="f-reset" type="button" class="filter-reset">Reset</button>
@@ -257,6 +254,6 @@
   <script src="site/priority-species.js"></script>
   <script src="site/info-dialogs.js?v=25"></script>
   <script src="site/tooltips.js?v=1"></script>
-  <script src="site/app.js?v=50"></script>
+  <script src="site/app.js?v=55"></script>
 </body>
 </html>

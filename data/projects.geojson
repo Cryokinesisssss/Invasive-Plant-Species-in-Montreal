@@ -466,6 +466,44 @@
         "type": "Point",
         "coordinates": [-73.8069462, 45.4949210]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bateliers and de la Merci parks - invasive plant removal",
+        "organization": "Comité écologique du grand Montréal (CEGM)",
+        "year": "2016-2017 (maintenance planned to 2021)",
+        "description": "A borough contract to restore the wooded areas of two riverside parks: removing invasive plants, planting native trees and shrubs, and working toward protected-area status for Bateliers Park.",
+        "species": [
+          {
+            "common": "Common buckthorn",
+            "scientific": "Rhamnus cathartica"
+          },
+          {
+            "common": "Glossy buckthorn",
+            "scientific": "Frangula alnus"
+          },
+          {
+            "common": "Japanese knotweed",
+            "scientific": "Reynoutria japonica"
+          }
+        ],
+        "species_note": "Schubert cherry (an ornamental chokecherry cultivar) was also removed.",
+        "project_area": "Parc des Bateliers and Parc de la Merci, Ahuntsic-Cartierville, Montreal",
+        "actions": [
+          "Removing invasive plants (about 90,000 stems over almost two hectares in 2016).",
+          "Planting native species (nearly 185 trees and over 500 shrubs in 2016).",
+          "Adding interpretive panels, bird nesting boxes and feeders, and bat roosts.",
+          "Maintaining the sites over five years, with Bateliers Park to become a protected area."
+        ],
+        "marker_location": "Marker shows Parc des Bateliers; Parc de la Merci is just to the east.",
+        "project_url": "https://journaldesvoisins.com/en/cegm-sactive-deuxieme-annee-consecutive/",
+        "source_url": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.7021016, 45.5451592]
+      }
     }
   ]
 }

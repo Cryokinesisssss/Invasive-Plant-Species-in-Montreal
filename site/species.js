@@ -1014,9 +1014,11 @@ function renderCard(s) {
   const hasObs = counts && (counts.inat > 0 || counts.sentinel > 0 || counts.unknownAcc > 0);
   // Only unknown-accuracy records: open the map with that option already on
   const onlyUnknown = hasObs && counts.inat === 0 && counts.sentinel === 0;
+  // Only Sentinelle records: open the map with the Sentinelle layer on
+  const onlySentinel = hasObs && counts.inat === 0 && !counts.unknownAcc && counts.sentinel > 0;
   const mapBtn = hasObs
     ? '<a class="species-map-btn" href="../map.html?species=' + encodeURIComponent(s.sci) +
-        (onlyUnknown ? '&accuracy=all' : '') + '"' +
+        (onlyUnknown ? '&accuracy=all' : '') + (onlySentinel ? '&source=sentinel' : '') + '"' +
         (onlyUnknown ? ' title="Only records with unknown location accuracy"' : '') + '>View in map</a>'
     : '<span class="species-map-btn is-empty" title="No mapped observations in Montréal">Not on map</span>';
 

@@ -3577,3 +3577,12 @@ html:has(body.home-page) { scroll-behavior: smooth; }
   font-size: 13px;
   font-weight: 600;
 }
+
+/* "Map view" label in the filter bar */
+.map-mode-control > span { font-weight: 700; }
+
+/* Records by source, under the totals (only when Sentinelle is on) */
+.status-line-split {
+  font-size: 12px;
+  opacity: 0.85;
+}

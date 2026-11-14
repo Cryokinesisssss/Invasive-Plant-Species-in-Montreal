@@ -343477,6 +343477,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6211083333,
+          45.4606466667
+        ]
+      },
+      "properties": {
+        "id": "410613780",
+        "observed_on": "2026-10-24",
+        "time_observed_at": "2026-10-24 19:15:13 UTC",
+        "user_login": "abbyearle",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) abbyearle, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/410613780",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/755215172/medium.jpg",
+        "place_guess": "Île de Montréal, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "lesser periwinkle",
+        "scientific_name": "Vinca minor",
+        "common_name": "lesser periwinkle",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55844",
+        "positional_accuracy": "10",
+        "public_positional_accuracy": "10",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.9351366667,
           45.4061916667
         ]
@@ -346622,6 +346659,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.583789121,
+          45.5043507204
+        ]
+      },
+      "properties": {
+        "id": "413359632",
+        "observed_on": "2026-11-03",
+        "time_observed_at": "2026-11-03 15:57:15 UTC",
+        "user_login": "jgrey",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) jgrey, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413359632",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/760769228/medium.jpg",
+        "place_guess": "Mount Royal Park, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6099153876,
           45.44318135
         ]
@@ -347880,6 +347954,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5730228504,
+          45.4439447072
+        ]
+      },
+      "properties": {
+        "id": "414365061",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:29:52 UTC",
+        "user_login": "christophedumoulin",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Christophe Dumoulin, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414365061",
+        "image_url": "",
+        "place_guess": "LaSalle / Valiquette, Montréal, QC H4H 1P9, Canada",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5729163686,
           45.4439886715
         ]
@@ -348102,6 +348213,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5728733763,
+          45.4443620811
+        ]
+      },
+      "properties": {
+        "id": "414366606",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:41:11 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366606",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762800924/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5726800025,
           45.4442103149
         ]
@@ -348201,6 +348349,43 @@
         "taxon_id": "55972",
         "positional_accuracy": "9",
         "public_positional_accuracy": "9",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5724541199,
+          45.4444499665
+        ]
+      },
+      "properties": {
+        "id": "414366948",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:44:05 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414366948",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762801912/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",
@@ -348546,6 +348731,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5651138168,
+          45.4525577199
+        ]
+      },
+      "properties": {
+        "id": "414371721",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 17:16:59 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414371721",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762811196/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun purgatif",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.57422,
           45.5204883333
         ]
@@ -348613,6 +348835,80 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.673219649,
+          45.5153765595
+        ]
+      },
+      "properties": {
+        "id": "414525364",
+        "observed_on": "2026-09-27",
+        "time_observed_at": "2026-09-27 15:13:41 UTC",
+        "user_login": "hudhaifa_bashar",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) hudhaifa_bashar, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414525364",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763122414/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Jerusalem artichoke",
+        "scientific_name": "Helianthus tuberosus",
+        "common_name": "Jerusalem artichoke",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "122970",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.559355,
+          45.4982616667
+        ]
+      },
+      "properties": {
+        "id": "414576808",
+        "observed_on": "2026-11-13",
+        "time_observed_at": "2026-11-13 12:58:56 UTC",
+        "user_login": "mcastaneda-zarate",
+        "license": "CC-BY-NC-SA",
+        "photo_license": "CC-BY-NC-SA",
+        "photo_attribution": "(c) Miguel Castañeda-Zárate, some rights reserved (CC BY-NC-SA)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414576808",
+        "image_url": "",
+        "place_guess": "Rue St-Maurice, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "14",
+        "public_positional_accuracy": "14",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
       }
     }
   ]

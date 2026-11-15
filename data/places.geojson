@@ -58725,6 +58725,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.618353121,
+          45.4622538981
+        ]
+      },
+      "properties": {
+        "id": "93808612",
+        "observed_on": "2021-09-05",
+        "time_observed_at": "2021-09-05 23:17:54 UTC",
+        "user_login": "rclark17",
+        "license": "CC-BY-SA",
+        "photo_license": "CC-BY-NC-SA",
+        "photo_attribution": "(c) Rebecca Clark, some rights reserved (CC BY-NC-SA)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/93808612",
+        "image_url": "",
+        "place_guess": "Saint-Jacques / Madison, Montréal, QC H4B 1T6, Canada",
+        "place_town_name": "",
+        "species_guess": "Cow Parsley",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5860364511,
           45.5048542252
         ]
@@ -188447,6 +188484,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6202801932,
+          45.4619284008
+        ]
+      },
+      "properties": {
+        "id": "219423853",
+        "observed_on": "2024-05-30",
+        "time_observed_at": "2024-05-30 22:46:08 UTC",
+        "user_login": "meagan26206",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Meagan Tobin-Devereaux, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/219423853",
+        "image_url": "",
+        "place_guess": "Île de Montréal, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cow Parsley",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "47",
+        "public_positional_accuracy": "47",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6203095411,
           45.4619723233
         ]
@@ -232699,6 +232773,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6218683333,
+          45.4599533333
+        ]
+      },
+      "properties": {
+        "id": "280834589",
+        "observed_on": "2025-05-13",
+        "time_observed_at": "2025-05-13 18:32:24 UTC",
+        "user_login": "miguel48778",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Miguel González Palacios, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/280834589",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/504425150/medium.jpeg",
+        "place_guess": "Montreal, Quebec H4B 1T6, Canadá",
+        "place_town_name": "",
+        "species_guess": "Espino cerval",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.8646972222,
           45.4351277778
         ]
@@ -240013,6 +240124,43 @@
         "taxon_id": "47779",
         "positional_accuracy": "6",
         "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.6177597768,
+          45.4623671236
+        ]
+      },
+      "properties": {
+        "id": "288533794",
+        "observed_on": "2025-06-09",
+        "time_observed_at": "2025-06-09 20:01:10 UTC",
+        "user_login": "wapiza",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) wapiza, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/288533794",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/518895329/medium.jpg",
+        "place_guess": "Rue St-Jacques, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cow Parsley",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "13",
+        "public_positional_accuracy": "13",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "low",
@@ -268804,6 +268952,43 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.6085128784,
+          45.4667396545
+        ]
+      },
+      "properties": {
+        "id": "318708799",
+        "observed_on": "2025-10-04",
+        "time_observed_at": "2025-10-04 20:06:04 UTC",
+        "user_login": "coopercat",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Nicole Sosa, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/318708799",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/576038271/medium.jpg",
+        "place_guess": "Montréal",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "86",
+        "public_positional_accuracy": "86",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
       }
     },
     {
@@ -320907,6 +321092,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6207791164,
+          45.4607820373
+        ]
+      },
+      "properties": {
+        "id": "399615830",
+        "observed_on": "2026-09-12",
+        "time_observed_at": "2026-09-12 14:26:55 UTC",
+        "user_login": "foresty_creature",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) foresty_creature, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/399615830",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/733188031/medium.jpg",
+        "place_guess": "Ville-Marie Expy, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "black locust",
+        "scientific_name": "Robinia pseudoacacia",
+        "common_name": "black locust",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56088",
+        "positional_accuracy": "40",
+        "public_positional_accuracy": "40",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6050109863,
           45.4984893799
         ]
@@ -348909,6 +349131,154 @@
         "risk": "high",
         "presence": "Established",
         "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7402640869,
+          45.5169310543
+        ]
+      },
+      "properties": {
+        "id": "414799907",
+        "observed_on": "2026-11-14",
+        "time_observed_at": "2026-11-14 17:08:50 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414799907",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763677489/medium.jpg",
+        "place_guess": "Parc-nature du Bois-de-Saraguay, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Égopode podagraire",
+        "scientific_name": "Aegopodium podagraria",
+        "common_name": "Goutweed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "51741",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "moderate",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.744956716,
+          45.5124343749
+        ]
+      },
+      "properties": {
+        "id": "414802174",
+        "observed_on": "2026-11-14",
+        "time_observed_at": "2026-11-14 19:40:17 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414802174",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763682502/medium.jpg",
+        "place_guess": "Parc-nature du Bois-de-Saraguay, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun bourdaine",
+        "scientific_name": "Frangula alnus",
+        "common_name": "alder buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "55972",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7444912733,
+          45.5129202567
+        ]
+      },
+      "properties": {
+        "id": "414802385",
+        "observed_on": "2026-11-14",
+        "time_observed_at": "2026-11-14 19:54:23 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414802385",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763682890/medium.jpg",
+        "place_guess": "Parc-nature du Bois-de-Saraguay, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Roseau commun d'Eurasie",
+        "scientific_name": "Phragmites australis australis",
+        "common_name": "European common reed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "556361",
+        "positional_accuracy": "20",
+        "public_positional_accuracy": "20",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7364371767,
+          45.514702189
+        ]
+      },
+      "properties": {
+        "id": "414803208",
+        "observed_on": "2026-11-14",
+        "time_observed_at": "2026-11-14 20:52:54 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414803208",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763684624/medium.jpg",
+        "place_guess": "Parc-nature du Bois-de-Saraguay, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "10",
+        "public_positional_accuracy": "10",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
       }
     }
   ]

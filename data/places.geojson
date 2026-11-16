@@ -346955,6 +346955,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6197403,
+          45.4920108997
+        ]
+      },
+      "properties": {
+        "id": "413662596",
+        "observed_on": "2026-09-13",
+        "time_observed_at": "2026-09-13 16:06:59 UTC",
+        "user_login": "babzb",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) babzb, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/413662596",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761385948/medium.jpg",
+        "place_guess": "Queen-Mary / Frère-André, Montréal, QC H3V 1A7, Canada",
+        "place_town_name": "",
+        "species_guess": "black locust",
+        "scientific_name": "Robinia pseudoacacia",
+        "common_name": "black locust",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56088",
+        "positional_accuracy": "",
+        "public_positional_accuracy": "",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.8272221822,
           45.5157432323
         ]

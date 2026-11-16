@@ -1,6 +1,6 @@
 {
   "source": "iNaturalist API observation photo metadata",
-  "checked_at": "2026-11-15T13:59:54.397169+00:00",
+  "checked_at": "2026-11-16T15:51:10.154949+00:00",
   "photos": {
     "4276938": {
       "photo_id": "5126423",
@@ -69216,6 +69216,13 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/758909464/medium.jpg",
       "license_code": "cc-by",
       "attribution": "(c) Carlos Domínguez-Rodríguez, some rights reserved (CC BY)",
+      "verified": true
+    },
+    "413662596": {
+      "photo_id": "761385948",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/761385948/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) babzb, some rights reserved (CC BY-NC)",
       "verified": true
     },
     "414181695": {

@@ -1,6 +1,6 @@
 {
   "source": "iNaturalist API observation photo metadata",
-  "checked_at": "2026-11-16T15:51:10.154949+00:00",
+  "checked_at": "2026-11-17T16:03:48.608134+00:00",
   "photos": {
     "4276938": {
       "photo_id": "5126423",
@@ -48309,6 +48309,13 @@
       "attribution": "(c) plounaki, some rights reserved (CC BY-NC)",
       "verified": true
     },
+    "366725128": {
+      "photo_id": "669646010",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/669646010/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) Anthony B. Zerafa, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
     "366765649": {
       "photo_id": "669723442",
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/669723442/medium.jpg",
@@ -49259,6 +49266,13 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/684275523/medium.jpg",
       "license_code": "cc-by-nc",
       "attribution": "(c) treebause, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "374388817": {
+      "photo_id": "684304829",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/684304829/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) naturos66, some rights reserved (CC BY-NC)",
       "verified": true
     },
     "374397410": {
@@ -53151,6 +53165,13 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/735227582/medium.jpg",
       "license_code": "cc-by-nc",
       "attribution": "(c) smith_gwen, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "400728978": {
+      "photo_id": "735415941",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/735415941/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) naturos66, some rights reserved (CC BY-NC)",
       "verified": true
     },
     "400729555": {
@@ -57710,6 +57731,13 @@
       "attribution": "(c) Christophe Dumoulin, all rights reserved",
       "verified": true
     },
+    "414365387": {
+      "photo_id": "762798315",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762798315/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
     "414365519": {
       "photo_id": "762798689",
       "image_url": "https://static.inaturalist.org/photos/762798689/medium.jpg",
@@ -57904,6 +57932,13 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/763684624/medium.jpg",
       "license_code": "cc-by-nc",
       "attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "415207210": {
+      "photo_id": "764511901",
+      "image_url": "https://static.inaturalist.org/photos/764511901/medium.jpg",
+      "license_code": null,
+      "attribution": "(c) Caroline Robert, all rights reserved",
       "verified": true
     },
     "2394341": {

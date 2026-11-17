@@ -294970,6 +294970,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5338222222,
+          45.5064694444
+        ]
+      },
+      "properties": {
+        "id": "366725128",
+        "observed_on": "2026-05-30",
+        "time_observed_at": "2026-05-30 14:34:00 UTC",
+        "user_login": "anthonyzerafa",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Anthony B. Zerafa, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/366725128",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/669646010/medium.jpg",
+        "place_guess": "Ville-Marie, Montreal, QC, Canada",
+        "place_town_name": "",
+        "species_guess": "dame's rocket",
+        "scientific_name": "Hesperis matronalis",
+        "common_name": "dame's rocket",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "47697",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.622163197,
           45.5085440487
         ]
@@ -323793,6 +323830,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.6348598271,
+          45.5605588247
+        ]
+      },
+      "properties": {
+        "id": "400728978",
+        "observed_on": "2026-09-16",
+        "time_observed_at": "2026-09-16 14:42:49 UTC",
+        "user_login": "naturos66",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) naturos66, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/400728978",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/735415941/medium.jpg",
+        "place_guess": "Île de Montréal, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Cerfeuil des bois",
+        "scientific_name": "Anthriscus sylvestris",
+        "common_name": "Cow Parsley",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "124544",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6348028914,
           45.560555141
         ]
@@ -348287,6 +348361,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5728911243,
+          45.4440802872
+        ]
+      },
+      "properties": {
+        "id": "414365387",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 16:32:36 UTC",
+        "user_login": "ghislaine_leclerc",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Ghislaine Leclerc, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/414365387",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/762798315/medium.jpg",
+        "place_guess": "Boul Lasalle, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Roseau commun d'Eurasie",
+        "scientific_name": "Phragmites australis australis",
+        "common_name": "European common reed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "556361",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5730103528,
           45.4441850315
         ]
@@ -349311,6 +349422,43 @@
         "taxon_id": "54811",
         "positional_accuracy": "10",
         "public_positional_accuracy": "10",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.6059416667,
+          45.5345083333
+        ]
+      },
+      "properties": {
+        "id": "415207210",
+        "observed_on": "2026-11-16",
+        "time_observed_at": "2026-11-17 01:22:04 UTC",
+        "user_login": "caroline70672",
+        "license": "",
+        "photo_license": "",
+        "photo_attribution": "(c) Caroline Robert, all rights reserved",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415207210",
+        "image_url": "",
+        "place_guess": "Rue Saint-Denis, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Renouée du Japon",
+        "scientific_name": "Reynoutria japonica",
+        "common_name": "Japanese knotweed",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "914922",
+        "positional_accuracy": "30",
+        "public_positional_accuracy": "30",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",

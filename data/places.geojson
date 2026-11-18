@@ -254307,6 +254307,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.530075,
+          45.5602
+        ]
+      },
+      "properties": {
+        "id": "304076885",
+        "observed_on": "2025-08-02",
+        "time_observed_at": "2025-08-02 20:02:00 UTC",
+        "user_login": "marpou",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) marpou, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/304076885",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/548127959/medium.jpg",
+        "place_guess": "Viauville, Montréal, QC H1V, Canada",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "12",
+        "public_positional_accuracy": "12",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5309222222,
           45.5606916667
         ]
@@ -254418,6 +254455,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5384972222,
+          45.56285
+        ]
+      },
+      "properties": {
+        "id": "304077012",
+        "observed_on": "2025-08-02",
+        "time_observed_at": "2025-08-02 19:22:00 UTC",
+        "user_login": "marpou",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) marpou, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/304077012",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/548128588/medium.jpg",
+        "place_guess": "Viauville, Montréal, QC H1V, Canada",
+        "place_town_name": "",
+        "species_guess": "Salicaire commune",
+        "scientific_name": "Lythrum salicaria",
+        "common_name": "purple loosestrife",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "61321",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5386055556,
           45.5631777778
         ]
@@ -254517,6 +254591,43 @@
         "taxon_id": "61321",
         "positional_accuracy": "27",
         "public_positional_accuracy": "27",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5445638889,
+          45.5651388889
+        ]
+      },
+      "properties": {
+        "id": "304077183",
+        "observed_on": "2025-08-02",
+        "time_observed_at": "2025-08-02 18:35:00 UTC",
+        "user_login": "marpou",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) marpou, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/304077183",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/548129525/medium.jpg",
+        "place_guess": "Communauté-Urbaine-de-Montréal, Québec, Canada",
+        "place_town_name": "",
+        "species_guess": "Robinier faux-acacia",
+        "scientific_name": "Robinia pseudoacacia",
+        "common_name": "black locust",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56088",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "low",
@@ -349464,6 +349575,80 @@
         "risk": "high",
         "presence": "Established",
         "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.9425095937,
+          45.4041696271
+        ]
+      },
+      "properties": {
+        "id": "415270301",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 14:13:20 UTC",
+        "user_login": "andrea41531",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Andrea Svoronos, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415270301",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/764636389/medium.jpg",
+        "place_guess": "Terrasse Glenaladale, Ste-Anne-de-Bellevue, QC, CA",
+        "place_town_name": "",
+        "species_guess": "black locust",
+        "scientific_name": "Robinia pseudoacacia",
+        "common_name": "black locust",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56088",
+        "positional_accuracy": "11",
+        "public_positional_accuracy": "11",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.56323,
+          45.4968383333
+        ]
+      },
+      "properties": {
+        "id": "415432243",
+        "observed_on": "2026-11-18",
+        "time_observed_at": "2026-11-18 12:47:51 UTC",
+        "user_login": "mcastaneda-zarate",
+        "license": "CC-BY-NC-SA",
+        "photo_license": "CC-BY-NC-SA",
+        "photo_attribution": "(c) Miguel Castañeda-Zárate, some rights reserved (CC BY-NC-SA)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415432243",
+        "image_url": "",
+        "place_guess": "Rue Montfort, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
       }
     }
   ]

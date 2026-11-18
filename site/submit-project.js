@@ -62,6 +62,8 @@ const SUBMIT_SDK = 'https://www.gstatic.com/firebasejs/12.18.0/';   // pinned ve
     addBtn.textContent = on ? 'Click the map (or press to cancel)' : 'Suggest a project';
     addBtn.classList.toggle('is-active', on);
     map.getContainer().style.cursor = on ? 'crosshair' : '';
+    // Fade the observations so streets and parks show; project pins stay
+    map.getContainer().classList.toggle('is-choosing-spot', on);
     if (on) status('');
   }
   addBtn.addEventListener('click', function () { setAdding(!adding); });

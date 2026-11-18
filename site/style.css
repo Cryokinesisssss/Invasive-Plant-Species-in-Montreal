@@ -3680,4 +3680,9 @@ fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
 .suggest-cancel { border: 1px solid #ccc; background: #fff; color: #333; }
 .suggest-send { border: none; background: #1D4E89; color: #fff; }
 .suggest-send:disabled { opacity: 0.6; cursor: default; }
+/* While picking a spot for a suggestion: observations fade, project pins stay */
+#map .leaflet-overlay-pane,
+#map .leaflet-marker-pane { transition: opacity 0.2s; }
+#map.is-choosing-spot .leaflet-overlay-pane,
+#map.is-choosing-spot .leaflet-marker-pane { opacity: 0.2; }
 .project-reader-note { margin-top: 6px; font-size: 11px; color: #555; font-style: italic; }

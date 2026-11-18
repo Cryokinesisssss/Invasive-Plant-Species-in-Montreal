@@ -93,6 +93,7 @@
             'Projects in the same park or island are grouped together.</li>' +
           '<li><strong>Not a complete list:</strong> these are selected projects that were checked by hand (last in October 2026). ' +
             'Areas without a marker may still have control work happening.</li>' +
+          '<li><strong>Know of one?</strong> Use “Suggest a project” on the map. Suggestions appear after they are reviewed.</li>' +
         '</ul>' +
         '<p class="risk-info-note">Turn this layer on or off under <strong>Map layers</strong> on the map. In the species catalog, ' +
           'use “View projects &amp; initiatives” to see projects for a specific species.</p>'

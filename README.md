@@ -98,6 +98,27 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 - Borough and city project totals are based on each project's mapped point
   falling inside the selected boundary.
 
+## Reader-suggested projects
+- Readers can press **Suggest a project** on the map, click the location, and
+  fill in a short form (`site/submit-project.js`, adapted from the GEOG 464
+  memory.js kit's shared route).
+- Suggestions are saved in Firebase Firestore (collection
+  `project_submissions`) with `status: "pending"`. Nobody can see them until
+  I change `status` to `approved` in the Firebase console (Firestore → Data).
+  I can fix typos in the same place before approving. Approved suggestions
+  appear in the Projects layer, marked "Suggested by a reader and reviewed".
+- The Firestore rules are in [`firestore.rules`](firestore.rules). They only
+  accept the expected fields, with length limits, a `https://` source link,
+  a location inside the Montréal area, and status `pending`. Suggestions
+  can't be edited or deleted from the website.
+- Privacy: the form asks for no names or home addresses, and stores no email.
+  Each browser gets a random anonymous id (Firebase anonymous sign-in).
+  The database is in Montréal (`northamerica-northeast1`); the sign-in
+  service may run outside Canada. I may edit or delete any suggestion, and
+  will delete pending and rejected suggestions at the end of the course.
+- The Firebase web config in `submit-project.js` is public by design; the
+  rules are what protect the database.
+
 ## Not in this iteration
 - Green spaces (parks, cemeteries, golf courses) are not a separate
   layer — they would clutter the map at this zoom.

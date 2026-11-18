@@ -230,7 +230,9 @@ let clustersEnabled = false;
 
 // ---- 3c. Community projects layer ----
 let projectLayer = null;
-let projectFeatures = [];
+let projectFeatures = [];          // base + reader projects, what the map shows
+let baseProjectFeatures = [];      // from data/projects.geojson
+let readerProjectFeatures = [];    // approved reader suggestions (site/submit-project.js)
 let projectsVisible = true;
 let projectsLoaded = false;
 let projectsLoadFailed = false;
@@ -712,8 +714,9 @@ function renderMonthTrendChart(chart) {
     const total = c.inat + c.sentinel;
     const label = MONTH_FULL[i] + ': ' + c.inat.toLocaleString() + ' iNaturalist and ' +
       c.sentinel.toLocaleString() + ' Sentinelle records';
+    const tip = c.inat.toLocaleString() + ' iNaturalist · ' + c.sentinel.toLocaleString() + ' Sentinelle';
     return '<div class="trend-row trend-row-static" role="img" aria-label="' + escapeAttr(label) +
-      '" title="' + escapeAttr(label) + '">' +
+      '" title="' + escapeAttr(tip) + '">' +
       '<span class="trend-year">' + MONTH_NAMES[i] + '</span>' +
       '<span class="trend-track" aria-hidden="true">' +
       '<span class="trend-bar-inat" style="width:' + (c.inat / maxCount) * 100 + '%"></span>' +
@@ -788,7 +791,8 @@ function renderObservationTrendChart() {
     return '<button type="button" class="trend-row' +
       (selected ? ' is-selected' : '') + (partial ? ' is-partial' : '') +
       '" data-years="' + yearLabel + '" aria-pressed="' + selected +
-      '" aria-label="' + escapeAttr(label) + '" title="' + escapeAttr(label) + '">' +
+      '" aria-label="' + escapeAttr(label) + '" title="' + escapeAttr(entry.inat.toLocaleString() +
+      ' iNaturalist · ' + entry.sentinel.toLocaleString() + ' Sentinelle') + '">' +
       '<span class="trend-year">' + entry.bucket.label + '</span>' +
       '<span class="trend-track" aria-hidden="true">' +
       '<span class="trend-bar-inat" style="width:' + inatWidth + '%"></span>' +
@@ -1082,9 +1086,9 @@ function buildObsLayer() {
         if (latinName) {
           const catalogUrl = 'site/species.html?species=' + encodeURIComponent(latinName);
           html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
-            '" title="Open in species catalog"><em>' + escapeHtml(latinName) + '</em></a></div>';
+            '"><em>' + escapeHtml(latinName) + '</em></a></div>';
         }
-        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</button>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</button>';
         html += '</div></div>';
         if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
           html += '<div class="popup-photo-attribution">Photo credit: ' +
@@ -1101,12 +1105,12 @@ function buildObsLayer() {
         if (p.presence) {
           const statusLabel = p.presence === 'Single observation' ? 'Occasional observation' : p.presence;
           html += '<div class="popup-grid-wide"><span class="lbl">Québec status</span>' +
-            '<button type="button" class="popup-status-link" data-info="presence" title="What does the Québec status mean?">' +
+            '<button type="button" class="popup-status-link" data-info="presence">' +
             escapeHtml(statusLabel) + '</button></div>';
         }
         if (p.banned) {
           html += '<div class="popup-grid-wide"><span class="lbl">Regulation</span>' +
-            '<button type="button" class="popup-status-link" data-info="refee" title="What does this mean?">' +
+            '<button type="button" class="popup-status-link" data-info="refee">' +
             'Cultivation &amp; sale prohibited</button></div>';
         }
         html += '</div>';
@@ -1160,7 +1164,7 @@ function buildObsLayer() {
       const size = count < 100 ? 36 : (count < 1000 ? 44 : 52);
       return L.divIcon({
         html: '<div class="observation-cluster observation-cluster-' + sizeClass +
-          '" title="Click to zoom in and explore observations">' +
+          '">' +
           count.toLocaleString() + '</div>',
         className: '',
         iconSize: [size, size],
@@ -1906,7 +1910,7 @@ function updateMapLegend() {
       '<div class="legend-mode-note">Shows where records are reported (iNaturalist and Sentinelle, as enabled), not how abundant plants are.</div>';
   } else {
     html = '<div class="legend-title">Risk ' +
-        '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?" title="What do the risk levels mean?">?</button>' +
+        '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?">?</button>' +
       '</div>' +
       '<div class="legend-risk-strip">' +
         '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
@@ -1926,7 +1930,7 @@ function updateMapLegend() {
   }
   html += '<div class="legend-divider"></div>' +
     '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives' +
-      '<button type="button" class="legend-help" data-info="projects" aria-label="What are projects and initiatives?" title="What are projects and initiatives?">?</button>' +
+      '<button type="button" class="legend-help" data-info="projects" aria-label="What are projects and initiatives?">?</button>' +
     '</div>';
   legendElement.innerHTML = html;
   positionTrendButton();
@@ -2655,7 +2659,7 @@ function buildSentinelLayer() {
         html += '<div class="popup-title">' + title + '</div>';
         if (latinLine) html += '<div class="popup-latin"><em>' + latinLine + '</em></div>';
         html += '<div class="popup-badge" style="background:#d8f3dc;color:#1b4332;border:1px solid #40916c;margin-right:4px;">Sentinelle</div>';
-        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" title="What does this risk level mean?" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + '</button>';
+        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" style="background:' + b.bg + ';color:' + b.fg + ';border:1px solid ' + b.border + ';">' + (RISK_LABEL[p.risk] || 'Unclassified') + '</button>';
         html += '</div></div>';
 
         html += '<div class="popup-grid">';
@@ -2689,7 +2693,7 @@ function buildSentinelLayer() {
       const size = count < 100 ? 36 : (count < 1000 ? 44 : 52);
       return L.divIcon({
         html: '<div class="observation-cluster sentinel-observation-cluster observation-cluster-' +
-          sizeClass + '" title="Click to zoom in and explore Sentinelle observations">' +
+          sizeClass + '">' +
           count.toLocaleString() + '</div>',
         className: '',
         iconSize: [size, size],
@@ -2754,9 +2758,9 @@ map.getContainer().addEventListener('mouseleave', function () { closeProjectSpid
 
 // What a project's pin stands for (marker_type in data/projects.geojson)
 const PROJECT_MARKER_TYPES = {
-  site:         { label: 'Project site',              tip: 'The marker is where the work happens.' },
-  area:         { label: 'Project area (approximate)', tip: 'Somewhere in the project area; exact work spots are not mapped.' },
-  organization: { label: 'Organization address',      tip: 'An office or meeting point, not where the work happens.' }
+  site:         { label: 'Project site',              tip: 'Where the work happens' },
+  area:         { label: 'Project area (approximate)', tip: 'Exact spots not mapped' },
+  organization: { label: 'Organization address',      tip: 'Office or meeting point' }
 };
 
 function buildProjectLayer() {
@@ -2801,19 +2805,19 @@ function buildProjectLayer() {
           if (!species || !species.common) return;
           // Plant named only in general ("buckthorn"): same grey style
           if (species.unspecified) {
-            html += '<li class="project-species-other" title="The source does not say which species">' +
+            html += '<li class="project-species-other">' +
               escapeHtml(species.common) + ' <em>(species not specified)</em></li>';
             return;
           }
           // Species without a catalog entry: grey, no link, hollow bullet (hover explains)
           if (species.in_catalog === false) {
-            html += '<li class="project-species-other" title="Not in the species catalog">' + escapeHtml(species.common) +
+            html += '<li class="project-species-other">' + escapeHtml(species.common) +
               (species.scientific ? ' <em>(' + escapeHtml(species.scientific) + ')</em>' : '') + '</li>';
             return;
           }
           if (species.scientific) {
             const catalogUrl = 'site/species.html?species=' + encodeURIComponent(species.scientific);
-            html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '" title="Open species catalog entry">';
+            html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '">';
           } else {
             html += '<li>';
           }
@@ -2850,7 +2854,9 @@ function buildProjectLayer() {
         html += '<div class="project-location-note" title="' + escapeAttr(marker.tip) + '">' +
           '<strong>Marker:</strong> ' + marker.label + '</div>';
       }
-      if (projectsSourcesLastChecked) {
+      if (p.reader_submitted) {
+        html += '<div class="project-reader-note">Suggested by a reader and reviewed</div>';
+      } else if (projectsSourcesLastChecked) {
         html += '<div class="project-source-checked">Project sources last checked: ' +
           escapeHtml(projectsSourcesLastChecked) + '</div>';
       }
@@ -2908,7 +2914,7 @@ function buildProjectLayer() {
       iconCreateFunction: function (cluster) {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: '<span class="project-pin-wrap" title="' + count + ' projects at this site. Click to show them.">' +
+          html: '<span class="project-pin-wrap" title="' + count + ' projects">' +
             PROJECT_PIN_SVG + '<span class="project-pin-count">' + count + '</span></span>',
           className: 'project-marker-icon project-cluster-pin',
           iconSize: [24, 32],
@@ -2932,6 +2938,14 @@ function buildProjectLayer() {
   projectLayer.addTo(map);
 }
 
+// Approved reader suggestions arrive from Firebase (site/submit-project.js)
+function setReaderProjects(features) {
+  readerProjectFeatures = features;
+  projectFeatures = baseProjectFeatures.concat(readerProjectFeatures);
+  buildProjectLayer();
+  refreshSelectionPanel();
+}
+
 fetch('data/projects.geojson')
   .then(function (response) {
     if (!response.ok) throw new Error('HTTP ' + response.status + ' loading projects.geojson');
@@ -2941,7 +2955,8 @@ fetch('data/projects.geojson')
     if (!data || data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
       throw new Error('projects.geojson must be a GeoJSON FeatureCollection');
     }
-    projectFeatures = data.features;
+    baseProjectFeatures = data.features;
+    projectFeatures = baseProjectFeatures.concat(readerProjectFeatures);
     projectsSourcesLastChecked = data.metadata && data.metadata.sources_last_checked
       ? data.metadata.sources_last_checked
       : null;

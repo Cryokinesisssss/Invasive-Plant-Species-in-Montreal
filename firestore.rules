@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// Firestore rules for reader-suggested projects (site/submit-project.js).
+// Paste into Firebase console > Firestore > Rules, then Publish.
+//
+// - Anyone may send a suggestion; it is saved as "pending".
+// - Nobody can read a suggestion until the owner changes its status to
+//   "approved" in the console (the console is not limited by these rules).
+// - Suggestions can't be edited or deleted from the website.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /project_submissions/{id} {
+      allow read: if resource.data.status == 'approved';
+      allow create: if request.auth != null && validSubmission(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    function validSubmission(d) {
+      return d.keys().hasOnly(['name', 'organization', 'year_start', 'year_end', 'description',
+                               'species', 'species_other', 'marker_type', 'source_url',
+                               'lat', 'lng', 'uid', 'ts', 'status'])
+        && d.keys().hasAll(['name', 'organization', 'year_start', 'year_end', 'description',
+                            'species', 'species_other', 'marker_type', 'source_url',
+                            'lat', 'lng', 'uid', 'ts', 'status'])
+        && d.uid == request.auth.uid
+        && d.status == 'pending'
+        && d.ts == request.time
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 100
+        && d.organization is string && d.organization.size() > 0 && d.organization.size() <= 100
+        && d.year_start is int && d.year_start >= 1990 && d.year_start <= 2100
+        && (d.year_end == null || (d.year_end is int && d.year_end >= d.year_start && d.year_end <= 2100))
+        && d.description is string && d.description.size() > 0 && d.description.size() <= 400
+        && d.species is list && d.species.size() <= 10
+        && d.species_other is string && d.species_other.size() <= 60
+        && d.marker_type in ['site', 'area', 'organization']
+        && d.source_url is string && d.source_url.size() <= 300 && d.source_url.matches('https://[^ ]+[.][^ ]+')
+        // Montréal agglomeration (same box as the website)
+        && d.lat is number && d.lat >= 45.40 && d.lat <= 45.71
+        && d.lng is number && d.lng >= -73.98 && d.lng <= -73.47;
+    }
+  }
+}

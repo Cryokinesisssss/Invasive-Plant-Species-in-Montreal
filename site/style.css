@@ -3612,3 +3612,72 @@ html:has(body.home-page) { scroll-behavior: smooth; }
   font-size: 12px;
   opacity: 0.85;
 }
+
+/* ---- Reader-suggested projects (site/submit-project.js) ---- */
+.suggest-panel {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  max-width: 220px;
+}
+.suggest-btn {
+  display: block;
+  width: 100%;
+  min-height: 34px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: #1D4E89;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.suggest-btn:hover { background: #163d6b; }
+.suggest-btn.is-active { background: #DCBD23; color: #1b1b1b; }
+.suggest-status { margin-top: 6px; font-size: 12px; line-height: 1.35; color: #333; }
+.suggest-form { max-width: 480px; border-left-color: #1D4E89; }
+.suggest-intro, .suggest-note { margin: 0 0 10px; font-size: 12.5px; color: #555; }
+.suggest-field { display: block; margin: 0 0 10px; font-size: 12.5px; font-weight: 600; color: #333; }
+.suggest-field input:not([type="checkbox"]):not([type="radio"]),
+.suggest-field textarea {
+  display: block;
+  width: 100%;
+  margin-top: 3px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font: inherit;
+  font-weight: 400;
+}
+.suggest-field textarea { resize: vertical; }
+fieldset.suggest-field { border: none; padding: 0; }
+fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
+.suggest-row { display: flex; gap: 10px; }
+.suggest-row .suggest-field { flex: 1 1 0; }
+.suggest-species-list {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.suggest-check, .suggest-radio { display: block; margin: 2px 0; font-weight: 400; }
+.suggest-check em { color: #777; }
+.suggest-error { margin: 0 0 10px; color: #b00020; font-size: 12.5px; }
+.suggest-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.suggest-cancel, .suggest-send {
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.suggest-cancel { border: 1px solid #ccc; background: #fff; color: #333; }
+.suggest-send { border: none; background: #1D4E89; color: #fff; }
+.suggest-send:disabled { opacity: 0.6; cursor: default; }
+.project-reader-note { margin-top: 6px; font-size: 11px; color: #555; font-style: italic; }

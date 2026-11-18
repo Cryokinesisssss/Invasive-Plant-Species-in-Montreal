@@ -859,7 +859,7 @@ function renderPhoto(s) {
         ' data-caption="' + escapeAttr(s.common + (s.photoCredit ? ' — ' + s.photoCredit.replace(/<br\s*\/?>/gi, ' · ').replace(/<[^>]*>/g, '') : '')) + '"' +
         (license ? ' data-license="' + escapeAttr(license.label) + '" data-license-url="' + escapeAttr(license.url) + '"' : '') +
         ' alt="' + escapeAttr(s.common) + '" loading="lazy" tabindex="0" role="button"' +
-        ' title="Click to enlarge" />' +
+        ' />' +
       creditEl +
     '</div>'
   );
@@ -876,13 +876,13 @@ function renderCounts(s) {
   }
 
   const inatPart = c.inat > 0
-    ? '<span class="species-count-pill" title="iNaturalist observations">' +
-        '<span class="sc-dot sc-dot-inat" title="iNaturalist"></span>' + fmt(c.inat) +
+    ? '<span class="species-count-pill" title="iNaturalist">' +
+        '<span class="sc-dot sc-dot-inat"></span>' + fmt(c.inat) +
       '</span>'
     : '';
   const sentPart = c.sentinel > 0
-    ? '<span class="species-count-pill" title="Sentinelle observations">' +
-        '<span class="sc-dot sc-dot-sentinel" title="Sentinelle"></span>' + fmt(c.sentinel) +
+    ? '<span class="species-count-pill" title="Sentinelle">' +
+        '<span class="sc-dot sc-dot-sentinel"></span>' + fmt(c.sentinel) +
       '</span>'
     : '';
 
@@ -1003,7 +1003,7 @@ function renderCard(s) {
     s.presence;
 
   const banPill = s.ban
-    ? '<button type="button" class="pill pill-ban" data-info="refee" title="What does this mean?">Cultivation &amp; sale prohibited (REFEE)</button>'
+    ? '<button type="button" class="pill pill-ban" data-info="refee">Cultivation &amp; sale prohibited (REFEE)</button>'
     : '';
 
   const descHtml = s.desc
@@ -1019,15 +1019,15 @@ function renderCard(s) {
   const mapBtn = hasObs
     ? '<a class="species-map-btn" href="../map.html?species=' + encodeURIComponent(s.sci) +
         (onlyUnknown ? '&accuracy=all' : '') + (onlySentinel ? '&source=sentinel' : '') + '"' +
-        (onlyUnknown ? ' title="Only records with unknown location accuracy"' : '') + '>View in map</a>'
-    : '<span class="species-map-btn is-empty" title="No mapped observations in Montréal">Not on map</span>';
+        (onlyUnknown ? ' title="Unknown accuracy only"' : '') + '>View in map</a>'
+    : '<span class="species-map-btn is-empty" title="No records in Montréal">Not on map</span>';
 
   const projectBtn = hasProj
     ? '<button class="species-project-btn" data-idx="' + idx + '" type="button">' +
         'View projects &amp; initiatives <span class="spb-count">' + projs.length + '</span>' +
       '</button>'
     : '<button class="species-project-btn is-empty" type="button" disabled ' +
-        'title="No projects or initiatives recorded for this species">' +
+        'title="No projects yet">' +
         'No projects recorded' +
       '</button>';
 
@@ -1038,13 +1038,13 @@ function renderCard(s) {
       '<div class="species-body">' +
         '<div class="species-card-head">' +
           '<h3 class="species-name">' + s.common + '</h3>' +
-          '<button type="button" class="species-tier-badge ' + meta.className + '" data-info="risk" title="What does this risk level mean?">' + meta.label + '</button>' +
+          '<button type="button" class="species-tier-badge ' + meta.className + '" data-info="risk">' + meta.label + '</button>' +
         '</div>' +
         '<p class="species-sci"><em>' + s.sci + '</em></p>' +
         '<div class="species-pills">' +
-          '<button type="button" class="pill pill-status" data-info="presence" title="What does the Québec status mean?">Québec: ' + presenceLabel + '</button>' +
+          '<button type="button" class="pill pill-status" data-info="presence">Québec: ' + presenceLabel + '</button>' +
           (s.priority
-            ? '<button type="button" class="pill pill-priority" data-info="priority" title="One of Québec’s 26 priority plant species for control">Québec priority</button>'
+            ? '<button type="button" class="pill pill-priority" data-info="priority" title="1 of Québec’s 26 priority species">Québec priority</button>'
             : '') +
           banPill +
         '</div>' +

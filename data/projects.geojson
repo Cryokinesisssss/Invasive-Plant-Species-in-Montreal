@@ -29,7 +29,7 @@
           "Inspecting the sites annually and manually removing remaining shoots.",
           "Planting a diversity of native trees and plants to restore the area."
         ],
-        "marker_location": "Marker shows the organization's location, not the project sites.",
+        "marker_type": "organization",
         "project_url": "https://www.pointe-claire.ca/en/wildlife-flora-and-species/urban-flora/invasive-harmful-species/buckthorn#:~:text=Pilot%20eradication%20project%20in%20Terra%20Cotta%20Park",
         "source_url": "https://www.pointe-claire.ca/en/municipal-organization/news-and-media/news/pilot-project-eradication-of-buckthorn-in-terra-cotta-natural-park-2"
       },
@@ -46,13 +46,12 @@
         "year": "2021",
         "description": "A phytotechnology station uses native plants and floating islands to help limit the establishment of invasive plants.",
         "species": [],
-        "species_note": "Invasive plant species not identified.",
         "project_area": "Montréal Botanical Garden",
         "actions": [
           "Established a riparian strip with diverse native plants to compete with invasive plants and filter runoff.",
           "Installed floating plant islands to make it harder for invasive plants that need sunlight to establish."
         ],
-        "marker_location": "Marker shows the project location at the Montréal Botanical Garden.",
+        "marker_type": "site",
         "project_url": "https://aiph.org/green-city-case-studies/montreal-canada-botanical-garden/"
       },
       "geometry": {
@@ -78,7 +77,7 @@
           "Tarps are installed over periwinkle colonies.",
           "Annual monitoring maintains the tarps and removes regrowth; tarps are planned to remain for two years."
         ],
-        "marker_location": "Approximate point within Parc-nature du Cap-Saint-Jacques; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413"
       },
       "geometry": {
@@ -93,13 +92,17 @@
         "organization": "Ville de Montréal",
         "year": "Active (updated March, 2026)",
         "description": "A pilot project in the Champs sector tests a specific cutting technique to control buckthorn.",
-        "species": [],
-        "species_note": "Buckthorn species not identified.",
+        "species": [
+          {
+            "common": "Buckthorn",
+            "unspecified": true
+          }
+        ],
         "project_area": "Parc-nature du Bois-de-Liesse — Champs sector",
         "actions": [
           "Control buckthorn using a specific cutting technique."
         ],
-        "marker_location": "Approximate point in the Saint-Laurent portion of Parc-nature du Bois-de-Liesse; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413"
       },
       "geometry": {
@@ -126,7 +129,7 @@
           "Tarps are installed over Japanese knotweed colonies.",
           "Annual monitoring maintains the tarps and controls regrowth; tarps are planned to remain for at least six years."
         ],
-        "marker_location": "Approximate point within Parc-nature du Bois-de-Saraguay; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413"
       },
       "geometry": {
@@ -153,15 +156,18 @@
           {
             "common": "Japanese knotweed",
             "scientific": "Reynoutria japonica"
+          },
+          {
+            "common": "Buckthorn",
+            "unspecified": true
           }
         ],
-        "species_note": "Buckthorn is also mentioned in the Bois-de-la-Réparation sector; species not identified.",
         "project_area": "Bois-de-la-Réparation, River, and Marais sectors",
         "actions": [
           "Bois-de-la-Réparation: manually remove buckthorn plants, cut and encapsulate large specimens, manually remove garlic mustard from April to June, and bend common reed plants.",
           "River and Marais: install tarps over Japanese knotweed colonies and monitor annually to maintain tarps and control regrowth; tarps are planned to remain for at least six years."
         ],
-        "marker_location": "Approximate point within Parc-nature de la Pointe-aux-Prairies; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants"
       },
       "geometry": {
@@ -188,7 +194,7 @@
           "Maintain tarps and control regrowth around their perimeter for two to three years.",
           "Seed and plant native species in treated areas."
         ],
-        "marker_location": "Approximate point within Parc Frédéric-Back; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413"
       },
       "geometry": {
@@ -228,7 +234,7 @@
           "Manually remove young Norway maples and cut large specimens.",
           "Cover Virginia creeper plants with tarps."
         ],
-        "marker_location": "Approximate point within Parc du Mont-Royal; exact treatment area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413"
       },
       "geometry": {
@@ -254,14 +260,13 @@
             "scientific": "Rhamnus cathartica"
           }
         ],
-        "species_note": "Glossy and common buckthorn are discussed; the species targeted at this site is not identified.",
         "project_area": "Parc-nature du Bois-de-Saraguay",
         "actions": [
           "The forest-restoration initiative controlled buckthorn rather than aiming for eradication.",
           "Across the initiative, a forestry mulcher crushed and dislodged stumps and buckthorn root systems; site-specific use is not identified.",
           "Diverse native species were planted to restore forest structure and resilience."
         ],
-        "marker_location": "Approximate point within Parc-nature du Bois-de-Saraguay; exact intervention area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://aiph.org/green-city-case-studies/montreal-canada-forests/"
       },
       "geometry": {
@@ -286,14 +291,13 @@
             "scientific": "Rhamnus cathartica"
           }
         ],
-        "species_note": "Glossy and common buckthorn are discussed; the species targeted at this site is not identified.",
         "project_area": "Grand parc de l’Est",
         "actions": [
           "The forest-restoration initiative controlled buckthorn rather than aiming for eradication.",
           "Across the initiative, a forestry mulcher crushed and dislodged stumps and buckthorn root systems; site-specific use is not identified.",
           "Diverse native species were planted to restore forest structure and resilience."
         ],
-        "marker_location": "Approximate point in Parc-nature de la Pointe-aux-Prairies representing the broader Grand parc de l’Est initiative; exact site is not mapped.",
+        "marker_type": "area",
         "project_url": "https://aiph.org/green-city-case-studies/montreal-canada-forests/"
       },
       "geometry": {
@@ -309,8 +313,12 @@
         "organization": "Ville de Montréal / Nature-Action Québec",
         "year": "2025–2028",
         "description": "A forest rehabilitation project following ash-tree removals at Domaine Saint-Paul. The 2025 update reports more than 1,500 buckthorn plants removed and 58% of planned trees and shrubs planted.",
-        "species": [],
-        "species_note": "Buckthorn (nerprun); species not identified.",
+        "species": [
+          {
+            "common": "Buckthorn",
+            "unspecified": true
+          }
+        ],
         "project_area": "Boisé Saint-Paul, Domaine Saint-Paul, L’Île-des-Sœurs",
         "actions": [
           "Remove invasive buckthorn plants as part of forest rehabilitation.",
@@ -318,7 +326,7 @@
           "Carry out habitat improvements, including wildlife structures, and renovate boardwalks.",
           "The related forestry intervention removed dead or declining ash trees near trails and infrastructure during winter 2024–2025."
         ],
-        "marker_location": "Approximate point within Domaine Saint-Paul; exact rehabilitation area is not mapped.",
+        "marker_type": "area",
         "project_url": "https://montreal.ca/articles/intervention-forestiere-dans-le-boise-saint-paul-74943",
         "source_url": "https://montreal.ca/lieux/domaine-saint-paul"
       },
@@ -346,7 +354,7 @@
           "Manually remove invasive phragmites, then bag and carry away the removed plant material.",
           "Maintain trees and shrubs planted along the lakeshore in fall 2024."
         ],
-        "marker_location": "Approximate point at Lac des Battures; volunteer work took place along the lakeshore.",
+        "marker_type": "area",
         "project_url": "https://www.idssocial.ca/en/events/403e9b51-20ae-4655-8607-0828a50596d6"
       },
       "geometry": {
@@ -377,7 +385,7 @@
           "Cover treated ground with a tarp to limit regrowth.",
           "Monitor the sites for three years and plant native species during the final project phases."
         ],
-        "marker_location": "Approximate point on Ile Haynes representing the project area; treatment sites are not individually mapped.",
+        "marker_type": "area",
         "project_url": "https://www.zipjc.org/fr/projets-actuels/travaux-de-controle-de-renouees-asiatiques-dans-le-secteur-de-lile-haynes"
       },
       "geometry": {
@@ -402,10 +410,12 @@
             "scientific": "Anthriscus sylvestris"
           },
           {
-            "common": "Buckthorn spp."
+            "common": "Buckthorn",
+            "unspecified": true
           },
           {
-            "common": "Vine species"
+            "common": "Vines",
+            "unspecified": true
           }
         ],
         "project_area": "Mercier-Ouest, Montreal",
@@ -413,7 +423,7 @@
           "Remove invasive plants, including buckthorn, vine, garlic mustard, and Anthriscus.",
           "Maintain trails, prune trees and shrubs, clean the site, and plant perennials and shrubs as needed."
         ],
-        "marker_location": "Approximate point in Mercier-Ouest representing the activity area; individual woodland work sites are not mapped.",
+        "marker_type": "area",
         "project_url": "https://volonterre.quebec/en/get-involved/jeudi-benevole/"
       },
       "geometry": {
@@ -430,13 +440,12 @@
         "year": "2026",
         "description": "Volunteer activities supervised by the conservation team to control invasive plants and improve ecological balance in targeted areas on Mount Royal.",
         "species": [],
-        "species_note": "Target plant species vary by activity; check the listing for current details.",
         "project_area": "Mount Royal",
         "actions": [
           "Participate in supervised invasive-plant control activities.",
           "The target species and meeting point are confirmed before each activity."
         ],
-        "marker_location": "Approximate point on Voie Camillien-Houde based on the listed meeting address; the intervention sites vary by activity.",
+        "marker_type": "organization",
         "project_url": "https://volonterre.quebec/en/get-involved/controle-despeces-envahissantes/"
       },
       "geometry": {
@@ -452,13 +461,12 @@
         "year": "Seasonal (Apr. - Oct.)",
         "description": "A free seasonal service offering assistance with questions about invasive alien species and help identifying them.",
         "species": [],
-        "species_note": "The Green Line assists with invasive-species questions; contact the service for identification help.",
         "project_area": "Service location: DDO Public Works building, 100 Rue Glenmore, Dollard-des-Ormeaux",
         "actions": [
           "Provide information and assistance identifying invasive alien species.",
           "Contact the Green Line at 514-684-3114 or LigneVerte@DDO.qc.ca."
         ],
-        "marker_location": "Marker shows the DDO Public Works building at 100 Rue Glenmore, not an invasive-species treatment site.",
+        "marker_type": "organization",
         "project_url": "https://ville.ddo.qc.ca/en/live/environment/green-line/invasive-alien-species/",
         "source_url": ""
       },
@@ -486,9 +494,13 @@
           {
             "common": "Japanese knotweed",
             "scientific": "Reynoutria japonica"
+          },
+          {
+            "common": "Schubert cherry",
+            "scientific": "Prunus virginiana",
+            "in_catalog": false
           }
         ],
-        "species_note": "Schubert cherry (an ornamental chokecherry cultivar) was also removed.",
         "project_area": "Parc des Bateliers and Parc de la Merci, Ahuntsic-Cartierville, Montreal",
         "actions": [
           "Removing invasive plants (about 90,000 stems over almost two hectares in 2016).",
@@ -496,7 +508,7 @@
           "Adding interpretive panels, bird nesting boxes and feeders, and bat roosts.",
           "Maintaining the sites over five years, with Bateliers Park to become a protected area."
         ],
-        "marker_location": "Marker shows Parc des Bateliers; Parc de la Merci is just to the east.",
+        "marker_type": "area",
         "project_url": "https://journaldesvoisins.com/en/cegm-sactive-deuxieme-annee-consecutive/",
         "source_url": ""
       },

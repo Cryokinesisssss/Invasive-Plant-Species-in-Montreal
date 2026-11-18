@@ -86,8 +86,11 @@
           '<li><strong>What they include:</strong> control work such as cutting invasive plants or covering them with tarps to smother them, ' +
             'often followed by planting native species, as well as pilot projects, monitoring, and volunteer activities.</li>' +
           '<li><strong>Click a marker</strong> to see who runs the project, when, its target species, the sites and methods involved, and links to the original sources.</li>' +
-          '<li><strong>Locations are approximate:</strong> a marker may show the park where work happens or the organization\'s address, ' +
-            'not the exact treatment site. Projects in the same park or island are grouped together.</li>' +
+          '<li><strong>What the marker shows:</strong> each popup says one of three things. ' +
+            '<em>Project site</em>: where the work happens. ' +
+            '<em>Project area (approximate)</em>: somewhere in the area; exact work spots are not mapped. ' +
+            '<em>Organization address</em>: an office or meeting point, not where the work happens. ' +
+            'Projects in the same park or island are grouped together.</li>' +
           '<li><strong>Not a complete list:</strong> these are selected projects that were checked by hand (last in October 2026). ' +
             'Areas without a marker may still have control work happening.</li>' +
         '</ul>' +

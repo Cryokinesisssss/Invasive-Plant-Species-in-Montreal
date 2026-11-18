@@ -2752,6 +2752,13 @@ function closeProjectSpiderIfAway(mousePoint) {
 map.on('mousemove', function (e) { closeProjectSpiderIfAway(e.containerPoint); });
 map.getContainer().addEventListener('mouseleave', function () { closeProjectSpiderIfAway(null); });
 
+// What a project's pin stands for (marker_type in data/projects.geojson)
+const PROJECT_MARKER_TYPES = {
+  site:         { label: 'Project site',              tip: 'The marker is where the work happens.' },
+  area:         { label: 'Project area (approximate)', tip: 'Somewhere in the project area; exact work spots are not mapped.' },
+  organization: { label: 'Organization address',      tip: 'An office or meeting point, not where the work happens.' }
+};
+
 function buildProjectLayer() {
   openProjectSpider = null;   // the old clusters are about to be removed
   if (projectLayer) {
@@ -2792,6 +2799,18 @@ function buildProjectLayer() {
         html += '<div class="project-species"><strong>Associated species</strong><ul>';
         p.species.forEach(function (species) {
           if (!species || !species.common) return;
+          // Plant named only in general ("buckthorn"): same grey style
+          if (species.unspecified) {
+            html += '<li class="project-species-other" title="The source does not say which species">' +
+              escapeHtml(species.common) + ' <em>(species not specified)</em></li>';
+            return;
+          }
+          // Species without a catalog entry: grey, no link, hollow bullet (hover explains)
+          if (species.in_catalog === false) {
+            html += '<li class="project-species-other" title="Not in the species catalog">' + escapeHtml(species.common) +
+              (species.scientific ? ' <em>(' + escapeHtml(species.scientific) + ')</em>' : '') + '</li>';
+            return;
+          }
           if (species.scientific) {
             const catalogUrl = 'site/species.html?species=' + encodeURIComponent(species.scientific);
             html += '<li><a class="project-species-link" href="' + escapeAttr(catalogUrl) + '" title="Open species catalog entry">';
@@ -2807,11 +2826,9 @@ function buildProjectLayer() {
         });
         html += '</ul></div>';
       }
-      if (p.species_note && !hasSpecies) {
-        html += '<div class="project-species"><strong>Associated species</strong><div>' +
-          escapeHtml(p.species_note) + '</div></div>';
-      } else if (p.species_note) {
-        html += '<div class="project-species-note">' + escapeHtml(p.species_note) + '</div>';
+      if (!hasSpecies) {
+        html += '<div class="project-species"><strong>Associated species</strong>' +
+          '<div class="project-species-none">Not specified</div></div>';
       }
       const hasDetails = p.project_area || (Array.isArray(p.actions) && p.actions.length);
       if (hasDetails) {
@@ -2828,8 +2845,10 @@ function buildProjectLayer() {
         html += '</ul></div>';
       }
       if (hasDetails) html += '</details>';
-      if (p.marker_location) {
-        html += '<div class="project-location-note">' + escapeHtml(p.marker_location) + '</div>';
+      const marker = PROJECT_MARKER_TYPES[p.marker_type];
+      if (marker) {
+        html += '<div class="project-location-note" title="' + escapeAttr(marker.tip) + '">' +
+          '<strong>Marker:</strong> ' + marker.label + '</div>';
       }
       if (projectsSourcesLastChecked) {
         html += '<div class="project-source-checked">Project sources last checked: ' +

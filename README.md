@@ -71,19 +71,24 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 - Include the organization and project area. Use `project_url` for the
   original project details and `source_url` for a later project update or
   additional information.
-  The marker location can represent the organization rather than the project
-  site, so explain that distinction in `marker_location`.
+- Set `marker_type` to say what the pin stands for. The popup shows a fixed
+  label for each:
+  - `site`: "Project site", the marker is where the work happens.
+  - `area`: "Project area (approximate)", somewhere in the project area.
+  - `organization`: "Organization address", an office or meeting point.
 - Add related species in the `species` array using their catalog common and
   scientific names. The species catalog uses those scientific names to list
   associated projects, which can be opened in its projects panel.
-- If the source does not identify the species, leave `species` empty and add
-  a concise `species_note` describing what is known, such as "Buckthorn
-  species not identified."
+- If a project targets a species that is not in the catalog, still add it to
+  `species` with its common and scientific names, plus `"in_catalog": false`.
+  The popup lists it in grey with a hollow bullet and no link.
+- If the source names a plant only in general (for example "buckthorn"), add
+  it as `{"common": "Buckthorn", "unspecified": true}`. The popup shows
+  "Buckthorn (species not specified)" in grey.
+- If the source names no plants at all, leave `species` empty. The popup
+  shows "Associated species: Not specified".
 - If a source names a park but not an exact work site, place a representative
-  point inside that park and explain the approximation in `marker_location`
-  from the reader's perspective (for example, "Approximate point within [park];
-  exact treatment area is not mapped"), rather than narrating what the source
-  does not show.
+  point inside that park and use `marker_type: "area"`.
 - If one initiative covers multiple mapped sites, use a separate feature for
   each site and explain which project details apply across the initiative
   rather than to an individual site.
@@ -166,7 +171,7 @@ Test 3. Click a project whose source doesn’t name a species; its popup explain
 
 | | |
 | --- | --- |
-| **Finding** | The "About this map" text was a long pop-up over the map. It opened from a small button in the bottom-left corner, covered the map while open, and was one dense block of text. A reader could use the map without ever finding out what it shows, where the data comes from, or what its limits are. |
+| **Finding** | Initial understanding of the map could have been much better (what I observed). Details were very scattered and was not found in one place |
 | **Severity** | 3 |
 | **Fix** | Added a home page (`index.html`) whose About section holds that content, rewritten shorter and split into sections: About, What's on the map, Risk levels, Limitations, Sources. The map moved to `map.html` and opens from the home page. "About" is in the top navigation on every page. The pop-up was removed. |
 | **Commits** | `a99eca0` (home page, map moved to `map.html`), `c2e3bd3` (About text updated for the new map features) |
@@ -186,11 +191,11 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 
 | Where | What it does |
 | --- | --- |
-| [`index.html` lines 20–26](index.html#L20-L26) | Top navigation (Home, Map, Species Catalog, About). "About" is a link to `#about`, so it scrolls straight to the About section. |
-| [`index.html` lines 33–45](index.html#L33-L45) | Title, one-line description, and a blurred preview of the map. Clicking the preview opens `map.html`. |
-| [`index.html` lines 51–70](index.html#L51-L70) | The About section (`id="about"`): what the map shows and who it's for. |
-| [`index.html` lines 75–111](index.html#L75-L111) | "What's on the map": six short cards (filters, map views, borough summaries, observation trends, local projects, species catalog). |
-| [`index.html` lines 116–185](index.html#L116-L185) | Risk levels, Limitations and Sources: what used to be one long block of text in the pop-up, split into its own sections. |
+| [`index.html` lines 20–28](index.html#L20-L28) | Top navigation. "About" is a link to `#about` that scrolls directly to the About section. |
+| [`index.html` lines 33–48](index.html#L33-L48) | Title, one-line description, and a blurred preview of the map that you can click to explore, which takes you to map.html. |
+| [`index.html` lines 51–70](index.html#L51-L70) | The About section that shows what the map is about and who it's for. |
+| [`index.html` lines 75–111](index.html#L75-L111) | Shows the "What's on the map" section: six small cards (filters, map views, borough summaries, observation trends, local projects, species catalog). |
+| [`index.html` lines 116–185](index.html#L116-L185) | Risk levels, Limitations and Sources: originally a long block of text was split into its own sections. |
 | [`index.html` lines 9–12](index.html#L9-L12) | Old links that pointed at the map with `?species=` (for example from the species catalog) are sent on to `map.html`, so they still work after the map moved. |
 | [`index.html` lines 196–206](index.html#L196-L206) | Reads `data/refresh_metadata.json` and adds the date of the last iNaturalist update to the Sources section. |
 | [`site/style.css` lines 2993–3280](site/style.css#L2993-L3280) | Section 23, the home page layout: the hero, the blurred preview, the cards, and the phone layout. |

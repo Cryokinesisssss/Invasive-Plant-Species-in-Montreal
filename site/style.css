@@ -115,6 +115,28 @@ body {
   font-weight: 600;
 }
 
+/* Language switch, top right. Placeholder until the French pages exist:
+   point it at the French page (and make it an <a>) when that's ready. */
+.topnav-lang {
+  margin-left: auto;
+  flex-shrink: 0;
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 13px;
+  background: transparent;
+  color: #d5e2d9;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: default;
+}
+.topnav-lang:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
 
 /* ============================================================
    4. FILTER BAR — the white bar under the nav
@@ -671,11 +693,15 @@ footer a {
   padding: 0;
 }
 .project-species li { margin: 2px 0; }
+.project-species li.project-species-other {
+  list-style-type: circle;   /* hollow bullet: no catalog entry, not a link */
+  color: #777;
+}
+.project-species li.project-species-other em { color: #888; }
 .project-species em { color: #555; }
-.project-species-note {
-  margin: -2px 0 6px;
-  font-size: 11px;
-  color: #555;
+.project-species-none {
+  margin-top: 2px;
+  color: #777;
 }
 .project-species-link {
   color: #1D4E89;

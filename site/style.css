@@ -3686,3 +3686,43 @@ fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
 #map.is-choosing-spot .leaflet-overlay-pane,
 #map.is-choosing-spot .leaflet-marker-pane { opacity: 0.2; }
 .project-reader-note { margin-top: 6px; font-size: 11px; color: #555; font-style: italic; }
+
+/* ---- Projects page (site/projects.html) ---- */
+.projects-learn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #DCBD23;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.projects-learn:hover { text-decoration: none; }
+.projects-list { display: grid; gap: 10px; }
+.project-card {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-left: 4px solid #1D4E89;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.project-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.project-card-head h2 { margin: 0; font-size: 15px; color: #1b1b1b; }
+.project-status {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.project-status-ongoing { background: #e3f0e8; color: #1B4332; }
+.project-status-past { background: #eee; color: #555; }
+.project-card-meta { margin-top: 2px; color: #555; font-size: 12px; }
+.project-card-place { margin-top: 2px; color: #1D4E89; font-size: 12px; font-weight: 600; }
+.project-card-place span { color: #777; font-weight: 400; }
+.project-card-desc { margin: 8px 0; }
+.project-card .project-species { font-size: 12px; }
+.project-card-links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 10px; }
+.projects-empty { color: #666; font-size: 13px; }

@@ -65,6 +65,10 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
    `sources_last_checked` date in `data/projects.geojson` when reviewing them.
 
 ## Adding projects to the map
+- Every project is also listed on the projects page (`site/projects.html`),
+  with filters for borough or city, species and ongoing / past. It reads the
+  same `projects.geojson` and approved reader suggestions, so there is nothing
+  extra to update. "Show on map" opens `map.html?project=<project name>`.
 - Add each project as a GeoJSON `Feature` in `data/projects.geojson`.
 - Store point coordinates in GeoJSON order: `[longitude, latitude]`.
 - Use the `Projects` checkbox to show or hide all project points.

@@ -13,27 +13,20 @@
 //  - The form asks for project details, not a category + short note.
 //  - Approved projects join the map's Projects layer (site/app.js).
 //
-// Needs site/app.js loaded first (map, speciesCatalog, projectFeatures,
-// setReaderProjects).
+// Needs site/reader-projects.js (Firebase connection) and site/app.js
+// (map, speciesCatalog, projectFeatures, setReaderProjects) loaded first.
 // ============================================================
 
 // ===== SETTINGS =====
 const SUBMIT = {
-  collection: 'project_submissions',
   // Montréal agglomeration; the Firestore rules check the same box
   bounds: { south: 45.40, north: 45.71, west: -73.98, east: -73.47 },
-  max: { name: 100, organization: 100, description: 400, speciesOther: 60, url: 300, species: 10 },
-  firebaseConfig: {
-    apiKey: 'AIzaSyCPKGOuv_lThk1KVaV6VgSxpvwXp-hifdY',
-    authDomain: 'invasive-plants-montreal.firebaseapp.com',
-    projectId: 'invasive-plants-montreal',
-    appId: '1:709970743488:web:faaf0ec6407a6431459d25'
-  }
+  max: { name: 100, organization: 100, description: 400, speciesOther: 60, url: 300, species: 10 }
 };
-const SUBMIT_SDK = 'https://www.gstatic.com/firebasejs/12.18.0/';   // pinned version (same as the kit)
 
 (function () {
-  if (typeof map === 'undefined') return;
+  if (typeof map === 'undefined' || !window.ReaderProjects) return;
+  const connect = window.ReaderProjects.connect;
 
   let fb = null;          // { fs, db, uid } once connected
   let adding = false;     // next map click picks the project location
@@ -142,7 +135,7 @@ const SUBMIT_SDK = 'https://www.gstatic.com/firebasejs/12.18.0/';   // pinned ve
       const label = document.createElement('label');
       label.className = 'suggest-check';
       const cb = document.createElement('input');
-      cb.type = 'checkbox'; cb.name = 'species'; cb.value = s.sci;
+      cb.type = 'checkbox'; cb.name = 'species'; cb.value = s.common + '|' + s.sci;
       const em = document.createElement('em');
       em.textContent = s.sci;
       label.append(cb, document.createTextNode(' ' + s.common + ' '), em);
@@ -223,12 +216,12 @@ const SUBMIT_SDK = 'https://www.gstatic.com/firebasejs/12.18.0/';   // pinned ve
     sendBtn.disabled = true;
     sendBtn.textContent = 'Sending…';
     try {
-      await connect();
+      fb = await connect();
       if (!fb) throw new Error('not-connected');
       data.uid = fb.uid;
       data.status = 'pending';
       data.ts = fb.fs.serverTimestamp();
-      await fb.fs.addDoc(fb.fs.collection(fb.db, SUBMIT.collection), data);
+      await fb.fs.addDoc(fb.fs.collection(fb.db, window.ReaderProjects.COLLECTION), data);
       closeForm();
       status('Thanks! Your suggestion will appear once it has been reviewed.');
     } catch (err) {
@@ -242,94 +235,8 @@ const SUBMIT_SDK = 'https://www.gstatic.com/firebasejs/12.18.0/';   // pinned ve
     }
   });
 
-  // ---------- Firebase (same steps as the kit's shared route) ----------
-  // Reading approved projects needs no sign-in; sending one does.
-  let opening = null;
-  function openDb() {
-    if (opening) return opening;
-    opening = (async function () {
-      const app = await import(SUBMIT_SDK + 'firebase-app.js');
-      const fs = await import(SUBMIT_SDK + 'firebase-firestore.js');
-      const fapp = app.initializeApp(SUBMIT.firebaseConfig);
-      return { app: app, fapp: fapp, fs: fs, db: fs.getFirestore(fapp) };
-    })().catch(function (err) {
-      console.error(err);
-      opening = null;   // allow a retry
-      return null;
-    });
-    return opening;
-  }
-
-  let connecting = null;
-  function connect() {
-    if (connecting) return connecting;
-    connecting = (async function () {
-      const base = await openDb();
-      if (!base) return null;
-      const au = await import(SUBMIT_SDK + 'firebase-auth.js');
-      const auth = au.getAuth(base.fapp);
-      await au.signInAnonymously(auth);            // a random, anonymous id for this browser
-      fb = { fs: base.fs, db: base.db, uid: auth.currentUser.uid };
-      return fb;
-    })().catch(function (err) {
-      console.error(err);
-      connecting = null;
-      return null;
-    });
-    return connecting;
-  }
-
-  // ---------- show approved suggestions in the Projects layer ----------
-  function toFeature(id, d) {
-    const common = {};
-    (typeof speciesCatalog !== 'undefined' ? speciesCatalog : []).forEach(function (s) { if (s.sci) common[s.sci] = s.common; });
-    const species = (Array.isArray(d.species) ? d.species : []).filter(function (s) { return typeof s === 'string'; })
-      .map(function (sci) { return { common: common[sci] || sci, scientific: sci }; });
-    if (d.species_other) species.push({ common: String(d.species_other), in_catalog: false });
-    const years = d.year_end == null ? d.year_start + '–present'
-      : (d.year_end === d.year_start ? String(d.year_start) : d.year_start + '–' + d.year_end);
-    return {
-      type: 'Feature',
-      properties: {
-        id: 'reader-' + id,
-        name: d.name,
-        organization: d.organization,
-        year: years,
-        description: d.description,
-        species: species,
-        marker_type: d.marker_type,
-        project_url: d.source_url,
-        reader_submitted: true
-      },
-      geometry: { type: 'Point', coordinates: [d.lng, d.lat] }
-    };
-  }
-
-  let approvedDocs = [];
-  function showApproved() {
-    const features = approvedDocs.map(function (doc) { return toFeature(doc.id, doc.data()); })
-      .filter(function (f) { return isFinite(f.geometry.coordinates[0]) && isFinite(f.geometry.coordinates[1]); });
+  // ---------- approved suggestions join the Projects layer ----------
+  window.ReaderProjects.watchApproved(function (features) {
     if (typeof setReaderProjects === 'function') setReaderProjects(features);
-  }
-
-  (async function loadApproved() {
-    const conn = await openDb();
-    if (!conn) return;   // no database: the map's own projects still show
-    const q = conn.fs.query(conn.fs.collection(conn.db, SUBMIT.collection),
-      conn.fs.where('status', '==', 'approved'), conn.fs.limit(200));
-    conn.fs.onSnapshot(q, function (snap) {
-      approvedDocs = snap.docs;
-      showApproved();
-    }, function (err) { console.error('Approved suggestions could not be loaded:', err); });
-  })();
-
-  // Common names come from the map's species list, which loads with the
-  // observations; redraw once it's there.
-  const waitForSpecies = setInterval(function () {
-    if (typeof observationDataLoaded !== 'undefined' && observationDataLoaded) {
-      clearInterval(waitForSpecies);
-      if (approvedDocs.length) showApproved();
-    }
-  }, 500);
-  setTimeout(function () { clearInterval(waitForSpecies); }, 60000);
+  });
 })();

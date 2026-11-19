@@ -1221,7 +1221,8 @@ fetch('data/places.geojson')
     );
     const bounds = allLayer.getBounds();
     // maxZoom keeps a single observation from zooming in to street level
-    if (bounds.isValid() && !(requestedSentinelOnly && !requestedSpeciesApplied)) map.fitBounds(bounds.pad(0.1), { maxZoom: requestedSpeciesApplied ? 14 : 18 });
+    if (bounds.isValid() && !(requestedSentinelOnly && !requestedSpeciesApplied) &&
+        !new URLSearchParams(window.location.search).get('project')) map.fitBounds(bounds.pad(0.1), { maxZoom: requestedSpeciesApplied ? 14 : 18 });
   })
   .catch(function (err) {
     showDataLoadError('Could not load the observation data (places.geojson). The map is blank until the request succeeds.', err);
@@ -2763,8 +2764,13 @@ const PROJECT_MARKER_TYPES = {
   organization: { label: 'Organization address',      tip: 'Office or meeting point' }
 };
 
+// Each project's pin (and its site group, if grouped), by project name,
+// so ?project=<name> from the projects page can open it
+let projectPinsByName = new Map();
+
 function buildProjectLayer() {
   openProjectSpider = null;   // the old clusters are about to be removed
+  projectPinsByName = new Map();
   if (projectLayer) {
     map.removeLayer(projectLayer);
     projectLayer = null;
@@ -2875,6 +2881,7 @@ function buildProjectLayer() {
       html += '<button type="button" class="popup-info-link" data-info="projects">Learn more about projects</button>';
       html += '</div>';
       layer.bindPopup(html, popupOptions({ maxWidth: 360, minWidth: 240 }));
+      if (p.name) projectPinsByName.set(p.name, { layer: layer, cluster: null });
     }
   };
 
@@ -2933,9 +2940,14 @@ function buildProjectLayer() {
       if (openProjectSpider && openProjectSpider.cluster === e.cluster) openProjectSpider = null;
     });
     siteCluster.addLayer(siteLayer);
+    siteLayer.eachLayer(function (layer) {
+      const name = layer.feature && layer.feature.properties && layer.feature.properties.name;
+      if (name && projectPinsByName.has(name)) projectPinsByName.get(name).cluster = siteCluster;
+    });
     projectLayer.addLayer(siteCluster);
   });
   projectLayer.addTo(map);
+  openRequestedProject();
 }
 
 // Approved reader suggestions arrive from Firebase (site/submit-project.js)
@@ -2944,6 +2956,36 @@ function setReaderProjects(features) {
   projectFeatures = baseProjectFeatures.concat(readerProjectFeatures);
   buildProjectLayer();
   refreshSelectionPanel();
+}
+
+// ?project=<name> (from the projects page): zoom to that project and open it.
+// The pins are redrawn a few times while data loads (which closes popups),
+// so the popup is reopened after each redraw until the reader touches the map.
+const requestedProjectName = new URLSearchParams(window.location.search).get('project');
+let keepRequestedProjectOpen = !!requestedProjectName;
+let requestedProjectZoomed = false;
+['mousedown', 'touchstart', 'wheel', 'keydown'].forEach(function (type) {
+  map.getContainer().addEventListener(type, function () { keepRequestedProjectOpen = false; }, { passive: true });
+});
+
+function openRequestedProject() {
+  if (!keepRequestedProjectOpen) return;
+  const pin = projectPinsByName.get(requestedProjectName);
+  if (!pin) return;   // may still arrive from Firebase
+  if (!requestedProjectZoomed) {
+    requestedProjectZoomed = true;
+    map.setView(pin.layer.getLatLng(), Math.max(map.getZoom(), 14), { animate: false });
+  }
+  setTimeout(function () {
+    if (!keepRequestedProjectOpen || !map.hasLayer(projectLayer)) return;
+    const parent = pin.cluster ? pin.cluster.getVisibleParent(pin.layer) : pin.layer;
+    if (parent && parent !== pin.layer && parent.spiderfy) {
+      pin.cluster.once('spiderfied', function () { pin.layer.openPopup(); });
+      parent.spiderfy();
+    } else {
+      pin.layer.openPopup();
+    }
+  }, 50);
 }
 
 fetch('data/projects.geojson')

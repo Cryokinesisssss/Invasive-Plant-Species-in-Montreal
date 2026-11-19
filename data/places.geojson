@@ -330009,6 +330009,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5843449738,
+          45.5053100316
+        ]
+      },
+      "properties": {
+        "id": "401059035",
+        "observed_on": "2026-09-17",
+        "time_observed_at": "2026-09-17 19:58:59 UTC",
+        "user_login": "edenfoster",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) edenfoster, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/401059035",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/736073403/medium.jpg",
+        "place_guess": "Communauté-Urbaine-de-Montréal, CA-QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "17",
+        "public_positional_accuracy": "17",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5833403417,
           45.5041735078
         ]
@@ -349619,6 +349656,117 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.9443466121,
+          45.4058059124
+        ]
+      },
+      "properties": {
+        "id": "415303642",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 18:12:39 UTC",
+        "user_login": "vladnathalie",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) vladnathalie, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415303642",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/764700194/medium.jpg",
+        "place_guess": "Rue Maple, Ste-Anne-de-Bellevue, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8189083333,
+          45.4427916667
+        ]
+      },
+      "properties": {
+        "id": "415370071",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 22:10:21 UTC",
+        "user_login": "zoe_topshee",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Zoë Topshee, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415370071",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/764838018/medium.jpg",
+        "place_guess": "Pointe-Claire, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8188866667,
+          45.4427916667
+        ]
+      },
+      "properties": {
+        "id": "415370879",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 22:11:02 UTC",
+        "user_login": "zoe_topshee",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Zoë Topshee, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415370879",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/764839723/medium.jpg",
+        "place_guess": "Pointe-Claire, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.56323,
           45.4968383333
         ]
@@ -349644,6 +349792,191 @@
         "taxon_id": "54763",
         "positional_accuracy": "7",
         "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5599366667,
+          45.46422
+        ]
+      },
+      "properties": {
+        "id": "415470520",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:03:57 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415470520",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765040963/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "valériane officinale",
+        "scientific_name": "Valeriana officinalis",
+        "common_name": "common valerian",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56160",
+        "positional_accuracy": "15",
+        "public_positional_accuracy": "15",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5601666667,
+          45.4645283333
+        ]
+      },
+      "properties": {
+        "id": "415472432",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:08:54 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415472432",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765045104/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.55983,
+          45.4664616667
+        ]
+      },
+      "properties": {
+        "id": "415473603",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:35:09 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415473603",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765047692/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5596783333,
+          45.467525
+        ]
+      },
+      "properties": {
+        "id": "415474564",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:47:15 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415474564",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765049930/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "18",
+        "public_positional_accuracy": "18",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.559655,
+          45.4683216667
+        ]
+      },
+      "properties": {
+        "id": "415475473",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:57:06 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415475473",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765051441/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "25",
+        "public_positional_accuracy": "25",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",

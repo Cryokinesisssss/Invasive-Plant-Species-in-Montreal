@@ -254,4 +254,8 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 - Sizes of certain things
 - The wording
 
-
+### What my map remembers
+- My map remembers user suggested projects/initiatives that they can add in a map. The suggestions are either approved or revoked. 
+- It is kept in Firebase. The region is northamerica-northeast1. Rejected suggestions are deleted after i review them. Pending ones that are never reviewed will probably be deleted by the end of the course. Approved ones will stay as long as the project is on the map. If the site needs to be taken down that I'll delete the database.
+- The reader can't clear it. They can only suggest a point and I have to approve or revoke them. 
+- The files that do most of the work are reader-projects.js and submit-projects.js. I understand that line 88-97 reads back what was remembered (suggested projects from user) and then it sees whether the status == "approved", and updates it live when I approve one. 

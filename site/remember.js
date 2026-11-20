@@ -1,7 +1,7 @@
 // ============================================================
 // READER PROJECTS — shared Firebase connection
 // ------------------------------------------------------------
-// Used by the map (site/submit-project.js) and the projects page
+// Used by the map (site/memory.js) and the projects page
 // (site/projects.js). Same pinned SDK, config and anonymous sign-in
 // as the GEOG 464 memory.js kit's shared route.
 //

@@ -13,7 +13,7 @@
 //  - The form asks for project details, not a category + short note.
 //  - Approved projects join the map's Projects layer (site/app.js).
 //
-// Needs site/reader-projects.js (Firebase connection) and site/app.js
+// Needs site/remember.js (Firebase connection) and site/app.js
 // (map, speciesCatalog, projectFeatures, setReaderProjects) loaded first.
 // ============================================================
 

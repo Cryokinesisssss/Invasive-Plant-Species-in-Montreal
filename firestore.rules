@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Firestore rules for reader-suggested projects (site/submit-project.js).
+// Firestore rules for reader-suggested projects (site/memory.js and site/remember.js).
 // Paste into Firebase console > Firestore > Rules, then Publish.
 //
 // - Anyone may send a suggestion; it is saved as "pending".

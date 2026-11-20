@@ -232,7 +232,7 @@ let clustersEnabled = false;
 let projectLayer = null;
 let projectFeatures = [];          // base + reader projects, what the map shows
 let baseProjectFeatures = [];      // from data/projects.geojson
-let readerProjectFeatures = [];    // approved reader suggestions (site/submit-project.js)
+let readerProjectFeatures = [];    // approved reader suggestions (site/memory.js)
 let projectsVisible = true;
 let projectsLoaded = false;
 let projectsLoadFailed = false;
@@ -2950,7 +2950,7 @@ function buildProjectLayer() {
   openRequestedProject();
 }
 
-// Approved reader suggestions arrive from Firebase (site/submit-project.js)
+// Approved reader suggestions arrive from Firebase (site/remember.js)
 function setReaderProjects(features) {
   readerProjectFeatures = features;
   projectFeatures = baseProjectFeatures.concat(readerProjectFeatures);

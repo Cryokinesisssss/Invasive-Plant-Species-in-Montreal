@@ -2,7 +2,7 @@
 // PROJECTS PAGE — every project & initiative as a filterable list
 // ------------------------------------------------------------
 // Reads the same data as the map: data/projects.geojson plus approved
-// reader suggestions (site/reader-projects.js). Each project's borough
+// reader suggestions (site/remember.js). Each project's borough
 // or city comes from its point (Turf point-in-polygon).
 // ============================================================
 (function () {

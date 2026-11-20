@@ -104,7 +104,7 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
 
 ## Reader-suggested projects
 - Readers can press **Suggest a project** on the map, click the location, and
-  fill in a short form (`site/submit-project.js`, adapted from the GEOG 464
+  fill in a short form (`site/memory.js`, adapted from the GEOG 464
   memory.js kit's shared route).
 - Suggestions are saved in Firebase Firestore (collection
   `project_submissions`) with `status: "pending"`. Nobody can see them until
@@ -120,7 +120,7 @@ https://www.donneesquebec.ca/recherche/dataset/especes-exotiques-envahissantes
   The database is in Montréal (`northamerica-northeast1`); the sign-in
   service may run outside Canada. I may edit or delete any suggestion, and
   will delete pending and rejected suggestions at the end of the course.
-- The Firebase web config in `submit-project.js` is public by design; the
+- The Firebase web config in `site/remember.js` is public by design; the
   rules are what protect the database.
 
 ## Not in this iteration
@@ -258,4 +258,4 @@ The About content now lives on the home page, [`index.html`](index.html), instea
 - My map remembers user suggested projects/initiatives that they can add in a map. The suggestions are either approved or revoked. 
 - It is kept in Firebase. The region is northamerica-northeast1. Rejected suggestions are deleted after i review them. Pending ones that are never reviewed will probably be deleted by the end of the course. Approved ones will stay as long as the project is on the map. If the site needs to be taken down that I'll delete the database.
 - The reader can't clear it. They can only suggest a point and I have to approve or revoke them. 
-- The files that do most of the work are reader-projects.js and submit-projects.js. I understand that line 88-97 reads back what was remembered (suggested projects from user) and then it sees whether the status == "approved", and updates it live when I approve one. 
+- The files that do most of the work are remember.js and memory.js. I understand that line 88-97 reads back what was remembered (suggested projects from user) and then it sees whether the status == "approved", and updates it live when I approve one. 

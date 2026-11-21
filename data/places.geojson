@@ -11938,7 +11938,7 @@
         "image_url": "",
         "place_guess": "6238 Rue de Normanville, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "Lamium galeobdolon flavidum",
+        "species_guess": "Longleaf Yellow Archangel",
         "scientific_name": "Lamium galeobdolon flavidum",
         "common_name": "Longleaf Yellow Archangel",
         "iconic_taxon_name": "Plantae",
@@ -19745,7 +19745,7 @@
         "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/79850358/medium.jpg",
         "place_guess": "Île de Montréal, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "Lamium galeobdolon flavidum",
+        "species_guess": "Longleaf Yellow Archangel",
         "scientific_name": "Lamium galeobdolon flavidum",
         "common_name": "Longleaf Yellow Archangel",
         "iconic_taxon_name": "Plantae",
@@ -286071,11 +286071,11 @@
         "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/653077947/medium.jpg",
         "place_guess": "Rue Bannantyne, Montréal, QC, CA",
         "place_town_name": "",
-        "species_guess": "yellow archangel",
-        "scientific_name": "Lamium galeobdolon",
-        "common_name": "yellow archangel",
+        "species_guess": "Variegated Yellow Archangel",
+        "scientific_name": "Lamium galeobdolon argentatum",
+        "common_name": "Variegated Yellow Archangel",
         "iconic_taxon_name": "Plantae",
-        "taxon_id": "204339",
+        "taxon_id": "707386",
         "positional_accuracy": "3",
         "public_positional_accuracy": "3",
         "coordinates_obscured": false,
@@ -349619,6 +349619,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5929866667,
+          45.5270366667
+        ]
+      },
+      "properties": {
+        "id": "415179608",
+        "observed_on": "2026-11-16",
+        "time_observed_at": "2026-11-16 12:55:02 UTC",
+        "user_login": "mcastaneda-zarate",
+        "license": "CC-BY-NC-SA",
+        "photo_license": "CC-BY-NC-SA",
+        "photo_attribution": "(c) Miguel Castañeda-Zárate, some rights reserved (CC BY-NC-SA)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415179608",
+        "image_url": "",
+        "place_guess": "Av Henri-Julien, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Virginia creeper",
+        "scientific_name": "Parthenocissus quinquefolia",
+        "common_name": "Virginia creeper",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "50278",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.6059416667,
           45.5345083333
         ]
@@ -349681,6 +349718,43 @@
         "taxon_id": "56088",
         "positional_accuracy": "11",
         "public_positional_accuracy": "11",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "low",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.942978852,
+          45.406331461
+        ]
+      },
+      "properties": {
+        "id": "415302431",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 18:05:50 UTC",
+        "user_login": "lucavalela",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) lucavalela, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415302431",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/764697897/medium.jpg",
+        "place_guess": "Ste-Anne-de-Bellevue, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Siberian elm",
+        "scientific_name": "Ulmus pumila",
+        "common_name": "Siberian elm",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "79463",
+        "positional_accuracy": "5",
+        "public_positional_accuracy": "5",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "low",
@@ -349952,6 +350026,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5598666667,
+          45.4664533333
+        ]
+      },
+      "properties": {
+        "id": "415473870",
+        "observed_on": "2026-11-17",
+        "time_observed_at": "2026-11-17 20:38:03 UTC",
+        "user_login": "patrice_dupont",
+        "license": "CC-BY",
+        "photo_license": "CC-BY",
+        "photo_attribution": "(c) Patrice Dupont, some rights reserved (CC BY)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415473870",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765048316/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Érable plane",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "8",
+        "public_positional_accuracy": "8",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5596783333,
           45.467525
         ]
@@ -350088,6 +350199,80 @@
         "taxon_id": "54811",
         "positional_accuracy": "4",
         "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5848166925,
+          45.5048236939
+        ]
+      },
+      "properties": {
+        "id": "415967585",
+        "observed_on": "2026-11-20",
+        "time_observed_at": "2026-11-20 19:11:12 UTC",
+        "user_login": "kelly3006",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) kelly3006, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415967585",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/766000070/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "2",
+        "public_positional_accuracy": "2",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5354799508,
+          45.545518106
+        ]
+      },
+      "properties": {
+        "id": "416103826",
+        "observed_on": "2026-11-20",
+        "time_observed_at": "2026-11-20 19:35:36 UTC",
+        "user_login": "renard_frak",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) François Plourde - Renard frak, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/416103826",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/766271255/medium.jpg",
+        "place_guess": "Parc Édouard-Raymond-Fabre, Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Nerprun cathartique",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "6",
+        "public_positional_accuracy": "6",
         "coordinates_obscured": false,
         "taxon_geoprivacy": "open",
         "risk": "high",

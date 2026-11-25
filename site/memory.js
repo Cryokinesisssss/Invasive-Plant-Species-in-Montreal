@@ -106,7 +106,13 @@ const SUBMIT = {
         '<label class="suggest-check suggest-species-none"><input type="checkbox" name="species_none"> ' +
           'No specific species named <span class="suggest-hint">(the source talks about invasive plants in general)</span></label>' +
         '<div class="suggest-species-list" data-s="species"></div>' +
-        '<input name="species_other" maxlength="' + SUBMIT.max.speciesOther + '" placeholder="Other plant, if not listed" aria-label="Other plant, if not listed">' +
+        '<label class="suggest-other-label" for="suggest-other">Other plant, if not listed: write its Latin name ' +
+          '<span class="suggest-hint">(a species, subspecies, hybrid, genus, family…, e.g. Rhamnus cathartica)</span></label>' +
+        '<div class="taxon-combo">' +
+          '<input id="suggest-other" name="species_other" maxlength="' + SUBMIT.max.speciesOther + '" placeholder="Start typing a Latin name…" ' +
+            'autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="taxon-options">' +
+          '<ul class="taxon-options" id="taxon-options" role="listbox" hidden></ul>' +
+        '</div>' +
       '</fieldset>' +
       '<fieldset class="suggest-field"><legend>The location you clicked is' + REQ + '</legend>' +
         '<label class="suggest-radio"><input type="radio" name="marker_type" value="site" required> Where the work happens</label>' +
@@ -143,6 +149,123 @@ const SUBMIT = {
       noneBox.checked = false;
     }
   });
+
+  // ---------- "Other plant": Latin-name suggestions from iNaturalist ----------
+  // Plants only (taxon 47126 = Plantae), anything from family down to form:
+  // tribes, genera, sections, complexes, species, hybrids, subspecies,
+  // varieties... Typing freely still works if nothing matches or iNaturalist
+  // can't be reached.
+  const TAXON_URL = 'https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=47126&min_rank=form&max_rank=family&per_page=10&locale=en&q=';
+  // How a rank reads in the list, when iNaturalist's own word isn't plain enough
+  const RANK_LABEL = { genushybrid: 'genus hybrid', infrahybrid: 'hybrid' };
+  // Botanical abbreviations for names below species (iNaturalist leaves them out)
+  const INFRA = { subspecies: 'subsp.', variety: 'var.', subvariety: 'subvar.', form: 'f.' };
+  function rankLabel(rank) { return RANK_LABEL[rank] || rank; }
+  function botanicalName(t) {
+    const abbr = INFRA[t.rank];
+    const parts = t.name.split(' ');
+    return abbr && parts.length > 2 ? parts.slice(0, -1).join(' ') + ' ' + abbr + ' ' + parts[parts.length - 1] : t.name;
+  }
+  const optionsEl = overlay.querySelector('#taxon-options');
+  let taxonTimer = null;
+  let taxonAbort = null;
+  let taxonResults = [];
+  let taxonActive = -1;
+
+  function taxonValue(t) {
+    // Species, hybrids and names below species are clear on their own
+    // ("Reynoutria × bohemica", "Phragmites australis subsp. australis");
+    // anything broader says what it is ("Rhamnus (genus)", "Rubus (complex)").
+    if (t.rank_level <= 10) return botanicalName(t);
+    return t.name + ' (' + rankLabel(t.rank) + ')';
+  }
+  function hideTaxa() {
+    optionsEl.hidden = true;
+    optionsEl.textContent = '';
+    otherInput.setAttribute('aria-expanded', 'false');
+    otherInput.removeAttribute('aria-activedescendant');
+    taxonResults = [];
+    taxonActive = -1;
+  }
+  function highlightTaxon(i) {
+    taxonActive = i;
+    Array.from(optionsEl.children).forEach(function (li, j) { li.classList.toggle('is-active', j === i); });
+    if (i >= 0) otherInput.setAttribute('aria-activedescendant', 'taxon-opt-' + i);
+    else otherInput.removeAttribute('aria-activedescendant');
+  }
+  function showTaxa(results) {
+    hideTaxa();
+    taxonResults = results;
+    if (!results.length) return;
+    results.forEach(function (t, i) {
+      const li = document.createElement('li');
+      li.id = 'taxon-opt-' + i;
+      li.setAttribute('role', 'option');
+      const em = document.createElement('em');
+      em.textContent = botanicalName(t);
+      const rank = document.createElement('span');
+      rank.className = 'taxon-rank';
+      rank.textContent = ' (' + rankLabel(t.rank) + ')';
+      li.append(em, rank);
+      if (t.preferred_common_name) {
+        const common = document.createElement('span');
+        common.className = 'taxon-common';
+        common.textContent = t.preferred_common_name;
+        li.append(common);
+      }
+      // mousedown, not click, so the input doesn't lose focus and close the list first
+      li.addEventListener('mousedown', function (e) { e.preventDefault(); pickTaxon(t); });
+      optionsEl.append(li);
+    });
+    optionsEl.hidden = false;
+    otherInput.setAttribute('aria-expanded', 'true');
+  }
+  function pickTaxon(t) {
+    hideTaxa();
+    // Already on the checklist? Tick it there instead of writing it out.
+    const listed = t.rank === 'species' && Array.from(form.querySelectorAll('input[name="species"]'))
+      .find(function (cb) { return cb.value.split('|')[1] === t.name; });
+    if (listed) {
+      listed.checked = true;
+      otherInput.value = '';
+    } else {
+      otherInput.value = taxonValue(t).slice(0, SUBMIT.max.speciesOther);
+    }
+    noneBox.checked = false;
+  }
+  function lookUpTaxa(q) {
+    if (taxonAbort) taxonAbort.abort();
+    taxonAbort = new AbortController();
+    fetch(TAXON_URL + encodeURIComponent(q), { signal: taxonAbort.signal })
+      .then(function (r) { return r.ok ? r.json() : { results: [] }; })
+      .then(function (data) {
+        if (document.activeElement !== otherInput || otherInput.value.trim() !== q) return;
+        showTaxa((data.results || []).filter(function (t) { return t.name && t.rank && typeof t.rank_level === 'number'; }));
+      })
+      .catch(function () { /* offline or aborted: free typing still works */ });
+  }
+
+  otherInput.addEventListener('input', function () {
+    clearTimeout(taxonTimer);
+    const q = otherInput.value.trim();
+    if (q.length < 3) { hideTaxa(); return; }
+    taxonTimer = setTimeout(function () { lookUpTaxa(q); }, 300);   // wait for a pause in typing
+  });
+  otherInput.addEventListener('keydown', function (e) {
+    if (optionsEl.hidden) return;
+    const n = taxonResults.length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); highlightTaxon((taxonActive + 1) % n); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); highlightTaxon((taxonActive - 1 + n) % n); }
+    else if (e.key === 'Enter' && taxonActive >= 0) { e.preventDefault(); pickTaxon(taxonResults[taxonActive]); }
+    else if (e.key === 'Escape') { e.stopPropagation(); hideTaxa(); }   // close the list, not the form
+  });
+  otherInput.addEventListener('blur', function () { clearTimeout(taxonTimer); hideTaxa(); });
+
+  // Hybrids use "×", which most keyboards can't type. A lone x between words
+  // ("Reynoutria x bohemica", "x Festulolium") becomes ×; an x inside a word
+  // ("Xanthium") is left alone. The search itself already matches either.
+  function hybridSign(text) { return text.replace(/(^|\s)[xX](?=\s)/g, '$1×'); }
+  otherInput.addEventListener('change', function () { otherInput.value = hybridSign(otherInput.value); });
 
   function fillChoices() {
     // Species: the map's species list (common name + Latin name)
@@ -209,7 +332,7 @@ const SUBMIT = {
       year_end: yearEnd,
       description: v('description').slice(0, SUBMIT.max.description),
       species: species,
-      species_other: v('species_other').slice(0, SUBMIT.max.speciesOther),
+      species_other: hybridSign(v('species_other')).slice(0, SUBMIT.max.speciesOther),
       marker_type: markerEl ? markerEl.value : '',
       source_url: v('source_url').slice(0, SUBMIT.max.url),
       lat: Math.round(formLatLng.lat * 1e5) / 1e5,   // about 1 m

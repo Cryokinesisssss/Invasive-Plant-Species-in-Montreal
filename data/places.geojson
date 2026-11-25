@@ -350581,6 +350581,43 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.5828779121,
+          45.5046339678
+        ]
+      },
+      "properties": {
+        "id": "415965239",
+        "observed_on": "2026-11-20",
+        "time_observed_at": "2026-11-20 17:52:58 UTC",
+        "user_login": "kelly3006",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) kelly3006, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/415965239",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/765996237/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "garlic mustard",
+        "scientific_name": "Alliaria petiolata",
+        "common_name": "garlic mustard",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56061",
+        "positional_accuracy": "4",
+        "public_positional_accuracy": "4",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5857368472,
           45.5039792558
         ]
@@ -350803,6 +350840,80 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -73.586751236,
+          45.5031691533
+        ]
+      },
+      "properties": {
+        "id": "416583566",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 21:16:13 UTC",
+        "user_login": "roza86186",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Roza Mirzabagherian, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/416583566",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/767226595/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "common buckthorn",
+        "scientific_name": "Rhamnus cathartica",
+        "common_name": "common buckthorn",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54811",
+        "positional_accuracy": "41",
+        "public_positional_accuracy": "41",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5863690641,
+          45.5034404846
+        ]
+      },
+      "properties": {
+        "id": "416584288",
+        "observed_on": "2026-11-12",
+        "time_observed_at": "2026-11-12 21:08:13 UTC",
+        "user_login": "roza86186",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) Roza Mirzabagherian, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/416584288",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/767228137/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "Norway maple",
+        "scientific_name": "Acer platanoides",
+        "common_name": "Norway maple",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "54763",
+        "positional_accuracy": "27",
+        "public_positional_accuracy": "27",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -73.5871253412,
           45.5036125813
         ]
@@ -350833,6 +350944,43 @@
         "risk": "low",
         "presence": "Established",
         "banned": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.5930203298,
+          45.5113522883
+        ]
+      },
+      "properties": {
+        "id": "416624854",
+        "observed_on": "2026-11-22",
+        "time_observed_at": "2026-11-22 19:11:02 UTC",
+        "user_login": "kelly3006",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) kelly3006, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/416624854",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/767310185/medium.jpg",
+        "place_guess": "Montréal, QC, CA",
+        "place_town_name": "",
+        "species_guess": "garlic mustard",
+        "scientific_name": "Alliaria petiolata",
+        "common_name": "garlic mustard",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56061",
+        "positional_accuracy": "3",
+        "public_positional_accuracy": "3",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
       }
     }
   ]

@@ -3654,6 +3654,8 @@ html:has(body.home-page) { scroll-behavior: smooth; }
   font-weight: 400;
 }
 .suggest-field textarea { resize: vertical; }
+.suggest-req { color: #c62828; font-weight: 700; }
+.suggest-req-key { white-space: nowrap; }
 fieldset.suggest-field { border: none; padding: 0; }
 fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
 .suggest-row { display: flex; gap: 10px; }
@@ -3667,6 +3669,8 @@ fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
 }
 .suggest-check, .suggest-radio { display: block; margin: 2px 0; font-weight: 400; }
 .suggest-check em { color: #777; }
+.suggest-species-none { margin: 0 0 6px; }
+.suggest-hint { color: #777; font-size: 11.5px; }
 .suggest-error { margin: 0 0 10px; color: #b00020; font-size: 12.5px; }
 .suggest-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .suggest-cancel, .suggest-send {

@@ -81,6 +81,7 @@ const SUBMIT = {
   const overlay = document.createElement('div');
   overlay.className = 'risk-info-overlay suggest-overlay';
   overlay.hidden = true;
+  const REQ = '<span class="suggest-req" aria-hidden="true"> *</span>';
   overlay.innerHTML =
     '<form class="risk-info suggest-form" role="dialog" aria-modal="true" aria-labelledby="suggest-title" novalidate>' +
       '<div class="risk-info-head">' +
@@ -88,28 +89,31 @@ const SUBMIT = {
         '<button class="risk-info-close" type="button" data-s="close" aria-label="Close">×</button>' +
       '</div>' +
       '<p class="suggest-intro">Know of work to control invasive plants in Montréal? Tell us about it. ' +
-        'Suggestions are reviewed before they appear on the map.</p>' +
-      '<label class="suggest-field">Project name' +
+        'Suggestions are reviewed before they appear on the map. ' +
+        '<span class="suggest-req-key"><span class="suggest-req">*</span> Required</span></p>' +
+      '<label class="suggest-field">Project name' + REQ +
         '<input name="name" required maxlength="' + SUBMIT.max.name + '"></label>' +
-      '<label class="suggest-field">Organization' +
+      '<label class="suggest-field">Organization' + REQ +
         '<input name="organization" required maxlength="' + SUBMIT.max.organization + '" list="suggest-orgs">' +
         '<datalist id="suggest-orgs"></datalist></label>' +
       '<div class="suggest-row">' +
-        '<label class="suggest-field">Start year<input name="year_start" type="number" required min="1990" max="2100" inputmode="numeric"></label>' +
+        '<label class="suggest-field">Start year' + REQ + '<input name="year_start" type="number" required min="1990" max="2100" inputmode="numeric"></label>' +
         '<label class="suggest-field">End year<input name="year_end" type="number" min="1990" max="2100" inputmode="numeric" placeholder="Ongoing"></label>' +
       '</div>' +
-      '<label class="suggest-field">What was done' +
+      '<label class="suggest-field">What was done' + REQ +
         '<textarea name="description" required rows="3" maxlength="' + SUBMIT.max.description + '"></textarea></label>' +
-      '<fieldset class="suggest-field suggest-species"><legend>Species targeted</legend>' +
+      '<fieldset class="suggest-field suggest-species"><legend>Species targeted' + REQ + '</legend>' +
+        '<label class="suggest-check suggest-species-none"><input type="checkbox" name="species_none"> ' +
+          'No specific species named <span class="suggest-hint">(the source talks about invasive plants in general)</span></label>' +
         '<div class="suggest-species-list" data-s="species"></div>' +
         '<input name="species_other" maxlength="' + SUBMIT.max.speciesOther + '" placeholder="Other plant, if not listed" aria-label="Other plant, if not listed">' +
       '</fieldset>' +
-      '<fieldset class="suggest-field"><legend>The location you clicked is</legend>' +
+      '<fieldset class="suggest-field"><legend>The location you clicked is' + REQ + '</legend>' +
         '<label class="suggest-radio"><input type="radio" name="marker_type" value="site" required> Where the work happens</label>' +
         '<label class="suggest-radio"><input type="radio" name="marker_type" value="area"> Somewhere in the project area</label>' +
         '<label class="suggest-radio"><input type="radio" name="marker_type" value="organization"> The organization’s office or meeting point</label>' +
       '</fieldset>' +
-      '<label class="suggest-field">Source link' +
+      '<label class="suggest-field">Source link' + REQ +
         '<input name="source_url" type="url" required maxlength="' + SUBMIT.max.url + '" placeholder="https://"></label>' +
       '<p class="suggest-note">Please don’t include people’s names or home addresses.</p>' +
       '<p class="suggest-error" data-s="error" role="alert" hidden></p>' +
@@ -125,6 +129,20 @@ const SUBMIT = {
   const sendBtn = overlay.querySelector('[data-s="send"]');
   let formLatLng = null;
   let returnFocus = null;
+
+  // "No specific species named" and the species choices exclude each other:
+  // ticking it clears the list; picking a species (or typing one) unticks it.
+  const noneBox = form.elements.species_none;
+  const otherInput = form.elements.species_other;
+  overlay.querySelector('.suggest-species').addEventListener('input', function (e) {
+    if (e.target === noneBox) {
+      if (!noneBox.checked) return;
+      form.querySelectorAll('input[name="species"]:checked').forEach(function (cb) { cb.checked = false; });
+      otherInput.value = '';
+    } else if (e.target.name === 'species' ? e.target.checked : e.target === otherInput && otherInput.value.trim()) {
+      noneBox.checked = false;
+    }
+  });
 
   function fillChoices() {
     // Species: the map's species list (common name + Latin name)
@@ -202,6 +220,9 @@ const SUBMIT = {
     if (!(yearStart >= 1990 && yearStart <= 2100)) return 'Add a start year (1990 or later).';
     if (yearEnd !== null && !(yearEnd >= yearStart && yearEnd <= 2100)) return 'The end year must be the start year or later.';
     if (!data.description) return 'Say briefly what was done.';
+    if (!data.species.length && !data.species_other && !form.elements.species_none.checked) {
+      return 'Choose the species targeted, add one under “Other plant”, or tick “No specific species named”.';
+    }
     if (data.species.length > SUBMIT.max.species) return 'Choose at most ' + SUBMIT.max.species + ' species.';
     if (!data.marker_type) return 'Say what the location you clicked is.';
     if (!/^https:\/\/\S+\.\S+/.test(data.source_url)) return 'Add a source link starting with https://';

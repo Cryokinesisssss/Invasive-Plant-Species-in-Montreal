@@ -350982,6 +350982,43 @@
         "presence": "Established",
         "banned": true
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.60434743,
+          45.49109118
+        ]
+      },
+      "properties": {
+        "id": "416945231",
+        "observed_on": "2026-10-11",
+        "time_observed_at": "2026-10-11 20:00:47 UTC",
+        "user_login": "saugep",
+        "license": "CC-BY-NC",
+        "photo_license": "CC-BY-NC",
+        "photo_attribution": "(c) saugep, some rights reserved (CC BY-NC)",
+        "photo_present": true,
+        "photo_license_verified": true,
+        "url": "https://www.inaturalist.org/observations/416945231",
+        "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/767954519/medium.jpg",
+        "place_guess": "The Boulevard / Westmount, Westmount, QC H3Y 1S6, Canada",
+        "place_town_name": "",
+        "species_guess": "garlic mustard",
+        "scientific_name": "Alliaria petiolata",
+        "common_name": "garlic mustard",
+        "iconic_taxon_name": "Plantae",
+        "taxon_id": "56061",
+        "positional_accuracy": "7",
+        "public_positional_accuracy": "7",
+        "coordinates_obscured": false,
+        "taxon_geoprivacy": "open",
+        "risk": "high",
+        "presence": "Established",
+        "banned": true
+      }
     }
   ]
 }

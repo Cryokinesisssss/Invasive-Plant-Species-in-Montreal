@@ -10,7 +10,10 @@
     // Old links went straight to the map (e.g. ./?species=...). Send them there.
     if (/[?&]species=/.test(location.search)) location.replace('map.html' + location.search + location.hash);
   </script>
-  <link rel="stylesheet" href="site/style.css?v=60" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Karla:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="site/style.css?v=62" />
 </head>
 <body class="home-page">
 
@@ -120,10 +123,10 @@
       <h2>Risk levels</h2>
       <p class="home-section-lede">Québec classifies invasive plants by their known risk to biodiversity and the environment.</p>
       <div class="home-risks">
-        <div class="home-risk" style="--risk:#e63946"><span class="home-risk-dot"></span><h3>High</h3><p>A major threat to biodiversity and to how ecosystems function.</p></div>
-        <div class="home-risk" style="--risk:#f4a261"><span class="home-risk-dot"></span><h3>Moderate</h3><p>May harm some native species or ecosystems, without severe impacts.</p></div>
-        <div class="home-risk" style="--risk:#ffd166"><span class="home-risk-dot"></span><h3>Low</h3><p>Limited impact on biodiversity and ecosystems.</p></div>
-        <div class="home-risk" style="--risk:#adb5bd"><span class="home-risk-dot"></span><h3>Unclassified</h3><p>Impacts in Québec are not yet well enough understood to rate.</p></div>
+        <div class="home-risk" style="--risk:var(--risk-high)"><span class="home-risk-dot"></span><h3>High</h3><p>A major threat to biodiversity and to how ecosystems function.</p></div>
+        <div class="home-risk" style="--risk:var(--risk-moderate)"><span class="home-risk-dot"></span><h3>Moderate</h3><p>May harm some native species or ecosystems, without severe impacts.</p></div>
+        <div class="home-risk" style="--risk:var(--risk-low)"><span class="home-risk-dot"></span><h3>Low</h3><p>Limited impact on biodiversity and ecosystems.</p></div>
+        <div class="home-risk" style="--risk:var(--risk-unknown)"><span class="home-risk-dot"></span><h3>Unclassified</h3><p>Impacts in Québec are not yet well enough understood to rate.</p></div>
       </div>
       <p class="home-note">
         Québec also lists 26 priority species for control. Priority considers other factors, such as
@@ -145,7 +148,6 @@
         <li><strong>Counts reflect reporting.</strong> Record counts, density and species per borough depend on how much people report, not how abundant a plant is.</li>
         <li><strong>Location accuracy.</strong> By default, observations are within 100 m: solid outlines within 10 m, dashed ones 10–100 m. Records with no recorded accuracy are hidden unless you turn them on (Observation filters → Location accuracy), where they appear as hollow rings. Records with hidden locations are always excluded.</li>
         <li><strong>Project locations are approximate.</strong> A marker may show a park or an organization's address, not the exact work site.</li>
-        <li><strong>Reader suggestions</strong> are reviewed before they appear, but their details come from the person who sent them.</li>
         <li><strong>Green spaces</strong> (parks, cemeteries, golf courses) aren't shown as a separate layer.</li>
       </ul>
     </div>
@@ -173,10 +175,8 @@
         <div class="home-source">
           <h3>Ville de Montréal</h3>
           <p>
-            <a href="https://www.app.geo.ca/en-ca/map-browser/record/9797a946-9da8-41ec-8815-f6b276dec7e9" target="_blank" rel="noopener">Administrative boundaries</a>,
-            <a href="https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413" target="_blank" rel="noopener">invasive plant control projects</a>,
-            <a href="https://donnees.montreal.ca/dataset/0f5cc045-9eb1-4e66-b63c-6c783bc7ac44" target="_blank" rel="noopener">protected natural areas</a> and
-            <a href="https://donnees.montreal.ca/dataset/2e9e4d2f-173a-4c3d-a5e3-565d79baa27d" target="_blank" rel="noopener">parks</a>. CC-BY 4.0.
+            <a href="https://www.app.geo.ca/en-ca/map-browser/record/9797a946-9da8-41ec-8815-f6b276dec7e9" target="_blank" rel="noopener">Administrative boundaries</a> and
+            <a href="https://montreal.ca/en/articles/controlling-invasive-alien-plant-species-to-protect-native-plants-94413" target="_blank" rel="noopener">invasive plant control projects</a>. CC-BY 4.0.
           </p>
         </div>
       </div>

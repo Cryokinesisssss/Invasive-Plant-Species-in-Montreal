@@ -122,10 +122,71 @@ function showDataLoadError(message, err) {
   if (err) console.error(message, err);
 }
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 20,
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+// ---- Basemap ----
+// Our own colours (cream land, sage parks, blue-grey water) drawn from
+// OpenFreeMap's free vector tiles, so the map matches the field-guide look.
+// If the browser can't draw it (no WebGL, or the style doesn't load), fall
+// back to OpenStreetMap tiles with softened colour (.basemap-muted in style.css).
+const BASEMAP_COLORS = {
+  land: '#F1EBDD', park: '#DCE3C6', wood: '#D2DCBB', water: '#BFD3D4', waterLine: '#A9C2C4',
+  residential: '#EDE6D6', building: '#E4DBC7', roadCasing: '#E0D5BD', road: '#FBF8F0',
+  motorway: '#F3E6C4', motorwayCasing: '#D8C89F', rail: '#CFC4AB', boundary: '#A79D86',
+  label: '#4E5B4F', labelHalo: '#F5F0E4', waterLabel: '#5D7B7E'
+};
+
+function addFallbackBasemap() {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    className: 'basemap-muted',
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+}
+
+function recolourBasemap(style) {
+  const C = BASEMAP_COLORS;
+  style.layers.forEach(function (l) {
+    const id = l.id, p = l.paint = l.paint || {};
+    if (l.type === 'background') p['background-color'] = C.land;
+    else if (id === 'park') { p['fill-color'] = C.park; p['fill-opacity'] = 1; }
+    else if (id === 'landcover_wood') { p['fill-color'] = C.wood; p['fill-opacity'] = 1; }
+    else if (id === 'water') p['fill-color'] = C.water;
+    else if (id === 'waterway') p['line-color'] = C.waterLine;
+    else if (id === 'landuse_residential') p['fill-color'] = C.residential;
+    else if (id === 'building') p['fill-color'] = C.building;
+    else if (/motorway.*casing/.test(id)) p['line-color'] = C.motorwayCasing;
+    else if (/motorway/.test(id) && l.type === 'line') p['line-color'] = C.motorway;
+    else if (/casing/.test(id)) p['line-color'] = C.roadCasing;
+    else if (/^highway|^road_/.test(id) && l.type === 'line') p['line-color'] = C.road;
+    else if (/railway/.test(id)) p['line-color'] = C.rail;
+    else if (/boundary/.test(id)) p['line-color'] = C.boundary;
+    else if (l.type === 'symbol') {
+      p['text-color'] = /water/.test(id) ? C.waterLabel : C.label;
+      p['text-halo-color'] = C.labelHalo;
+    }
+  });
+  return style;
+}
+
+(function addBasemap() {
+  // Set now: the basemap arrives later (after its style downloads), but the
+  // clustered layers need the map's max zoom as soon as they are built.
+  map.setMaxZoom(20);
+  const canvas = document.createElement('canvas');
+  const webgl = !!(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+  if (!webgl || typeof L.maplibreGL !== 'function') { addFallbackBasemap(); return; }
+  fetch('https://tiles.openfreemap.org/styles/positron')
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (style) {
+      L.maplibreGL({
+        style: recolourBasemap(style),
+        attribution: '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> &copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+      }).addTo(map);
+    })
+    .catch(function (err) {
+      console.warn('Custom basemap unavailable, using OpenStreetMap tiles instead.', err);
+      addFallbackBasemap();
+    });
+})();
 
 // Data credits (the map page has no footer; full sources are on the home page)
 map.attributionControl.addAttribution(
@@ -137,14 +198,31 @@ map.attributionControl.addAttribution(
 
 // ============================================================
 // 2. RISK → STYLE MAPPING — dot colours and labels
-//    Change a colour here to recolour every dot of that tier.
+//    The colours themselves are set once in style.css (:root, --risk-*);
+//    change them there to recolour dots, badges, legends and the catalog.
 // ============================================================
-const RISK_STYLE = {
-  high:     { color: '#8b0000', fillColor: '#e63946', label: 'High risk' },
-  moderate: { color: '#a15c00', fillColor: '#f4a261', label: 'Moderate risk' },
-  low:      { color: '#7a6000', fillColor: '#ffd166', label: 'Low risk' },
-  unknown:  { color: '#444',    fillColor: '#adb5bd', label: 'Unclassified' }
+const ROOT_CSS = getComputedStyle(document.documentElement);
+function cssVar(name) { return ROOT_CSS.getPropertyValue(name).trim(); }
+function riskColors(tier) {
+  const v = '--risk-' + tier;
+  return { fill: cssVar(v), line: cssVar(v + '-line'), soft: cssVar(v + '-soft'), text: cssVar(v + '-text') };
+}
+const RISK_COLORS = {
+  high: riskColors('high'), moderate: riskColors('moderate'),
+  low: riskColors('low'), unknown: riskColors('unknown')
 };
+const RISK_STYLE = {
+  high:     { color: RISK_COLORS.high.line,     fillColor: RISK_COLORS.high.fill,     label: 'High risk' },
+  moderate: { color: RISK_COLORS.moderate.line, fillColor: RISK_COLORS.moderate.fill, label: 'Moderate risk' },
+  low:      { color: RISK_COLORS.low.line,      fillColor: RISK_COLORS.low.fill,      label: 'Low risk' },
+  unknown:  { color: RISK_COLORS.unknown.line,  fillColor: RISK_COLORS.unknown.fill,  label: 'Unclassified' }
+};
+// Popup badges: pale background, dark text, coloured border
+const RISK_BADGE = {};
+Object.keys(RISK_COLORS).forEach(function (t) {
+  const c = RISK_COLORS[t];
+  RISK_BADGE[t] = { bg: c.soft, fg: c.text, border: c.fill };
+});
 
 // ---- Hovered iNaturalist dot (one at a time) ----
 let hoveredDot = null;
@@ -934,7 +1012,7 @@ function choroplethColor(value) {
   return CHORO_COLORS[CHORO_COLORS.length - 1];
 }
 
-const BOROUGH_BASE_STYLE = { color: '#666', weight: 1, opacity: 0.6, fillColor: '#1F2D5A', fillOpacity: 0.05 };
+const BOROUGH_BASE_STYLE = { color: '#666', weight: 1, opacity: 0.6, fillColor: cssVar('--brand-dark'), fillOpacity: 0.05 };
 
 function updateBoroughChoropleth() {
   if (!boroughPolygonLayer || !boroughData) return;
@@ -1063,10 +1141,10 @@ function buildObsLayer() {
         const s = styleFor(p);
 
         const badgeColors = {
-          high:     { bg: '#fde2e4', fg: '#8b0000', border: '#e63946' },
-          moderate: { bg: '#fdead2', fg: '#7a4500', border: '#f4a261' },
-          low:      { bg: '#fff4c2', fg: '#5c4700', border: '#ffd166' },
-          unknown:  { bg: '#e9ecef', fg: '#333',    border: '#adb5bd' }
+          high:     RISK_BADGE.high,
+          moderate: RISK_BADGE.moderate,
+          low:      RISK_BADGE.low,
+          unknown:  RISK_BADGE.unknown
         };
         const badge = badgeColors[p.risk] || badgeColors.unknown;
 
@@ -1914,9 +1992,9 @@ function updateMapLegend() {
         '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?">?</button>' +
       '</div>' +
       '<div class="legend-risk-strip">' +
-        '<span class="legend-risk-item"><span class="swatch" style="background:#e63946;border-color:#8b0000"></span>High</span>' +
-        '<span class="legend-risk-item"><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span>Mod.</span>' +
-        '<span class="legend-risk-item"><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span>Low</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-high);border-color:var(--risk-high-line)"></span>High</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-moderate);border-color:var(--risk-moderate-line)"></span>Mod.</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-low);border-color:var(--risk-low-line)"></span>Low</span>' +
       '</div>' +
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
@@ -2119,10 +2197,10 @@ if (window.ResizeObserver) {
 }
 
 const TIER_INFO = {
-  high:     { label: 'High risk',     fill: '#e63946', border: '#8b0000' },
-  moderate: { label: 'Moderate risk', fill: '#f4a261', border: '#a15c00' },
-  low:      { label: 'Low risk',      fill: '#ffd166', border: '#7a6000' },
-  unknown:  { label: 'Unclassified',  fill: '#adb5bd', border: '#444'    }
+  high:     { label: 'High risk',     fill: RISK_COLORS.high.fill,     border: RISK_COLORS.high.line },
+  moderate: { label: 'Moderate risk', fill: RISK_COLORS.moderate.fill, border: RISK_COLORS.moderate.line },
+  low:      { label: 'Low risk',      fill: RISK_COLORS.low.fill,      border: RISK_COLORS.low.line },
+  unknown:  { label: 'Unclassified',  fill: RISK_COLORS.unknown.fill,  border: RISK_COLORS.unknown.line }
 };
 
 // Refresh the summary if it is showing (don't reopen it if the user closed it)
@@ -2643,10 +2721,10 @@ function buildSentinelLayer() {
 
         const RISK_LABEL = { high: 'High risk', moderate: 'Moderate risk', low: 'Low risk', unknown: 'Unclassified' };
         const BADGE = {
-          high:     { bg: '#fde2e4', fg: '#8b0000', border: '#e63946' },
-          moderate: { bg: '#fdead2', fg: '#7a4500', border: '#f4a261' },
-          low:      { bg: '#fff4c2', fg: '#5c4700', border: '#ffd166' },
-          unknown:  { bg: '#e9ecef', fg: '#333',    border: '#adb5bd' }
+          high:     RISK_BADGE.high,
+          moderate: RISK_BADGE.moderate,
+          low:      RISK_BADGE.low,
+          unknown:  RISK_BADGE.unknown
         };
         const b = BADGE[p.risk] || BADGE.unknown;
 

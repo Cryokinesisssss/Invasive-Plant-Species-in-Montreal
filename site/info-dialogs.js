@@ -69,10 +69,10 @@
       body:
         '<p>Québec classifies harmful invasive plant species by their known risk to biodiversity and the environment:</p>' +
         '<ul class="risk-info-list">' +
-          '<li><span class="swatch" style="background:#e63946;border-color:#8b0000"></span><div><strong>High risk:</strong> a major threat to biodiversity and the proper functioning of ecosystems.</div></li>' +
-          '<li><span class="swatch" style="background:#f4a261;border-color:#a15c00"></span><div><strong>Moderate risk:</strong> may harm some native species or disrupt some ecosystems, but without causing severe impacts.</div></li>' +
-          '<li><span class="swatch" style="background:#ffd166;border-color:#7a6000"></span><div><strong>Low risk:</strong> impacts on biodiversity and ecosystems are limited.</div></li>' +
-          '<li><span class="swatch" style="background:#adb5bd;border-color:#444"></span><div><strong>Undetermined — watch</strong> (“Unclassified” on the map): impacts and risk in Québec are not yet sufficiently understood.</div></li>' +
+          '<li><span class="swatch" style="background:var(--risk-high);border-color:var(--risk-high-line)"></span><div><strong>High risk:</strong> a major threat to biodiversity and the proper functioning of ecosystems.</div></li>' +
+          '<li><span class="swatch" style="background:var(--risk-moderate);border-color:var(--risk-moderate-line)"></span><div><strong>Moderate risk:</strong> may harm some native species or disrupt some ecosystems, but without causing severe impacts.</div></li>' +
+          '<li><span class="swatch" style="background:var(--risk-low);border-color:var(--risk-low-line)"></span><div><strong>Low risk:</strong> impacts on biodiversity and ecosystems are limited.</div></li>' +
+          '<li><span class="swatch" style="background:var(--risk-unknown);border-color:var(--risk-unknown-line)"></span><div><strong>Undetermined — watch</strong> (“Unclassified” on the map): impacts and risk in Québec are not yet sufficiently understood.</div></li>' +
         '</ul>' +
         '<p class="risk-info-note">Priority for control is a separate classification: a species can be a priority even if its risk level is moderate or low.</p>' +
         '<p class="risk-info-note">Source: Québec\'s <a href="' + RISK_GUIDANCE_URL + '" target="_blank" rel="noopener noreferrer">risk criteria and control guidance</a>.</p>'

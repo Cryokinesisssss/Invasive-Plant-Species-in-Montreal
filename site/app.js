@@ -493,8 +493,9 @@ function buildSpeciesCatalog() {
     if (!common && !sci) return;
     const key = (common || sci) + '|' + sci;
     if (!byKey.has(key)) {
-      byKey.set(key, { key: key, common: common || sci, sci: sci });
+      byKey.set(key, { key: key, common: common || sci, sci: sci, watch: false });
     }
+    if (p.risk === 'unknown') byKey.get(key).watch = true;   // undetermined risk
   });
   speciesCatalog = Array.from(byKey.values()).sort(function (a, b) {
     return a.common.localeCompare(b.common);
@@ -1537,7 +1538,7 @@ function renderSpeciesList(query) {
   const counts = speciesCountsInSelectedBoroughs();
   const matches = availableSpecies().filter(function (s) {
     if (!q) return true;
-    return (s.common + ' ' + s.sci).toLowerCase().indexOf(q) !== -1;
+    return speciesSearchText(s).indexOf(q) !== -1;
   });
 
   if (!matches.length) {
@@ -1552,6 +1553,7 @@ function renderSpeciesList(query) {
              '<input type="checkbox" data-sp-key="' + escapeAttr(s.key) + '"' + checked + '>' +
              '<span>' + escapeHtml(s.common) +
                (s.sci ? ' <em style="color:#888">(' + escapeHtml(s.sci) + ')</em>' : '') +
+               watchTag(s) +
                (counts ? ' <span class="fp-count">' + (counts.get(s.key) || 0) + '</span>' : '') +
              '</span>' +
            '</label>';
@@ -1560,7 +1562,7 @@ function renderSpeciesList(query) {
   listEl.querySelectorAll('input[data-sp-key]').forEach(function (cb) {
     cb.addEventListener('change', function () {
       const key = cb.getAttribute('data-sp-key');
-      if (cb.checked) filterState.species.add(key);
+      if (cb.checked) { filterState.species.add(key); showWatchListFor(key); }
       else filterState.species.delete(key);
       syncSpeciesAllCheckbox();
       updateSummaries();
@@ -1569,6 +1571,33 @@ function renderSpeciesList(query) {
       refreshSelectionPanel();
     });
   });
+}
+
+// ---- 10a0. Search text and undetermined-risk species ----
+// iNaturalist's common names differ from the species catalog's for some
+// species; let readers find them by either name.
+const SPECIES_ALIASES = {
+  'Euonymus alatus': 'burning bush',
+  'Berberis vulgaris': 'common barberry',
+  'Lysimachia nummularia': 'moneywort creeping jenny',
+  'Lonicera japonica': 'golden-and-silver honeysuckle'
+};
+function speciesSearchText(s) {
+  return (s.common + ' ' + s.sci + ' ' + (SPECIES_ALIASES[s.sci] || '')).toLowerCase();
+}
+function watchTag(s) {
+  return s.watch ? ' <span class="sp-watch-tag" title="Undetermined risk (species to watch)">undetermined</span>' : '';
+}
+// Picking an undetermined-risk species turns those (normally hidden) dots on,
+// otherwise the selection would show nothing.
+function showWatchListFor(key) {
+  if (filterState.risk.has('unknown')) return;
+  const s = speciesCatalog.find(function (x) { return x.key === key; });
+  if (!s || !s.watch) return;
+  filterState.risk.add('unknown');
+  const box = document.querySelector('input[data-risk="unknown"]');
+  if (box) box.checked = true;
+  updateMapLegend();
 }
 
 // ---- 10a. HTML escaping helpers ----
@@ -1591,7 +1620,7 @@ function showSpSuggest(query) {
   if (!q) { hideSpSuggest(); return; }
 
   const matches = availableSpecies().filter(function (s) {
-    return (s.common + ' ' + s.sci).toLowerCase().indexOf(q) !== -1;
+    return speciesSearchText(s).indexOf(q) !== -1;
   }).slice(0, 8);
 
   if (!matches.length) {
@@ -1605,7 +1634,7 @@ function showSpSuggest(query) {
     return '<button type="button" class="ss-item' + (i === spSuggestIndex ? ' active' : '') + (checked ? ' is-checked' : '') + '" ' +
              'data-sp-key="' + escapeAttr(s.key) + '">' +
              '<span class="ss-common">' + escapeHtml(s.common) + '</span>' +
-             '<span class="ss-sci"><em>' + escapeHtml(s.sci) + '</em></span>' +
+             '<span class="ss-sci"><em>' + escapeHtml(s.sci) + '</em>' + watchTag(s) + '</span>' +
              (checked ? '<span class="ss-tier tier-watch">✓</span>' : '') +
            '</button>';
   }).join('');
@@ -1616,7 +1645,7 @@ function showSpSuggest(query) {
       e.stopPropagation();
       const key = btn.getAttribute('data-sp-key');
       if (filterState.species.has(key)) filterState.species.delete(key);
-      else filterState.species.add(key);
+      else { filterState.species.add(key); showWatchListFor(key); }
       syncSpeciesAllCheckbox();
       updateSummaries();
       buildObsLayer();
@@ -2576,6 +2605,17 @@ function renderSelectionPanel() {
     '<span class="bp-caret">' + (projectToggleOpen ? '▾' : '▸') + '</span>' +
     '</button>';
   if (projectToggleOpen) html += renderProjectOrganizationRows(selectedProjects);
+
+  // One borough or city clicked: link to that municipality's own advice on
+  // invasive plants (site/city-guidance.js), or to the home page list if it has none
+  if (selectedBorough && !selectedIsUnion && typeof guidanceForPlace === 'function') {
+    const props = selectedBorough.properties || {};
+    const g = guidanceForPlace(props.NOM, props.TYPE);
+    html += g
+      ? '<a class="bp-guidance" href="' + escapeAttr(g.url) + '" target="_blank" rel="noopener">' +
+          'What ' + escapeHtml(g.name.replace(/ \(all 19 boroughs\)$/, '')) + ' says about invasive plants ↗</a>'
+      : '<a class="bp-guidance" href="./#what-you-can-do">What you can do about invasive plants</a>';
+  }
 
   BP_BODY.innerHTML = html;
   BOROUGH_PANEL.hidden = false;

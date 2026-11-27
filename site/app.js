@@ -37,6 +37,11 @@ const map = L.map('map', {
   maxBoundsViscosity: 1.0
 }).setView([45.51, -73.58], 12);
 
+// Dots, borough shapes and the island outline are drawn on one canvas instead
+// of thousands of separate SVG shapes: much faster to pan and zoom.
+// (One shared canvas, so boroughs underneath still get hovers and clicks.)
+const VECTOR_CANVAS = L.canvas({ padding: 0.5, tolerance: 3 });
+
 const POPUP_VIEWPORT_PADDING = 40;
 let activeMapPopup = null;
 
@@ -223,6 +228,21 @@ Object.keys(RISK_COLORS).forEach(function (t) {
   const c = RISK_COLORS[t];
   RISK_BADGE[t] = { bg: c.soft, fg: c.text, border: c.fill };
 });
+
+// ---- Popup thumbnails ----
+// The popup shows a 72 px thumbnail, so load iNaturalist's "square" photo
+// (~7 KB) instead of "medium" (~170 KB); the medium one is kept for the
+// click-to-enlarge view. Other photo hosts are left as they are.
+function thumbUrl(url) {
+  return /inaturalist/.test(url || '') ? url.replace(/\/(medium|large|original|small)\.(jpe?g|png)/i, '/square.$2') : url;
+}
+// Start downloading a dot's thumbnail on hover, so it's ready on click
+const prefetchedThumbs = new Set();
+function prefetchThumb(url) {
+  if (!url || prefetchedThumbs.has(url)) return;
+  prefetchedThumbs.add(url);
+  new Image().src = thumbUrl(url);
+}
 
 // ---- Hovered iNaturalist dot (one at a time) ----
 let hoveredDot = null;
@@ -1012,7 +1032,40 @@ function choroplethColor(value) {
   return CHORO_COLORS[CHORO_COLORS.length - 1];
 }
 
-const BOROUGH_BASE_STYLE = { color: '#666', weight: 1, opacity: 0.6, fillColor: cssVar('--brand-dark'), fillOpacity: 0.05 };
+// ---- Borough hover labels: never leave one behind ----
+// Leaflet closes a sticky tooltip when it sees the mouse leave the borough,
+// but that event can be missed (e.g. moving straight onto a dot or project
+// pin, or a layer being redrawn under the cursor), leaving a label stuck on
+// screen. So: allow only one open at a time, and close it as soon as the
+// pointer is no longer over that borough's shape.
+let openBoroughTooltip = null;   // the borough layer whose label is showing
+
+function closeBoroughTooltip() {
+  if (!openBoroughTooltip) return;
+  const layer = openBoroughTooltip;
+  openBoroughTooltip = null;
+  layer.closeTooltip();
+  layer.setStyle({ weight: mapMode === 'boroughs' ? 1 : BOROUGH_BASE_STYLE.weight,
+                   opacity: mapMode === 'boroughs' ? 0.7 : BOROUGH_BASE_STYLE.opacity });
+}
+
+function keepBoroughTooltipsTidy() {
+  boroughPolygonLayer.on('tooltipopen', function (e) {
+    if (openBoroughTooltip && openBoroughTooltip !== e.layer) closeBoroughTooltip();
+    openBoroughTooltip = e.layer;
+  });
+  boroughPolygonLayer.on('tooltipclose', function (e) {
+    if (openBoroughTooltip === e.layer) openBoroughTooltip = null;
+  });
+  map.on('mousemove', function (e) {
+    if (!openBoroughTooltip || !window.turf) return;
+    const pt = turf.point([e.latlng.lng, e.latlng.lat]);
+    if (!turf.booleanPointInPolygon(pt, openBoroughTooltip.feature)) closeBoroughTooltip();
+  });
+  map.on('mouseout movestart zoomstart popupopen', closeBoroughTooltip);
+}
+
+const BOROUGH_BASE_STYLE ={ color: '#666', weight: 1, opacity: 0.6, fillColor: cssVar('--brand-dark'), fillOpacity: 0.05 };
 
 function updateBoroughChoropleth() {
   if (!boroughPolygonLayer || !boroughData) return;
@@ -1105,6 +1158,7 @@ function buildObsLayer() {
         if (!clustersEnabled && unknownAccuracy) {
           // Hollow ring: same risk colour, no fill
           return L.circleMarker(latlng, {
+            renderer: VECTOR_CANVAS,
             radius: 6,
             weight: 2.5,
             color: s.fillColor,
@@ -1114,6 +1168,7 @@ function buildObsLayer() {
         }
         if (!clustersEnabled) {
           return L.circleMarker(latlng, {
+            renderer: VECTOR_CANVAS,
             radius: approximateLocation ? 7 : 6,
             weight: approximateLocation ? 2 : 1.5,
             dashArray: approximateLocation ? '3,3' : null,
@@ -1137,76 +1192,79 @@ function buildObsLayer() {
       },
       // ---- 6b. The popup HTML ----
       onEachFeature: function (feature, layer) {
-        const p = feature.properties;
-        const s = styleFor(p);
+        // Popup HTML is built only when the popup opens, not for every dot
+        // on every filter change (thousands of dots, a handful of popups).
+        layer.bindPopup(function () {
+          const p = feature.properties;
+          const s = styleFor(p);
 
-        const badgeColors = {
-          high:     RISK_BADGE.high,
-          moderate: RISK_BADGE.moderate,
-          low:      RISK_BADGE.low,
-          unknown:  RISK_BADGE.unknown
-        };
-        const badge = badgeColors[p.risk] || badgeColors.unknown;
+          const badgeColors = {
+            high:     RISK_BADGE.high,
+            moderate: RISK_BADGE.moderate,
+            low:      RISK_BADGE.low,
+            unknown:  RISK_BADGE.unknown
+          };
+          const badge = badgeColors[p.risk] || badgeColors.unknown;
 
-        const title = p.common_name || p.scientific_name || p.species_guess || ('Observation ' + p.id);
-        const approximateLocation = isApproximateLocation(p);
+          const title = p.common_name || p.scientific_name || p.species_guess || ('Observation ' + p.id);
+          const approximateLocation = isApproximateLocation(p);
 
-        let html = '<div class="popup-head">';
-        if (p.image_url) {
-          html += '<img class="popup-thumb" src="' + p.image_url + '" data-full="' + p.image_url + '" alt="">';
-        } else {
-          html += '<div class="popup-thumb popup-thumb-empty"><span>No photo</span></div>';
-        }
-        html += '<div class="popup-headtext">';
-        html += '<div class="popup-title">' + title + '</div>';
-        // Latin name links to this species' entry in the catalog
-        const latinName = p.scientific_name || '';
-        if (latinName) {
-          const catalogUrl = 'site/species.html?species=' + encodeURIComponent(latinName);
-          html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
-            '"><em>' + escapeHtml(latinName) + '</em></a></div>';
-        }
-        html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</button>';
-        html += '</div></div>';
-        if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
-          html += '<div class="popup-photo-attribution">Photo credit: ' +
-            escapeHtml(p.photo_attribution) + ' · <a href="' +
-            PHOTO_LICENSE_URLS[p.photo_license] +
-            '" target="_blank" rel="noopener noreferrer">' +
-            escapeHtml(p.photo_license) + '</a></div>';
-        }
+          let html = '<div class="popup-head">';
+          if (p.image_url) {
+            html += '<img class="popup-thumb" src="' + thumbUrl(p.image_url) + '" data-full="' + p.image_url + '" alt="">';
+          } else {
+            html += '<div class="popup-thumb popup-thumb-empty"><span>No photo</span></div>';
+          }
+          html += '<div class="popup-headtext">';
+          html += '<div class="popup-title">' + title + '</div>';
+          // Latin name links to this species' entry in the catalog
+          const latinName = p.scientific_name || '';
+          if (latinName) {
+            const catalogUrl = 'site/species.html?species=' + encodeURIComponent(latinName);
+            html += '<div class="popup-latin"><a class="popup-latin-link" href="' + escapeAttr(catalogUrl) +
+              '"><em>' + escapeHtml(latinName) + '</em></a></div>';
+          }
+          html += '<button type="button" class="popup-badge popup-badge-info" data-info="risk" style="background:' + badge.bg + ';color:' + badge.fg + ';border:1px solid ' + badge.border + ';">' + s.label + '</button>';
+          html += '</div></div>';
+          if (p.image_url && p.photo_attribution && PHOTO_LICENSE_URLS[p.photo_license]) {
+            html += '<div class="popup-photo-attribution">Photo credit: ' +
+              escapeHtml(p.photo_attribution) + ' · <a href="' +
+              PHOTO_LICENSE_URLS[p.photo_license] +
+              '" target="_blank" rel="noopener noreferrer">' +
+              escapeHtml(p.photo_license) + '</a></div>';
+          }
 
-        html += '<div class="popup-grid">';
-        if (p.observed_on) html += '<div><span class="lbl">Observed</span>' + p.observed_on + '</div>';
-        if (p.user_login)  html += '<div><span class="lbl">By</span>' + p.user_login + '</div>';
-        if (p.place_guess) html += '<div class="popup-grid-wide"><span class="lbl">Place</span>' + p.place_guess + '</div>';
-        if (p.presence) {
-          const statusLabel = p.presence === 'Single observation' ? 'Occasional observation' : p.presence;
-          html += '<div class="popup-grid-wide"><span class="lbl">Québec status</span>' +
-            '<button type="button" class="popup-status-link" data-info="presence">' +
-            escapeHtml(statusLabel) + '</button></div>';
-        }
-        if (p.banned) {
-          html += '<div class="popup-grid-wide"><span class="lbl">Regulation</span>' +
-            '<button type="button" class="popup-status-link" data-info="refee">' +
-            'Cultivation &amp; sale prohibited</button></div>';
-        }
-        html += '</div>';
+          html += '<div class="popup-grid">';
+          if (p.observed_on) html += '<div><span class="lbl">Observed</span>' + p.observed_on + '</div>';
+          if (p.user_login)  html += '<div><span class="lbl">By</span>' + p.user_login + '</div>';
+          if (p.place_guess) html += '<div class="popup-grid-wide"><span class="lbl">Place</span>' + p.place_guess + '</div>';
+          if (p.presence) {
+            const statusLabel = p.presence === 'Single observation' ? 'Occasional observation' : p.presence;
+            html += '<div class="popup-grid-wide"><span class="lbl">Québec status</span>' +
+              '<button type="button" class="popup-status-link" data-info="presence">' +
+              escapeHtml(statusLabel) + '</button></div>';
+          }
+          if (p.banned) {
+            html += '<div class="popup-grid-wide"><span class="lbl">Regulation</span>' +
+              '<button type="button" class="popup-status-link" data-info="refee">' +
+              'Cultivation &amp; sale prohibited</button></div>';
+          }
+          html += '</div>';
 
-        if (approximateLocation) html += '<div class="popup-approximate">Approximate location (10–100 m)</div>';
-        if (isUnknownAccuracy(p)) html += '<div class="popup-approximate">Location accuracy unknown (not recorded by the observer)</div>';
-        if (p.photo_present && !p.image_url) {
-          const photoLicense = p.photo_license || 'All rights reserved';
-          const photoNote = !p.photo_license_verified
-            ? 'Photo omitted — its license could not be verified.'
-            : 'Photo omitted — photo license ' + photoLicense + ' does not permit reuse.';
-          html += '<div class="popup-photo-note">' + escapeHtml(photoNote) + '</div>';
-        }
-        if (p.url) html += '<a class="popup-btn" href="' + p.url + '" target="_blank" rel="noopener noreferrer">View on iNaturalist ↗</a>';
-        const license = p.license ? String(p.license).replace(/^CC-/, 'CC ') : 'All rights reserved';
-        html += '<div class="popup-license"><span class="popup-license-label">Observation license:</span> ' + escapeHtml(license) + '</div>';
-
-        layer.bindPopup(html, popupOptions({ maxWidth: 300, minWidth: 260 }));
+          if (approximateLocation) html += '<div class="popup-approximate">Approximate location (10–100 m)</div>';
+          if (isUnknownAccuracy(p)) html += '<div class="popup-approximate">Location accuracy unknown (not recorded by the observer)</div>';
+          if (p.photo_present && !p.image_url) {
+            const photoLicense = p.photo_license || 'All rights reserved';
+            const photoNote = !p.photo_license_verified
+              ? 'Photo omitted — its license could not be verified.'
+              : 'Photo omitted — photo license ' + photoLicense + ' does not permit reuse.';
+            html += '<div class="popup-photo-note">' + escapeHtml(photoNote) + '</div>';
+          }
+          if (p.url) html += '<a class="popup-btn" href="' + p.url + '" target="_blank" rel="noopener noreferrer">View on iNaturalist ↗</a>';
+          const license = p.license ? String(p.license).replace(/^CC-/, 'CC ') : 'All rights reserved';
+          html += '<div class="popup-license"><span class="popup-license-label">Observation license:</span> ' + escapeHtml(license) + '</div>';
+          return html;
+        }, popupOptions({ maxWidth: 300, minWidth: 260 }));
 
         // Hover: keep the risk colour, just grow the dot and darken its outline.
         // (In "group nearby" mode the dots are HTML markers; style.css handles those.)
@@ -1216,7 +1274,10 @@ function buildObsLayer() {
             weight: layer.options.weight,
             color: layer.options.color
           };
-          layer.on('mouseover', function () { setHoveredDot(layer, base); });
+          layer.on('mouseover', function () {
+            setHoveredDot(layer, base);
+            prefetchThumb(feature.properties.image_url);
+          });
           layer.on('mouseout', function () { if (hoveredDot && hoveredDot.layer === layer) clearHoveredDot(); });
         }
       }
@@ -2509,8 +2570,11 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
     buildBoroughList();
 
     // ---- 18b. Draw union outline FIRST (bottom), then boroughs on top ----
+    let unionOutline = null;
     if (boroughsUnion) {
-      L.geoJSON(boroughsUnion, {
+      unionOutline = L.geoJSON(boroughsUnion, {
+        renderer: VECTOR_CANVAS,
+        interactive: false,
         style: {
           color: '#1B4332',
           weight: 3,
@@ -2524,6 +2588,7 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
 
     // ---- 18c. Draw boroughs (interactive) + click handler ----
     boroughPolygonLayer = L.geoJSON(boundaryData, {
+      renderer: VECTOR_CANVAS,
       style: function () { return BOROUGH_BASE_STYLE; },
       onEachFeature: function (feature, layer) {
         const name = nameEn(feature);
@@ -2551,6 +2616,10 @@ fetch('data/limites-administratives-agglomeration.GEOjson')
         layer.on('mouseout', function () { layer.setStyle({ weight: 1, opacity: 0.6 }); });
       }
     }).addTo(map);
+    // Same canvas as the dots: keep boroughs and the outline underneath them
+    boroughPolygonLayer.bringToBack();
+    if (unionOutline) unionOutline.bringToBack();
+    keepBoroughTooltipsTidy();
     scheduleThematicMapLayerUpdate();   // colour boroughs if that view is already chosen
 
     // ---- 18d. Click empty map → clear selection ----
@@ -2730,7 +2799,7 @@ function buildSentinelLayer() {
 
         let html = '<div class="popup-head">';
         if (photo) {
-          html += '<img class="popup-thumb" src="' + photo + '" data-full="' + photo + '" alt="">';
+          html += '<img class="popup-thumb" src="' + thumbUrl(photo) + '" data-full="' + photo + '" alt="">';
         } else {
           html += '<div class="popup-thumb popup-thumb-empty"><span>No photo</span></div>';
         }

@@ -314,7 +314,9 @@ const SUBMIT = {
 
   overlay.querySelector('[data-s="close"]').addEventListener('click', closeForm);
   overlay.querySelector('[data-s="cancel"]').addEventListener('click', closeForm);
-  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeForm(); });
+  // No click-outside-to-close: selecting text and releasing the mouse past the
+  // form's edge counts as a click on the backdrop and would lose what was typed.
+  // Close only with ×, Cancel or Esc.
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) closeForm(); });
 
   // ---------- read + check the form (the Firestore rules check the same things) ----------

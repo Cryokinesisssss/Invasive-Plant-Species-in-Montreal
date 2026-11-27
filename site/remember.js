@@ -78,6 +78,12 @@ window.ReaderProjects = (function () {
         species: species,
         marker_type: d.marker_type,
         project_url: d.source_url,
+        // Optional extras (older suggestions don't have them)
+        project_area: typeof d.project_area === 'string' ? d.project_area : '',
+        actions: (Array.isArray(d.actions) ? d.actions : [])
+          .filter(function (a) { return typeof a === 'string' && a.trim(); })
+          .slice(0, 10)
+          .map(function (a) { return a.trim().slice(0, 150); }),
         reader_submitted: true
       },
       geometry: { type: 'Point', coordinates: [d.lng, d.lat] }

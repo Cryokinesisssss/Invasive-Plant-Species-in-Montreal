@@ -21,7 +21,8 @@
 const SUBMIT = {
   // Montréal agglomeration; the Firestore rules check the same box
   bounds: { south: 45.40, north: 45.71, west: -73.98, east: -73.47 },
-  max: { name: 100, organization: 100, description: 400, speciesOther: 60, url: 300, species: 10 }
+  max: { name: 100, organization: 100, description: 400, speciesOther: 60, url: 300, species: 10,
+         projectArea: 200, actions: 10, action: 150 }
 };
 
 (function () {
@@ -102,6 +103,17 @@ const SUBMIT = {
       '</div>' +
       '<label class="suggest-field">What was done' + REQ +
         '<textarea name="description" required rows="3" maxlength="' + SUBMIT.max.description + '"></textarea></label>' +
+      // Optional: fills the "Project sites and restoration work" dropdown in the popup
+      '<fieldset class="suggest-field suggest-details"><legend>Project sites and restoration work ' +
+          '<span class="suggest-hint">(optional)</span></legend>' +
+        '<label class="suggest-sub" for="suggest-area">Sites</label>' +
+        '<input id="suggest-area" name="project_area" maxlength="' + SUBMIT.max.projectArea + '" ' +
+          'placeholder="e.g. Morgan Arboretum, Macdonald Campus">' +
+        '<label class="suggest-sub" for="suggest-actions">Restoration work ' +
+          '<span class="suggest-hint">(one step per line, up to ' + SUBMIT.max.actions + ')</span></label>' +
+        '<textarea id="suggest-actions" name="actions" rows="3" ' +
+          'placeholder="e.g. Pulled garlic mustard by hand&#10;Bagged and weighed the plants removed"></textarea>' +
+      '</fieldset>' +
       '<fieldset class="suggest-field suggest-species"><legend>Species targeted' + REQ + '</legend>' +
         '<label class="suggest-check suggest-species-none"><input type="checkbox" name="species_none"> ' +
           'No specific species named <span class="suggest-hint">(the source talks about invasive plants in general)</span></label>' +
@@ -340,6 +352,18 @@ const SUBMIT = {
       lat: Math.round(formLatLng.lat * 1e5) / 1e5,   // about 1 m
       lng: Math.round(formLatLng.lng * 1e5) / 1e5
     };
+    // Optional sites and restoration steps: only sent when filled in
+    const projectArea = v('project_area').slice(0, SUBMIT.max.projectArea);
+    const actions = v('actions').split(/\n+/)
+      .map(function (line) { return line.replace(/^\s*[-•*·]\s*/, '').trim(); })
+      .filter(Boolean);
+    if (actions.length > SUBMIT.max.actions) return 'List at most ' + SUBMIT.max.actions + ' restoration steps (one per line).';
+    if (actions.some(function (a) { return a.length > SUBMIT.max.action; })) {
+      return 'Keep each restoration step under ' + SUBMIT.max.action + ' characters.';
+    }
+    if (projectArea) data.project_area = projectArea;
+    if (actions.length) data.actions = actions;
+
     if (!data.name) return 'Add the project name.';
     if (!data.organization) return 'Add the organization.';
     if (!(yearStart >= 1990 && yearStart <= 2100)) return 'Add a start year (1990 or later).';

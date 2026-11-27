@@ -19,7 +19,8 @@ service cloud.firestore {
     function validSubmission(d) {
       return d.keys().hasOnly(['name', 'organization', 'year_start', 'year_end', 'description',
                                'species', 'species_other', 'marker_type', 'source_url',
-                               'lat', 'lng', 'uid', 'ts', 'status'])
+                               'lat', 'lng', 'uid', 'ts', 'status',
+                               'project_area', 'actions'])   // these two are optional
         && d.keys().hasAll(['name', 'organization', 'year_start', 'year_end', 'description',
                             'species', 'species_other', 'marker_type', 'source_url',
                             'lat', 'lng', 'uid', 'ts', 'status'])
@@ -34,6 +35,8 @@ service cloud.firestore {
         && d.species is list && d.species.size() <= 10
         && d.species_other is string && d.species_other.size() <= 60
         && d.marker_type in ['site', 'area', 'organization']
+        && (!('project_area' in d) || (d.project_area is string && d.project_area.size() > 0 && d.project_area.size() <= 200))
+        && (!('actions' in d) || (d.actions is list && d.actions.size() > 0 && d.actions.size() <= 10))
         && d.source_url is string && d.source_url.size() <= 300 && d.source_url.matches('https://[^ ]+[.][^ ]+')
         // Montréal agglomeration (same box as the website)
         && d.lat is number && d.lat >= 45.40 && d.lat <= 45.71

@@ -3707,6 +3707,7 @@ fieldset.suggest-field legend { padding: 0; margin-bottom: 3px; }
 .suggest-species-none { margin: 0 0 6px; }
 .suggest-hint { color: var(--text-faint); font-size: 11.5px; }
 .suggest-other-label { display: block; margin-top: 8px; font-weight: 400; }
+.suggest-sub { display: block; margin-top: 6px; font-weight: 400; }
 .taxon-combo { position: relative; }
 .taxon-options {
   position: absolute;

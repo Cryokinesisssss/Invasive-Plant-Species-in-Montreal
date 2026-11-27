@@ -1,6 +1,6 @@
 {
   "source": "iNaturalist API observation photo metadata",
-  "checked_at": "2026-11-26T16:58:13.400077+00:00",
+  "checked_at": "2026-11-27T16:43:32.714243+00:00",
   "photos": {
     "4276938": {
       "photo_id": "5126423",
@@ -58233,6 +58233,13 @@
       "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/767954519/medium.jpg",
       "license_code": "cc-by-nc",
       "attribution": "(c) saugep, some rights reserved (CC BY-NC)",
+      "verified": true
+    },
+    "417127036": {
+      "photo_id": "768317486",
+      "image_url": "https://inaturalist-open-data.s3.amazonaws.com/photos/768317486/medium.jpg",
+      "license_code": "cc-by-nc",
+      "attribution": "(c) kelly3006, some rights reserved (CC BY-NC)",
       "verified": true
     },
     "2394341": {

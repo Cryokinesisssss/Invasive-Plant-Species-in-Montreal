@@ -25,6 +25,7 @@ RISK_TAXON_SETS = {
     "HIGH_RISK_TAXON_IDS",
     "MODERATE_RISK_TAXON_IDS",
     "LOW_RISK_TAXON_IDS",
+    "WATCH_LIST_TAXON_IDS",   # not yet rated: mapped as "unknown"
 }
 CSV_COLUMNS = [
     "id",

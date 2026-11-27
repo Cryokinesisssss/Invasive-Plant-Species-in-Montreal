@@ -90,13 +90,17 @@ function keepPopupVisible(popup) {
   });
 }
 
+// On phones the legend, buttons and sidebar float over the map and would
+// cover popups, so they fade out while a popup is open (style.css, 700 px).
 map.on('popupopen', function (event) {
   activeMapPopup = event.popup;
+  document.documentElement.classList.add('map-popup-open');
   keepPopupVisible(activeMapPopup);
 });
 
 map.on('popupclose', function (event) {
   if (activeMapPopup === event.popup) activeMapPopup = null;
+  if (!activeMapPopup) document.documentElement.classList.remove('map-popup-open');
 });
 
 map.on('resize', function () {
@@ -220,7 +224,7 @@ const RISK_STYLE = {
   high:     { color: RISK_COLORS.high.line,     fillColor: RISK_COLORS.high.fill,     label: 'High risk' },
   moderate: { color: RISK_COLORS.moderate.line, fillColor: RISK_COLORS.moderate.fill, label: 'Moderate risk' },
   low:      { color: RISK_COLORS.low.line,      fillColor: RISK_COLORS.low.fill,      label: 'Low risk' },
-  unknown:  { color: RISK_COLORS.unknown.line,  fillColor: RISK_COLORS.unknown.fill,  label: 'Unclassified' }
+  unknown:  { color: RISK_COLORS.unknown.line,  fillColor: RISK_COLORS.unknown.fill,  label: 'Undetermined risk' }
 };
 // Popup badges: pale background, dark text, coloured border
 const RISK_BADGE = {};
@@ -267,10 +271,13 @@ function styleFor(props) {
 
 // ============================================================
 // 3. FILTER STATE — the single source of truth for filters
-//    filterState.risk starts with all four tiers ON.
+//    filterState.risk starts with the three rated tiers ON; the watch list
+//    ('unknown': on Québec's list but not yet rated) is OFF by default.
 // ============================================================
+const RATED_TIERS = ['high', 'moderate', 'low'];
+function defaultRiskSet() { return new Set(RATED_TIERS); }
 const filterState = {
-  risk: new Set(['high', 'moderate', 'low', 'unknown']),
+  risk: defaultRiskSet(),
   boroughs: new Set(),
   species: new Set(),
   years: new Set(),        // empty = all years
@@ -367,9 +374,12 @@ function updateStatusSummary(filtered) {
 
   // Count only the layers that are switched on.
   // Unknown-accuracy records only count toward the total once they're switched on.
-  const inatTotal = !inatVisible ? 0 : (filterState.accuracy.has('unknown')
-    ? allFeatures.length
-    : allFeatures.filter(function (f) { return !isUnknownAccuracy(f.properties); }).length);
+  // Same for "Undetermined risk" records: only once that box is ticked.
+  const inatTotal = !inatVisible ? 0 : allFeatures.filter(function (f) {
+    if (!filterState.accuracy.has('unknown') && isUnknownAccuracy(f.properties)) return false;
+    if (!filterState.risk.has('unknown') && f.properties.risk === 'unknown') return false;
+    return true;
+  }).length;
   const inatShownList = inatVisible ? filtered : [];
   const sentinelOn = sentinelVisible && sentinelFeatures.length > 0;
   const sentinelShownList = sentinelOn
@@ -557,6 +567,18 @@ function applyRequestedSpecies() {
   if (!matches.length) return false;
   filterState.species.clear();
   matches.forEach(function (s) { filterState.species.add(s.key); });
+  // A watch-list species (from the catalog): switch the watch list on
+  const keys = new Set(matches.map(function (s) { return s.key; }));
+  const isWatch = allFeatures.some(function (f) {
+    const p = f.properties;
+    return p.risk === 'unknown' && keys.has(((p.common_name || '').trim() || (p.scientific_name || '').trim()) + '|' + (p.scientific_name || '').trim());
+  });
+  if (isWatch && !filterState.risk.has('unknown')) {
+    filterState.risk.add('unknown');
+    const watchBox = document.querySelector('input[data-risk="unknown"]');
+    if (watchBox) watchBox.checked = true;
+    updateMapLegend();
+  }
   if (new URLSearchParams(window.location.search).get('accuracy') === 'all') {
     filterState.accuracy.add('unknown');
     syncAccuracyCheckboxes();
@@ -1146,8 +1168,12 @@ function buildObsLayer() {
     return;
   }
 
+  // Watch-list (grey) dots first, so the rated risk dots draw on top of them
+  const drawOrder = filtered.slice().sort(function (a, b) {
+    return (a.properties.risk === 'unknown' ? 0 : 1) - (b.properties.risk === 'unknown' ? 0 : 1);
+  });
   const observationMarkers = L.geoJSON(
-    { type: 'FeatureCollection', features: filtered },
+    { type: 'FeatureCollection', features: drawOrder },
     {
       // ---- 6a. The dot itself ----
       pointToLayer: function (feature, latlng) {
@@ -1441,10 +1467,12 @@ function updateSummaries() {
 
   const rSum = document.getElementById('fp-risk-summary');
   if (rSum) {
-    const n = filterState.risk.size;
-    const total = 4;
-    rSum.textContent = n === total ? 'All' : (n === 0 ? 'None' : n + ' selected');
-    rSum.classList.toggle('is-set', n !== total);
+    const rated = RATED_TIERS.filter(function (t) { return filterState.risk.has(t); }).length;
+    const watch = filterState.risk.has('unknown');
+    // Short on the button; the full "Undetermined risk — species to watch" is in the filter panel
+    rSum.textContent = rated === RATED_TIERS.length ? (watch ? 'All + watch' : 'All')
+      : (rated === 0 ? (watch ? 'Watch only' : 'None') : rated + (watch ? ' + watch' : ' selected'));
+    rSum.classList.toggle('is-set', !(rated === RATED_TIERS.length && !watch));
   }
 
   const bSum = document.getElementById('fp-borough-summary');
@@ -1667,27 +1695,31 @@ document.querySelectorAll('input[data-risk]').forEach(function (cb) {
     else filterState.risk.delete(risk);
     syncRiskAllCheckbox();
     updateSummaries();
+    updateMapLegend();
     buildObsLayer();
     buildSentinelLayer();
+    refreshSelectionPanel();   // dims / undims the "Undetermined risk" row
   });
 });
 
 document.getElementById('f-risk-all').addEventListener('change', function (e) {
-  const all = ['high', 'moderate', 'low', 'unknown'];
-  filterState.risk.clear();
-  if (e.target.checked) all.forEach(function (r) { filterState.risk.add(r); });
+  // "All risk levels" = the three rated tiers; the watch list has its own box
+  RATED_TIERS.forEach(function (r) {
+    if (e.target.checked) filterState.risk.add(r); else filterState.risk.delete(r);
+  });
   document.querySelectorAll('input[data-risk]').forEach(function (cb) {
-    cb.checked = e.target.checked;
+    if (cb.getAttribute('data-risk') !== 'unknown') cb.checked = e.target.checked;
   });
   updateSummaries();
   buildObsLayer();
   buildSentinelLayer();
+  refreshSelectionPanel();
 });
 
 function syncRiskAllCheckbox() {
   const all = document.getElementById('f-risk-all');
   if (!all) return;
-  all.checked = filterState.risk.size === 4;
+  all.checked = RATED_TIERS.every(function (t) { return filterState.risk.has(t); });
 }
 
 
@@ -1958,7 +1990,7 @@ if (inatToggleEl) {
 // 14. RESET — the Reset button clears every filter
 // ============================================================
 document.getElementById('f-reset').addEventListener('click', function () {
-  filterState.risk = new Set(['high', 'moderate', 'low', 'unknown']);
+  filterState.risk = defaultRiskSet();
   filterState.boroughs.clear();
   filterState.species.clear();
   filterState.years.clear();
@@ -1971,7 +2003,7 @@ document.getElementById('f-reset').addEventListener('click', function () {
   selectedBoroughName = null;
   selectedIsUnion = false;
 
-  document.querySelectorAll('input[data-risk]').forEach(function (cb) { cb.checked = true; });
+  document.querySelectorAll('input[data-risk]').forEach(function (cb) { cb.checked = cb.getAttribute('data-risk') !== 'unknown'; });
   document.getElementById('f-risk-all').checked = true;
 
   document.querySelectorAll('#f-borough-list input[data-boro]').forEach(function (cb) { cb.checked = false; });
@@ -2049,13 +2081,18 @@ function updateMapLegend() {
       '<div class="legend-gradient-labels"><span>Fewer records</span><span>More records</span></div>' +
       '<div class="legend-mode-note">Shows where records are reported (iNaturalist and Sentinelle, as enabled), not how abundant plants are.</div>';
   } else {
-    html = '<div class="legend-title">Risk ' +
-        '<button type="button" class="legend-help" data-info="risk" aria-label="What do the risk levels mean?">?</button>' +
+    html = '<div class="legend-title legend-title-row">Risk ' +
+        '<button type="button" class="legend-more" data-info="risk" aria-label="Learn more about the risk levels">learn more</button>' +
       '</div>' +
-      '<div class="legend-risk-strip">' +
+      // 2 × 2 grid of short labels. "Undetermined" (species to watch) is off by
+      // default: greyed out, with the how-to in its tooltip.
+      '<div class="legend-risk-strip legend-risk-grid">' +
         '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-high);border-color:var(--risk-high-line)"></span>High</span>' +
-        '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-moderate);border-color:var(--risk-moderate-line)"></span>Mod.</span>' +
+        '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-moderate);border-color:var(--risk-moderate-line)"></span>Moderate</span>' +
         '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-low);border-color:var(--risk-low-line)"></span>Low</span>' +
+        '<span class="legend-risk-item legend-watch' + (filterState.risk.has('unknown') ? '' : ' is-off') + '" title="' +
+          (filterState.risk.has('unknown') ? 'Undetermined risk: species to watch' : 'Undetermined risk (species to watch): hidden; turn on under Risk') + '">' +
+          '<span class="swatch" style="background:var(--risk-unknown);border-color:var(--risk-unknown-line)"></span>Undetermined</span>' +
       '</div>' +
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
@@ -2069,8 +2106,8 @@ function updateMapLegend() {
       '<div class="legend-row"><span class="swatch swatch-sentinel"></span>Sentinelle <small>(square)</small></div>';
   }
   html += '<div class="legend-divider"></div>' +
-    '<div class="legend-row"><span class="swatch swatch-project"></span>Projects &amp; initiatives' +
-      '<button type="button" class="legend-help" data-info="projects" aria-label="What are projects and initiatives?">?</button>' +
+    '<div class="legend-row legend-row-more"><span class="swatch swatch-project"></span>Projects &amp; initiatives' +
+      '<button type="button" class="legend-more" data-info="projects" aria-label="Learn more about projects and initiatives">learn more</button>' +
     '</div>';
   legendElement.innerHTML = html;
   positionTrendButton();
@@ -2261,7 +2298,7 @@ const TIER_INFO = {
   high:     { label: 'High risk',     fill: RISK_COLORS.high.fill,     border: RISK_COLORS.high.line },
   moderate: { label: 'Moderate risk', fill: RISK_COLORS.moderate.fill, border: RISK_COLORS.moderate.line },
   low:      { label: 'Low risk',      fill: RISK_COLORS.low.fill,      border: RISK_COLORS.low.line },
-  unknown:  { label: 'Unclassified',  fill: RISK_COLORS.unknown.fill,  border: RISK_COLORS.unknown.line }
+  unknown:  { label: 'Undetermined risk', fill: RISK_COLORS.unknown.fill, border: RISK_COLORS.unknown.line }
 };
 
 // Refresh the summary if it is showing (don't reopen it if the user closed it)
@@ -2499,9 +2536,12 @@ function renderSelectionPanel() {
     const cnt = stats.byTier[tier] || 0;
     if (cnt === 0 && tier === 'unknown') return;
     const isOpen = openTiers.has(tier);
-    html += '<button class="bp-tier' + (isOpen ? ' open' : '') + '" data-tier="' + tier + '">' +
+    // Undetermined risk is off by default: list it, dimmed, so readers know it exists
+    const isOff = tier === 'unknown' && !filterState.risk.has('unknown');
+    html += '<button class="bp-tier' + (isOpen ? ' open' : '') + (isOff ? ' is-off' : '') + '" data-tier="' + tier + '"' +
+              (isOff ? ' title="Hidden on the map; turn on under Risk"' : '') + '>' +
               '<span class="swatch" style="background:' + info.fill + ';border-color:' + info.border + '"></span>' +
-              '<span>' + info.label + '</span>' +
+              '<span>' + info.label + (isOff ? ' <small>(off)</small>' : '') + '</span>' +
               '<span class="bp-count">' + cnt + '</span>' +
               '<span class="bp-caret">' + (isOpen ? '▾' : '▸') + '</span>' +
             '</button>';

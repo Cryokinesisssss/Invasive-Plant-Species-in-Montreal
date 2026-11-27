@@ -752,7 +752,7 @@ const TIER_META = {
   high:     { label: 'High risk',            className: 'tier-high' },
   moderate: { label: 'Moderate risk',        className: 'tier-moderate' },
   low:      { label: 'Low risk',             className: 'tier-low' },
-  watch:    { label: 'Undetermined — watch', className: 'tier-watch' }
+  watch:    { label: 'Undetermined risk — species to watch', className: 'tier-watch' }
 };
 
 let projectRecords = [];

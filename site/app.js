@@ -2090,9 +2090,12 @@ function updateMapLegend() {
         '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-high);border-color:var(--risk-high-line)"></span>High</span>' +
         '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-moderate);border-color:var(--risk-moderate-line)"></span>Moderate</span>' +
         '<span class="legend-risk-item"><span class="swatch" style="background:var(--risk-low);border-color:var(--risk-low-line)"></span>Low</span>' +
-        '<span class="legend-risk-item legend-watch' + (filterState.risk.has('unknown') ? '' : ' is-off') + '" title="' +
-          (filterState.risk.has('unknown') ? 'Undetermined risk: species to watch' : 'Undetermined risk (species to watch): hidden; turn on under Risk') + '">' +
-          '<span class="swatch" style="background:var(--risk-unknown);border-color:var(--risk-unknown-line)"></span>Undetermined</span>' +
+        // Tap / click to show or hide them (phones have no hover hint)
+        '<button type="button" class="legend-risk-item legend-watch' + (filterState.risk.has('unknown') ? '' : ' is-off') + '" ' +
+          'data-toggle-watch aria-pressed="' + filterState.risk.has('unknown') + '" title="' +
+          (filterState.risk.has('unknown') ? 'Undetermined risk (species to watch): tap to hide' : 'Undetermined risk (species to watch): tap to show') + '">' +
+          '<span class="swatch" style="background:var(--risk-unknown);border-color:var(--risk-unknown-line)"></span>' +
+          '<span class="legend-watch-label">Undetermined</span></button>' +
       '</div>' +
       '<div class="legend-divider"></div>' +
       '<div class="legend-row"><span class="swatch swatch-solid"></span>Precise <small>(≤10 m)</small></div>' +
@@ -2118,6 +2121,17 @@ legend.onAdd = function () {
   // Let touch/wheel scrolling inside the legend scroll it instead of panning the map
   L.DomEvent.disableScrollPropagation(legendElement);
   L.DomEvent.disableClickPropagation(legendElement);
+  // "Undetermined" in the legend toggles the same box as the Risk filter
+  legendElement.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-toggle-watch]')) return;
+    // The legend is redrawn below, detaching the tapped button; without this
+    // the map would treat the tap as a click on empty map (closing the sheet)
+    e.stopPropagation();
+    const box = document.querySelector('input[data-risk="unknown"]');
+    if (!box) return;
+    box.checked = !box.checked;
+    box.dispatchEvent(new Event('change'));
+  });
   updateMapLegend();
   return legendElement;
 };

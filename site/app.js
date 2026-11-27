@@ -3038,9 +3038,14 @@ function buildProjectLayer() {
     const siteGroup = typeof properties.cluster_group === 'string'
       ? properties.cluster_group.trim()
       : '';
-    const area = properties.project_area;
-    const siteKey = (siteGroup || (typeof area === 'string' ? area.trim() : ''))
-      .toLocaleLowerCase() || 'project-' + index;
+    // Group by the hand-set cluster_group, otherwise by location (same spot,
+    // ~10 m). Not by the "Sites" text: two projects far apart can list the
+    // same places, and grouping them hid both pins.
+    const coords = feature.geometry && feature.geometry.coordinates;
+    const spotKey = Array.isArray(coords) && isFinite(coords[0]) && isFinite(coords[1])
+      ? 'at:' + Number(coords[0]).toFixed(4) + ',' + Number(coords[1]).toFixed(4)
+      : 'project-' + index;
+    const siteKey = siteGroup ? siteGroup.toLocaleLowerCase() : spotKey;
     if (!projectSiteGroups.has(siteKey)) projectSiteGroups.set(siteKey, []);
     projectSiteGroups.get(siteKey).push(feature);
   });

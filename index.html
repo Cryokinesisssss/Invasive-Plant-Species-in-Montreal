@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Karla:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="site/style.css?v=73" />
+  <link rel="stylesheet" href="site/style.css?v=74" />
 </head>
 <body class="home-page">
 
@@ -138,9 +138,41 @@
   </section>
 
   <!-- ============================================================
-       6. LIMITATIONS
+       6. WHERE THE OBSERVATIONS COME FROM
        ============================================================ -->
-  <section class="home-section home-section-alt">
+  <section id="observations" class="home-section home-section-alt">
+    <div class="home-wrap">
+      <h2>Where the observations come from</h2>
+      <p class="home-section-lede">The map combines two kinds of records, shown with different symbols.</p>
+      <div class="home-sources home-obs-sources">
+        <div class="home-source">
+          <h3><span class="home-obs-symbol is-circle" aria-hidden="true"></span>iNaturalist <small>(circles on the map)</small></h3>
+          <p>
+            Anyone can photograph a plant with the iNaturalist app or website; the photo, date and
+            location become an observation, and other users then check the identification. This map
+            only uses <strong>research-grade</strong> observations: ones with a photo, a date and a
+            location, where most identifiers agree on the species. Because records come from
+            volunteers, busy parks and trails have more of them.
+          </p>
+        </div>
+        <div class="home-source">
+          <h3><span class="home-obs-symbol is-square" aria-hidden="true"></span>Sentinelle <small>(squares on the map)</small></h3>
+          <p>
+            Sentinelle is the Québec government's tool for reporting invasive species, run by the
+            MELCCFP (the province's environment ministry). Anyone who finds an invasive species can
+            photograph it and report where it is; ministry professionals validate and approve each
+            report before it is added. There are far fewer records than on iNaturalist, and like
+            iNaturalist they depend on who reports, so they aren't a complete survey.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       7. LIMITATIONS
+       ============================================================ -->
+  <section class="home-section">
     <div class="home-wrap">
       <h2>Limitations</h2>
       <ul class="home-caveats">
@@ -154,9 +186,9 @@
   </section>
 
   <!-- ============================================================
-       7. SOURCES
+       8. SOURCES
        ============================================================ -->
-  <section class="home-section">
+  <section class="home-section home-section-alt">
     <div class="home-wrap">
       <h2>Sources</h2>
       <div class="home-sources">

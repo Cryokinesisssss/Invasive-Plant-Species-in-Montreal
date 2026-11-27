@@ -3289,6 +3289,15 @@ html:has(body.home-page) { scroll-behavior: smooth; }
 .home-source h3 a { text-decoration: none; }
 .home-source h3 a:hover { text-decoration: underline; }
 .home-source p { margin: 0; font-size: 13.5px; }
+.home-obs-sources .home-source h3 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.home-obs-sources .home-source h3 small { font-family: 'Karla', system-ui, sans-serif; font-weight: 400; font-size: 12.5px; color: var(--text-muted); }
+.home-obs-sources .home-source p { line-height: 1.55; }
+.home-obs-symbol {           /* same shapes as the map: circle = iNaturalist, square = Sentinelle */
+  width: 13px; height: 13px; flex: none;
+  background: var(--risk-high); border: 1.5px solid var(--risk-high-line);
+}
+.home-obs-symbol.is-circle { border-radius: 50%; }
+.home-obs-symbol.is-square { border-radius: 2px; width: 11px; height: 11px; }
 .home-section .home-fineprint { margin: 16px 0 0; font-size: 12.5px; color: var(--text-muted); }
 
 /* ---- Closing CTA ---- */
